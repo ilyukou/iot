@@ -1,0 +1,76 @@
+version: '2.2'
+services:
+  api:
+    image: ilyukou/api:0.1
+    container_name: api
+    command: -timeout 60s
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: Europe/Minsk
+    restart: always
+    depends_on:
+      - mysql
+      - elasticsearch
+      - activemq
+
+#  async_handler:
+#    image: ilyukou/async_handler:0.1.4
+#    container_name: async_handler
+#    command: -timeout 60s
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      TZ: Europe/Minsk
+#    restart: always
+#    depends_on:
+#      - mysql
+#      - elasticsearch
+#      - activemq
+
+  mysql:
+    image: mysql:8.0.21
+    container_name: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: iot
+      MYSQL_USER: iot
+      MYSQL_PASSWORD: password
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3306" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  elasticsearch:
+    image: elasticsearch:7.9.2
+    container_name: elasticsearch
+    ports:
+        - "9200:9200"
+        - "9300:9300"
+    restart: always
+    environment:
+      discovery.type: single-node
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  activemq:
+    image: rmohr/activemq:5.15.6
+    container_name: activemq
+    ports:
+      - "61617:61617"
+      - "8162:8162"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:61617" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5

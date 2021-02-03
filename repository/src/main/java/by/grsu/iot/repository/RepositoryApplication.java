@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableAutoConfiguration
+
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"by.grsu.iot"})
 @EntityScan(basePackages = {"by.grsu.iot"})

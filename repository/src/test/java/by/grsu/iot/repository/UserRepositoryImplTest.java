@@ -1,6 +1,6 @@
 package by.grsu.iot.repository;
 
-import by.grsu.iot.model.User;
+import by.grsu.iot.repository.interf.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,15 +18,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void test(){
-        User user = new User();
-        user.setUsername("username");
-        user.setPassword("password");
-        Long id =1L;
-
-        User actual = userRepository.save(user);
-
-        Assert.assertEquals(user.getPassword(), actual.getPassword());
-        Assert.assertEquals(user.getUsername(), actual.getUsername());
-        Assert.assertEquals(id, actual.getId());
+        System.out.println();
     }
 }
