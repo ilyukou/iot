@@ -91,3 +91,17 @@ Code | Body | Description
 404 | - | Not found Device
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
+___
+### Set device state
+##### Request /device/state/{token}?state=off
+Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
+------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
+GET | - | token, state | token of device, new device state | - | - | - | -
+
+##### Response
+Code | Body | Description
+------------ | ------------- | -------------
+200 | [DeviceState](../model/DeviceState.md) | -
+400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
+404 | - | Not found Device
+500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.

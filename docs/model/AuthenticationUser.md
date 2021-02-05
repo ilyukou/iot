@@ -1,15 +1,15 @@
 #### AuthenticationUser
 Filed name | Type | Note
 ------------ | ------------- | -------------
-id | Long | User#id
+tokenValidity | long | Token validity time in millisecond
 username | String | User#username
 token | String | Authorization token. Dispatched in the request header ("Authorization")
 
 ```json
 {
-    "id" : 1,
-    "username" : "String",
-    "token" : "String"
+  "tokenValidity" : 1000,
+  "username" : "String",
+  "token" : "String"
 }
 
 ```

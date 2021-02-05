@@ -43,7 +43,7 @@ GET | [User authorization token](../model/AuthenticationUser.md) | id | ID of pr
 
 ##### Response
 Code | Body | Description
------------- | -------------
+------------ | ------------- | -------------
 200 | [Project](../model/Project.md) | OK
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed.
 401 | [ExceptionResponse](../model/ExceptionResponse.md) | Unauthorized.
@@ -56,7 +56,7 @@ ___
 ##### Request /project/page?count=1&username=String
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User authorization token](../model/AuthenticationUser.md) | count, username | int count, String username | username is OPTIONAL field. If not present return your repositories. If present return {username} repositories | - | - | -
+GET | [User authorization token](../model/AuthenticationUser.md) | count, username | int count, String username | username is OPTIONAL field. If not present return your repositories. If present return {username} repositories. Count is a number of required page. Page size is const. | - | - | -
 
 ##### Response
 Code | Body | Description
