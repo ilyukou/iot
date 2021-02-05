@@ -11,8 +11,8 @@ GET | entity | String entity - entity name | - | - | - | -
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | [Validation](docs/model/Validation.md) | -
-400 | [ExceptionResponse](docs/model/exception/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
-500 | [ExceptionResponse](docs/model/exception/ExceptionResponse.md) | Internal server error occurred.
+200 | [Validation](../model/Validation.md) | -
+400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
+500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
 

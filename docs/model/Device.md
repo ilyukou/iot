@@ -2,7 +2,7 @@
 Filed name | Type | Note
 ------------ | ------------- | -------------
 id | Long | Device id
-project | Long | [Project#id](docs/model/Project.md)
+project | Long | [Project#id](Project.md)
 name | String | Device name.
 state | String | Current Device state.
 states | Array of String | Array of possible states

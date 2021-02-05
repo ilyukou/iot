@@ -1,8 +1,8 @@
 #### AuthenticationUser
 Filed name | Type | Note
 ------------ | ------------- | -------------
-id | Long | [User#id](docs/model/User.md)
-username | String | [User#username](docs/model/User.md)
+id | Long | User#id
+username | String | User#username
 token | String | Authorization token. Dispatched in the request header ("Authorization")
 
 ```json

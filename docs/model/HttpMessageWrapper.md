@@ -1,7 +1,7 @@
 #### HttpMessageWrapper
 Filed name | Type | Note
 ------------ | ------------- | -------------
-status | [HttpMessageEnum](docs/model/HttpMessageEnum.md) | Enum
+status | [HttpMessageEnum](HttpMessageEnum.md) | Enum
 message | String | Informational message from the server
 status | T | Any Object
 

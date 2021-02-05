@@ -6,7 +6,7 @@ sensors | Long array | Sensors ids.
 device | Long array | Device ids.
 name | String | Project name.
 title | Blob | Project title.
-owner | Long | [User#id](docs/model/User.md)
+owner | Long | User#id
 
 ```json
 {
