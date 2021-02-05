@@ -6,7 +6,7 @@ ___
 ##### Request /project
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-POST | [User authorization token](../model/AuthenticationUser.md) |- | - | - | [ProjectForm](../model/ProjectForm.md) | - | -
+POST | [User#token](../model/AuthenticationUser.md) |- | - | - | [ProjectForm](../model/ProjectForm.md) | - | -
 
 ##### Response
 Code | Body | Description
@@ -22,7 +22,7 @@ ___
 ##### Request /project/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-PUT | [User authorization token](../model/AuthenticationUser.md) | id | ID of project | - | [ProjectForm](../model/ProjectForm.md) | - | -
+PUT | [User#token](../model/AuthenticationUser.md) | id | ID of project | - | [ProjectForm](../model/ProjectForm.md) | - | -
 
 ##### Response
 Code | Body | Description
@@ -39,7 +39,7 @@ ___
 ##### Request /project/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User authorization token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
+GET | [User#token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
 
 ##### Response
 Code | Body | Description
@@ -56,7 +56,7 @@ ___
 ##### Request /project/page?count=1&username=String
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User authorization token](../model/AuthenticationUser.md) | count, username | int count, String username | username is OPTIONAL field. If not present return your repositories. If present return {username} repositories. Count is a number of required page. Page size is const. | - | - | -
+GET | [User#token](../model/AuthenticationUser.md) | count, username | int count, String username | username is OPTIONAL field. If not present return your repositories. If present return {username} repositories. Count is a number of required page. Page size is const. | - | - | -
 
 ##### Response
 Code | Body | Description
@@ -72,7 +72,7 @@ ___
 ##### Request /project/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User authorization token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
+GET | [User#token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
 
 ##### Response
 Code | Body | Description
