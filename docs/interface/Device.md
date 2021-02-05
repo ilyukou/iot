@@ -5,7 +5,7 @@ ___
 ##### Request /device
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-POST | [User#token](../model/AuthenticationUser.md) |- | - | - | [DeviceForm](../model/DeviceForm.md) | - | -
+POST | [AuthenticationUser#token](../model/AuthenticationUser.md) |- | - | - | [DeviceForm](../model/DeviceForm.md) | - | -
 
 ##### Response
 Code | Body | Description
@@ -20,7 +20,7 @@ ___
 ##### Request /device/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-PUT | [User#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceForm](../model/DeviceForm.md) | - | -
+PUT | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceForm](../model/DeviceForm.md) | - | -
 
 ##### Response
 Code | Body | Description
@@ -37,7 +37,7 @@ ___
 ##### Request /device/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User#token](../model/AuthenticationUser.md) | id | ID of device | - | - | - | -
+GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | - | - | -
 
 ##### Response
 Code | Body | Description
@@ -54,7 +54,7 @@ ___
 ##### Request /device/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [User#token](../model/AuthenticationUser.md) | id | ID of device | - | - | - | -
+GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | - | - | -
 
 ##### Response
 Code | Body | Description
