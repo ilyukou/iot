@@ -5,6 +5,7 @@ ___
 * [Auth](interface/Auth.md) - interface for **Sign In** and **Sign Up**
 * [Project](interface/Project.md) - interface for CRUD operation with project
 * [Device](interface/Device.md) - interface for CRUD operation with device
+* [DeviceState](interface/DeviceState.md) - interface for changing device state
 * [Validation](interface/Validation.md) - requirements for transferred entities
 
 #### List of API Entities which using into API Interfaces

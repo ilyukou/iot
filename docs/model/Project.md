@@ -6,7 +6,6 @@ sensors | Long array | Sensors ids.
 device | Long array | Device ids.
 name | String | Project name.
 title | Blob | Project title.
-owner | Long | User#id
 
 ```json
 {
@@ -16,8 +15,7 @@ owner | Long | User#id
       "device" : [1,2,3]
     },
     "name" : "String",
-    "title" : "Long String",
-    "owner" : 1
+    "title" : "Long String"
 }
 
 ```
