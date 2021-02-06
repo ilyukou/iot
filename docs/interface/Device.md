@@ -5,14 +5,15 @@ ___
 ##### Request /device
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-POST | [AuthenticationUser#token](../model/AuthenticationUser.md) |- | - | - | [DeviceForm](../model/DeviceForm.md) | - | -
+POST | [AuthenticationUser#token](../model/AuthenticationUser.md) |- | - | - | [DeviceForm](../model/DeviceForm.md) | Device#states size min 2. Device#state includes Device#states. | -
 
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
 200 | id | Long id – ID of created device
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Bad request
-401 | [ExceptionResponse](../model/ExceptionResponse.md) | Unauthorized
+403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
+404 | - | Not found project
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
 ___
@@ -20,14 +21,13 @@ ___
 ##### Request /device/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-PUT | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceForm](../model/DeviceForm.md) | - | -
+PUT | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceForm](../model/DeviceForm.md) | Device#states size min 2. Device#state includes Device#states. | -
 
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
 200 | - | -
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
-401 | [ExceptionResponse](../model/ExceptionResponse.md) | Unauthorized
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
 404 | - | Not found Device
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
@@ -44,7 +44,6 @@ Code | Body | Description
 ------------ | ------------- | -------------
 200 | [Device](../model/Device.md) | -
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
-401 | [ExceptionResponse](../model/ExceptionResponse.md) | Unauthorized
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
 404 | - | Not found Device
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
@@ -61,7 +60,6 @@ Code | Body | Description
 ------------ | ------------- | -------------
 200 | [Device](../model/Device.md) | -
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
-401 | [ExceptionResponse](../model/ExceptionResponse.md) | Unauthorized
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
 404 | - | Not found Device
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.

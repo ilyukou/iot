@@ -3,7 +3,7 @@ Filed name | Type | Note
 ------------ | ------------- | -------------
 tokenValidity | long | Token validity time in millisecond
 username | String | User#username
-token | String | Authorization token. Dispatched in the request header ("Authorization")
+token | String | Authorization token.
 
 ```json
 {

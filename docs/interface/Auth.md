@@ -11,8 +11,8 @@ POST | - | - | - | [AuthenticationRequest](../model/AuthenticationRequest.md) | 
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | [AuthenticationUser](../model/AuthenticationUser.md) | Validation error or request body is an invalid JSON or cannot be parsed
-400 | [ExceptionResponse](../model/ExceptionResponse.md) | Bad request
+200 | [AuthenticationUser](../model/AuthenticationUser.md) | OK
+400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
 404 | - | Not found User with such username and password
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
