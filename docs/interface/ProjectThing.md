@@ -9,7 +9,7 @@ GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of pr
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | Array of [ProjectThing](../model/ProjectThing.md) | -
+200 | Array of [ProjectThing](../model/ProjectThing.md) | OK
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
 404 | - | Not found Project
