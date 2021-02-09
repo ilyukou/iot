@@ -2,3 +2,7 @@
 /model/target/
 /repository/target/
 /.idea/
+/repository/repository.iml
+/api/api.iml
+/iot.iml
+/model/model.iml
