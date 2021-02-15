@@ -1,14 +1,17 @@
 package by.grsu.iot.model.sql;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "project")
 public class Project extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
@@ -21,13 +24,27 @@ public class Project extends BaseEntity {
 
     private String title;
 
-    public Project(Long id, Set<Device> devices, String name, AccessType accessType, String title) {
-        super(id);
+    public Project(Long id, Date created, Date updated, Status status,
+                   User user, Set<Device> devices, String name, AccessType accessType, String title) {
+        super(id, created, updated, status);
+        this.user = user;
         this.devices = devices;
         this.name = name;
         this.accessType = accessType;
         this.title = title;
     }
+
+    public Project(Project project) {
+        this(project.getId(), project.getCreated(), project.getUpdated(), project.getStatus(),
+//                FIXME java.lang.StackOverflowError
+//                project.getUser() != null ? new User(project.getUser()) : null,
+                null,
+                project.getDevices().stream().map(Device::new).collect(Collectors.toSet()),
+                project.getName(),
+                project.getAccessType(),
+                project.getTitle());
+    }
+
 
     public Project(BaseEntity baseEntity) {
         super(baseEntity);
@@ -79,15 +96,14 @@ public class Project extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof Project)) return false;
+        if (!super.equals(o)) return false;
         Project project = (Project) o;
-
-        return super.getId().equals(project.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return super.getId() != null ? super.getId().hashCode() : 0;
+        return
+//                Objects.equals(user, project.user)
+//                && Objects.equals(devices, project.devices) &&
+                        Objects.equals(name, project.name)
+                && accessType == project.accessType
+                && Objects.equals(title, project.title);
     }
 }

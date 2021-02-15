@@ -39,7 +39,7 @@ public class JwtTokenProvider {
         claims.put(
                 "roles",
                 roles.stream()
-                        .map(role -> role.getRole().getValue())
+                        .map(role -> role.getRoleType().getValue())
                         .collect(Collectors.toList())
         );
 

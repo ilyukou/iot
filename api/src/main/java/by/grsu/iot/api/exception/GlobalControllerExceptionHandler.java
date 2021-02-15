@@ -21,14 +21,22 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
     @ExceptionHandler({IOException.class})
-    public void serverErrors(final IOException exception, final HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponse> serverErrors(final IOException exception, final HttpServletRequest request) {
         LOGGER.error(exception.toString(), request);
+
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "Server error", null)
+                , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
     @ExceptionHandler({NullPointerException.class})
-    public void serverErrors(final NullPointerException exception, final HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponse> serverErrors(final NullPointerException exception, final HttpServletRequest request) {
         LOGGER.error(exception.toString(), request);
+
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "Server error", null)
+                , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
@@ -39,8 +47,10 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
     @ExceptionHandler({IllegalArgumentException.class})
-    public void validationErrorException() {
-        // Nothing to do
+    public ResponseEntity<ExceptionResponse> validationErrorException() {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), null, null)
+                , HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
@@ -51,17 +61,17 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity badRequestException(final BadRequestException exception, final HttpServletRequest request) {
-        ExceptionResponse exceptionResponse
-                = new ExceptionResponse(new Date(), exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), exception.getField());
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ExceptionResponse> badRequestException(final BadRequestException exception, final HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), exception.getMessage(), exception.getField())
+                , HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
     @ExceptionHandler({NotAccessForOperationException.class})
-    public void notAccessForOperationException() {
-        // Nothing to do
+    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final BadRequestException exception, final HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), exception.getMessage(), exception.getField())
+                , HttpStatus.FORBIDDEN);
     }
 }

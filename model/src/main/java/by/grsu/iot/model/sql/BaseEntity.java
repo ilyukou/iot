@@ -4,13 +4,15 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Superclass which contains base filed (id, created time, updated time and status) for any object
  */
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,18 +30,18 @@ public class BaseEntity {
     @Column(name = "status")
     private Status status;
 
-    public BaseEntity(Long id) {
+    public BaseEntity(Long id, Date created, Date updated, Status status) {
         this.id = id;
+        this.created = created;
+        this.updated = updated;
+        this.status = status;
     }
 
     public BaseEntity() {
     }
 
     public BaseEntity(BaseEntity baseEntity) {
-        this.id = baseEntity.id;
-        this.created = baseEntity.created;
-        this.updated = baseEntity.updated;
-        this.status = baseEntity.status;
+        this(baseEntity.getId(), baseEntity.getCreated(), baseEntity.getUpdated(), baseEntity.getStatus());
     }
 
     public Long getId() {
@@ -78,4 +80,14 @@ public class BaseEntity {
         return getStatus() == Status.ACTIVE;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseEntity)) return false;
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(created, that.created)
+                && Objects.equals(updated, that.updated)
+                && Objects.equals(status, that.status);
+    }
 }

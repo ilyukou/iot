@@ -10,95 +10,84 @@ import by.grsu.iot.repository.interf.RoleRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.UserJpaRepository;
 import by.grsu.iot.repository.util.TimeUtil;
+import org.apache.commons.lang3.SerializationUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 
 @Transactional
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-//    private final PasswordEncoder passwordEncoder;
+    private static final RoleType DEFAULT_ROLE = RoleType.User;
     private final UserJpaRepository userJpaRepository;
-    private final RoleRepository roleRepository;
-    private final TimeUtil timeUtil;
     private final EmailRepository emailRepository;
+    private final EntityFactory entityFactory;
+    private final TimeUtil timeUtil;
+    private final RoleRepository roleRepository;
 
-    public UserRepositoryImpl(
-//            PasswordEncoder passwordEncoder,
-            UserJpaRepository userJpaRepository,
-            RoleRepository roleRepository, TimeUtil timeUtil, EmailRepository emailRepository) {
-//        this.passwordEncoder = passwordEncoder;
+    public UserRepositoryImpl(UserJpaRepository userJpaRepository,
+                              RoleRepository roleRepository,
+                              EmailRepository emailRepository,
+                              EntityFactory entityFactory,
+                              TimeUtil timeUtil) {
         this.userJpaRepository = userJpaRepository;
         this.roleRepository = roleRepository;
-        this.timeUtil = timeUtil;
         this.emailRepository = emailRepository;
+        this.entityFactory = entityFactory;
+        this.timeUtil = timeUtil;
     }
 
     @Override
-    public User create(User user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User create(final User user) {
+        User u = SerializationUtils.clone(user);
 
-        Email email = emailRepository.create(user.getEmail()); // Create Email entity
+        Date date = timeUtil.getCurrentDate();
 
-        user.setEmail(email); // set email with id
-        user.setRoles(Arrays.asList(roleRepository.getRoleOrCreate(RoleType.User)));
-        user.setEmail(EntityFactory.createEmail(user.getEmail().getAddress()));
+        // Create Email entity
+        Email email = emailRepository.create(entityFactory.createEmail(u.getEmail().getAddress()));
 
-        user = userJpaRepository.save(user); // save user with email
+        u.setEmail(email);
+        u.setRoles(Collections.singletonList(roleRepository.getRoleOrCreate(DEFAULT_ROLE)));
+        u.setCreated(date);
+        u.setUpdated(date);
 
-        email.setUser(user); // insert user into email entity
-        emailRepository.update(email); // save updates
+        // Save User with Email and Roles
+        u = userJpaRepository.save(u);
 
+        // Save User in Email entity
+        email.setUser(u);
+        emailRepository.update(email);
 
-        return user;
+        return u;
     }
 
     @Override
-    public User getById(Long id) {
+    public User getById(final Long id) {
         return userJpaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public boolean disableUserByUserId(Long userId) {
-        User user = getById(userId);
+    public User update(final User user) {
+        User u = SerializationUtils.clone(user);
 
-        if (user == null) {
-            return false;
-        }
-
-        user.setStatus(Status.DISABLED);
-
-        update(user);
-
-        return true;
+        u.setUpdated(timeUtil.getCurrentDate());
+        return userJpaRepository.save(u);
     }
 
     @Override
-    public boolean isExist(Long id) {
-        return userJpaRepository.existsById(id);
-    }
-
-    @Override
-    public User update(User user) {
-        user.setUpdated(timeUtil.getCurrentDate());
-        return userJpaRepository.save(user);
-    }
-
-    @Override
-    public User getByUsername(String username) {
+    public User getByUsername(final String username) {
         return userJpaRepository.findByUsername(username).orElse(null);
     }
 
     @Override
-    public boolean isExistByUsername(String username) {
-        return userJpaRepository.findByUsername(username).isPresent();
+    public boolean isExistByUsername(final String username) {
+        return userJpaRepository.existsByUsername(username);
     }
-
-    @Override
-    public RoleType getUserRole(String username) {
-        return userJpaRepository.getUserRoleType(username);
-    }
-
 }

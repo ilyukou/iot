@@ -1,17 +1,21 @@
 package by.grsu.iot.api.service.impl;
 
-import by.grsu.iot.api.dto.DeviceState;
+import by.grsu.iot.api.exception.BadRequestException;
 import by.grsu.iot.api.exception.EntityNotFoundException;
+import by.grsu.iot.api.exception.NotAccessForOperationException;
 import by.grsu.iot.api.service.interf.DeviceService;
+import by.grsu.iot.model.elastic.DeviceState;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.interf.DeviceRepository;
+import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Transactional
@@ -22,94 +26,93 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
+    private final DeviceStateQueueRepository deviceStateQueueRepository;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ProjectRepository projectRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ProjectRepository projectRepository, DeviceStateQueueRepository deviceStateQueueRepository) {
         this.deviceRepository = deviceRepository;
         this.projectRepository = projectRepository;
+        this.deviceStateQueueRepository = deviceStateQueueRepository;
     }
 
 
     @Override
-    public Device create(Long projectId, String name, String username) {
+    public Device create(Long projectId, Device device, String username) {
         Project project = projectRepository.getById(projectId);
 
-        if (!project.getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.warn(ms);
-            throw new IllegalArgumentException(ms);
+        if(project == null){
+            throw new EntityNotFoundException("Project does not exist with given id={" + projectId + "}");
         }
 
-        return deviceRepository.create(project, name);
+        if (!project.getUser().getUsername().equals(username)) {
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
+        }
+
+        if(device.getStates().size() < 2){
+            throw new BadRequestException("state", "States size is less than 2");
+        }
+
+        if(device.getStates().contains(device.getState())){
+            throw new BadRequestException("state", "State not contains in states");
+        }
+
+        return deviceRepository.create(project, device);
     }
 
     @Override
     public Device getById(Long id, String username) {
-        Device sensor = deviceRepository.getById(id);
+        Device deviceFromRep = deviceRepository.getById(id);
 
-        if (sensor == null || !sensor.isActive()) {
-            String ms = "Sensor does not exist with given id {" + id + "}";
-            LOG.warn(ms);
-            throw new EntityNotFoundException(ms);
+        if(deviceFromRep == null){
+            throw new EntityNotFoundException("id", "Device does not exist with given id={" + id + "}");
         }
 
-        // FIXME - add LAZY init from db
-        if (!sensor.getProject().getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.warn(ms);
-            throw new IllegalArgumentException(ms);
+        if (!deviceFromRep.getProject().getUser().getUsername().equals(username)) {
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        return sensor;
+        return deviceFromRep;
     }
 
     @Override
     public boolean deleteById(Long id, String username) {
         Device device = deviceRepository.getById(id);
 
-        if (device == null || !device.isActive()) {
-            String ms = "Sensor does not exist with given id {" + id + "}";
-            LOG.warn(ms);
-            throw new EntityNotFoundException(ms);
+        if(device == null){
+            throw new EntityNotFoundException("id", "Device does not exist with given id={" + id + "}");
         }
 
-        // FIXME - add LAZY init from db
         if (!device.getProject().getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.warn(ms);
-            throw new IllegalArgumentException(ms);
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        deviceRepository.delete(id);
+        deviceRepository.delete(device.getId());
 
         return true;
     }
 
     @Override
-    public void update(Long id, String name, String state, String username) {
-        Device device = getById(id, username);
+    public Device update(Long id, Device device, String username) {
+        Device deviceFromRep = deviceRepository.getById(id);
 
-        if (device == null || !device.isActive()) {
-            String ms = "Sensor does not exist with given id {" + id + "}";
-            LOG.warn(ms);
-            throw new EntityNotFoundException(ms);
+        if(deviceFromRep == null){
+            throw new EntityNotFoundException("id", "Device does not exist with given id={" + id + "}");
         }
 
-        // FIXME - add LAZY init from db
-        if (!device.getProject().getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.warn(ms);
-            throw new IllegalArgumentException(ms);
+        if (!deviceFromRep.getProject().getUser().getUsername().equals(username)) {
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        if (name != null) {
-            device.setName(name);
+        if(device.getStates().size() < 2){
+            throw new BadRequestException("state", "States size is less than 2");
         }
 
-        if (state != null && device.getStates().contains(state)) {
-            device.setState(name);
+        if(device.getStates().contains(device.getState())){
+            throw new BadRequestException("state", "State not contains in states");
         }
 
-        update(device);
+        device.setId(id);
+
+        return update(device);
     }
 
     @Override
@@ -118,12 +121,31 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public void setState(String token, String state) {
+    public by.grsu.iot.api.dto.DeviceState setState(String token, String state) {
         Device device = deviceRepository.getByToken(token);
 
-        if (device != null && device.getStates().contains(state)) {
-            device.setState(state);
-            update(device);
+        if(device == null){
+            throw new EntityNotFoundException("Not found device with such token={" + token + "}");
+        }
+
+        if(!device.getStates().contains(state)){
+            throw new EntityNotFoundException("Not found state={" + state +"}, list of possible " +
+                    "states={" + device.getStates() + "}");
+        }
+
+        deviceStateQueueRepository.put(new DeviceState(token, state, new Date().getTime()));
+
+        while (true){
+
+            if(deviceStateQueueRepository.isExist(token)){
+                return new by.grsu.iot.api.dto.DeviceState(deviceRepository.getByToken(token));
+            }
+
+            try {
+                TimeUnit.SECONDS.sleep(1l);
+            } catch (InterruptedException e) {
+                // ignore
+            }
         }
     }
 
@@ -133,18 +155,25 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceState getStateWhenDeviceStateNotEqualState(String token, String deviceState) {
+    public by.grsu.iot.api.dto.DeviceState getStateWhenDeviceStateNotEqualState(String token, String deviceState) {
+        Device device = getByToken(token);
+
+        if (device == null) {
+            LOG.info("Sensor is null");
+            return null;
+        }
+
+        if (!device.getState().equals(deviceState)) {
+            LOG.info("Device state not equal db state");
+            return new by.grsu.iot.api.dto.DeviceState(device);
+        }
+
         while (true) {
-            Device device = getByToken(token);
 
-            if (device == null) {
-                LOG.info("Sensor is null");
-                return null;
-            }
+            if(deviceStateQueueRepository.isExist(token)){
+                device.setState(deviceStateQueueRepository.getAndDelete(token).getState());
 
-            if (!device.getState().equals(deviceState)) {
-                LOG.info("Device state not equal db state");
-                return new DeviceState(device);
+                return new by.grsu.iot.api.dto.DeviceState(update(device));
             }
 
             try {
@@ -153,5 +182,10 @@ public class DeviceServiceImpl implements DeviceService {
                 // ignore
             }
         }
+    }
+
+    @Override
+    public void deleteDeviceStateChangeRequests(String token) {
+        deviceStateQueueRepository.delete(token);
     }
 }

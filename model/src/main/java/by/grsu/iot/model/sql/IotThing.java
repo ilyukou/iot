@@ -3,6 +3,8 @@ package by.grsu.iot.model.sql;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import java.util.Date;
+import java.util.Objects;
 
 @MappedSuperclass
 public class IotThing extends BaseEntity {
@@ -11,11 +13,17 @@ public class IotThing extends BaseEntity {
 
     private String token;
 
-    public IotThing(Long id, String name, String token) {
-        super(id);
+    public IotThing(Long id, Date created, Date updated, Status status, String name, String token) {
+        super(id, created, updated, status);
         this.name = name;
         this.token = token;
     }
+
+    public IotThing(IotThing iotThing) {
+        this(iotThing.getId(), iotThing.getCreated(), iotThing.getUpdated(), iotThing.getStatus(),
+                 iotThing.getName(), iotThing.getToken());
+    }
+
 
     public IotThing(Project project, String name, String token) {
         this.name = name;
@@ -49,5 +57,14 @@ public class IotThing extends BaseEntity {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IotThing)) return false;
+        if (!super.equals(o)) return false;
+        IotThing iotThing = (IotThing) o;
+        return Objects.equals(name, iotThing.name) && Objects.equals(token, iotThing.token);
     }
 }

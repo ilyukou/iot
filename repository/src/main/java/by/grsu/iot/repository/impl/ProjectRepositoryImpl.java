@@ -1,19 +1,20 @@
 package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.model.sql.Status;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
+import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.ProjectJpaRepository;
 import by.grsu.iot.repository.util.TimeUtil;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Transactional
@@ -24,71 +25,55 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     private final ProjectJpaRepository projectJpaRepository;
     private final UserRepository userRepository;
+    private final DeviceRepository deviceRepository;
     private final TimeUtil timeUtil;
+    private final EntityFactory entityFactory;
 
-    public ProjectRepositoryImpl(ProjectJpaRepository projectJpaRepository, UserRepository userRepository, TimeUtil timeUtil) {
+    public ProjectRepositoryImpl(ProjectJpaRepository projectJpaRepository, UserRepository userRepository, DeviceRepository deviceRepository, TimeUtil timeUtil, EntityFactory entityFactory) {
         this.projectJpaRepository = projectJpaRepository;
         this.userRepository = userRepository;
+        this.deviceRepository = deviceRepository;
         this.timeUtil = timeUtil;
+        this.entityFactory = entityFactory;
     }
 
-
     @Override
-    public Project create(String name, String username, String title) {
+    public Project create(final String name, final String username, final String title) {
         User user = userRepository.getByUsername(username);
+        Set<Project> projects = getUserProjectsByUser(user);
 
-        if (user == null) {
-            String ms = "User must be not null";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
-        }
-
-        Set<Project> projects = user.getProjects();
-
-        Project newProject = EntityFactory.createProject();
+        Project newProject = entityFactory.createProject();
         newProject.setName(name);
         newProject.setTitle(title);
-        newProject.setUser(user);
+
+        newProject = projectJpaRepository.save(newProject);
 
         projects.add(newProject);
         user.setProjects(projects);
         userRepository.update(user);
 
-        return projectJpaRepository.save(newProject);
+        newProject.setUser(user);
+        return update(newProject);
     }
 
     @Override
-    public Project update(Project project) {
+    public Project update(final Project project) {
+        Project p = SerializationUtils.clone(project);
 
-        if (project == null || project.getId() == null) {
-            String ms = "Update project is null or project.id is null";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
-        }
-
-        project.setUpdated(timeUtil.getCurrentDate());
-
-        return projectJpaRepository.save(project);
+        p.setUpdated(timeUtil.getCurrentDate());
+        return projectJpaRepository.save(p);
     }
 
     @Override
-    public Project getById(Long id) {
+    public Project getById(final Long id) {
         return projectJpaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public boolean disableProjectByProjectId(Long projectId) {
-        Project project = getById(projectId);
+    public Set<Project> getUserProjectsByUser(final User user) {
+        User u = SerializationUtils.clone(user);
 
-        if (project == null) {
-            return false;
-        }
-
-        project.setStatus(Status.DISABLED);
-
-        update(project);
-
-        return true;
+        return projectJpaRepository.findProjectsByUser(u).orElse(new HashSet<>());
     }
 
     @Override
@@ -97,17 +82,28 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Long> getProjects(Long userId) {
-        return projectJpaRepository.findProjectsIdByUserId(userId);
-    }
+    public boolean delete(Long id) {
+        Project project = getById(id);
 
-    @Override
-    public List<Project> getProjectsByIds(List<Long> ids) {
-        return null;
-    }
+        if(project == null){
+            return false;
+        }
 
-    @Override
-    public boolean isUserProject(Long projectId, String username) {
-        return false;
+        if(project.getDevices().size() != 0){
+            project.getDevices().forEach(device -> deviceRepository.delete(device.getId()));
+        }
+
+        User user = project.getUser();
+
+        Set<Project> projects = user.getProjects();
+        projects.remove(project);
+
+        user.setProjects(projects);
+
+        user = userRepository.update(user);
+
+        projectJpaRepository.deleteById(project.getId());
+
+        return !isExist(id);
     }
 }

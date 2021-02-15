@@ -1,7 +1,9 @@
 package by.grsu.iot.model.sql;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -18,8 +20,8 @@ public class Role extends BaseEntity {
         this.role = role;
     }
 
-    public Role(Long id, RoleType role, List<User> users) {
-        super(id);
+    public Role(Long id, Date created, Date updated, Status status, RoleType role, List<User> users) {
+        super(id, created, updated, status);
         this.role = role;
         this.users = users;
     }
@@ -32,11 +34,16 @@ public class Role extends BaseEntity {
         super();
     }
 
-    public RoleType getRole() {
+    public Role(Role role){
+        this(role.getId(), role.getCreated(), role.getUpdated(), role.getStatus(),
+                role.getRoleType(), role.getUsers());
+    }
+
+    public RoleType getRoleType() {
         return role;
     }
 
-    public void setRole(RoleType role) {
+    public void setRoleType(RoleType role) {
         this.role = role;
     }
 
@@ -55,4 +62,14 @@ public class Role extends BaseEntity {
                 "name: " + role + "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role)) return false;
+        if (!super.equals(o)) return false;
+        Role role1 = (Role) o;
+        return role == role1.role
+//                && Objects.equals(users, role1.users)
+                ;
+    }
 }

@@ -1,11 +1,15 @@
 package by.grsu.iot.api.service.impl;
 
+import by.grsu.iot.api.exception.BadRequestException;
 import by.grsu.iot.api.service.activemq.EntityProducer;
 import by.grsu.iot.api.service.interf.EmailService;
 import by.grsu.iot.api.service.interf.UserService;
 import by.grsu.iot.model.activemq.ActActiveMQ;
 import by.grsu.iot.model.sql.*;
+import by.grsu.iot.repository.factory.EntityFactory;
+import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,95 +27,53 @@ public class UserServiceImpl implements UserService {
 
     private static final RoleType DEFAULT_ROLE_TYPE = RoleType.User;
 
-    private final EmailService emailService;
+    private final EmailRepository emailRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EntityProducer entityProducer;
+    private final EntityFactory entityFactory;
 
     @Autowired
-    public UserServiceImpl(EmailService emailService, UserRepository userRepository, PasswordEncoder passwordEncoder, EntityProducer entityProducer) {
-        this.emailService = emailService;
+    public UserServiceImpl(EmailRepository emailRepository, UserRepository userRepository, PasswordEncoder passwordEncoder,
+                           EntityProducer entityProducer, EntityFactory entityFactory) {
+        this.emailRepository = emailRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.entityProducer = entityProducer;
+        this.entityFactory = entityFactory;
     }
 
     @Override
-    public User create(User user) {
+    public User create(final User user) {
+        User u = SerializationUtils.clone(user);
 
-        if (emailService.isExist(user.getEmail().getAddress()) || userRepository.isExistByUsername(user.getUsername())) {
-            String ms = "User with such username or email exist";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
+        if(emailRepository.isExist(u.getEmail().getAddress())){
+            throw new BadRequestException("email", "User with such email exist");
         }
 
-        user = userRepository.create(user);
+        if (userRepository.isExistByUsername(u.getUsername())) {
+            throw new BadRequestException("username", "User with such username exist");
+        }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        u.setEmail(entityFactory.createEmail(u.getEmail().getAddress()));
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
 
-        entityProducer.sendMessage(user, ActActiveMQ.CREATE);
+        u = userRepository.create(u);
+
+
+        entityProducer.sendMessage(u, ActActiveMQ.CREATE);
+
+        return u;
+    }
+
+    @Override
+    public User getByUsername(final String username) {
+        User user = userRepository.getByUsername(username);
+
+        if(user == null){
+            throw new EntityNotFoundException("User does not found with such username={" + username + "}");
+        }
 
         return user;
-    }
-
-    @Override
-    public User getById(Long id) {
-        return userRepository.getById(id);
-    }
-
-    @Override
-    public User getByUsername(String username) {
-        return userRepository.getByUsername(username);
-    }
-
-    @Override
-    public boolean isUserHasProjectByProjectId(User user, Long projectId) {
-        for (Project p : user.getProjects()) {
-            if (p.getId().equals(projectId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        User user = getById(id);
-
-        userRepository.disableUserByUserId(id);
-
-        entityProducer.sendMessage(user, ActActiveMQ.DELETE);
-    }
-
-    @Override
-    public boolean isExist(Long id) {
-        return userRepository.isExist(id);
-    }
-
-    @Override
-    public User update(User user) {
-        user = userRepository.update(user);
-
-        entityProducer.sendMessage(user, ActActiveMQ.CREATE);
-
-        return user;
-    }
-
-    @Override
-    public void confirmUser(String verificationCode) {
-        Email email = emailService.findByCode(verificationCode);
-
-        if (email == null) {
-            throw new EntityNotFoundException("Email not found with such verification code");
-        }
-
-        email.setStatus(Status.ACTIVE);
-        emailService.update(email);
-
-        User user = email.getUser();
-
-        user.setStatus(Status.ACTIVE);
-        update(user);
     }
 }

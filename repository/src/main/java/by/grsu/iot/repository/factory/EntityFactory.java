@@ -1,11 +1,8 @@
 package by.grsu.iot.repository.factory;
 
-import by.grsu.iot.model.activemq.*;
-import by.grsu.iot.model.elastic.*;
 import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.RoleRepository;
 import by.grsu.iot.repository.util.TimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,25 +16,30 @@ import java.util.List;
 @Component
 public class EntityFactory {
 
+    private final TimeUtil timeUtil;
+    private final StringUtil stringUtil;
+
     // BaseEntity default fields
-    private static final Status DEFAULT_STATUS = Status.NOT_ACTIVE;
+    private final Status DEFAULT_STATUS = Status.NOT_ACTIVE;
 
     // User default fields
-    private static final RoleType DEFAULT_ROLE_TYPE = RoleType.User;
+    private final RoleType DEFAULT_ROLE_TYPE = RoleType.User;
 
     // Project default fields
-    private static final AccessType PROJECT_ACCESS_TYPE = AccessType.PRIVATE;
-    private static final Status PROJECT_STATUS = Status.ACTIVE;
+    private final AccessType PROJECT_ACCESS_TYPE = AccessType.PRIVATE;
+    private final Status PROJECT_STATUS = Status.ACTIVE;
 
-    private static final long EMAIL_VERIFICATION_CODE_LENGTH = 30;
-    private static Long tokenLength;
-    private static RoleRepository roleRepository;
-    private static TimeUtil timeUtil;
-    private static StringUtil stringUtil;
+    private final long EMAIL_VERIFICATION_CODE_LENGTH = 30;
+
     @Value("${iot.sensor.token.length}")
     private Long tokenLen;
 
-    private static BaseEntity createBaseEntity() {
+    public EntityFactory(TimeUtil timeUtil, StringUtil stringUtil) {
+        this.timeUtil = timeUtil;
+        this.stringUtil = stringUtil;
+    }
+
+    private BaseEntity createBaseEntity() {
         BaseEntity baseEntity = new BaseEntity();
 
         baseEntity.setStatus(DEFAULT_STATUS);
@@ -50,21 +52,21 @@ public class EntityFactory {
         return baseEntity;
     }
 
-    public static User createUser() {
+    public User createUser() {
         User user = new User(createBaseEntity());
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
-        user.setRoles(roles);
+//        List<Role> roles = new ArrayList<>();
+//        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
+//        user.setRoles(roles);
 
         return user;
     }
 
-    public static Device createDevice(Status projectStatus) {
+    public Device createDevice(Status status) {
         Device sensor = new Device(createBaseEntity());
 
-        sensor.setStatus(projectStatus);
-        sensor.setToken(stringUtil.generateToken(tokenLength));
+        sensor.setStatus(status);
+        sensor.setToken(stringUtil.generateToken(tokenLen));
 
         // Default values
         sensor.addState("off");
@@ -76,11 +78,11 @@ public class EntityFactory {
         return sensor;
     }
 
-    public static Device createDevice() {
+    public Device createDevice() {
         return createDevice(Status.ACTIVE);
     }
 
-    public static Project createProject() {
+    public Project createProject() {
         Project project = new Project(createBaseEntity());
 
         project.setStatus(PROJECT_STATUS);
@@ -89,24 +91,16 @@ public class EntityFactory {
         return project;
     }
 
-    public static Email createEmail() {
+    public Email createEmail() {
         return new Email(createBaseEntity());
     }
 
-    public static Email createEmail(String address) {
+    public Email createEmail(String address) {
         Email email = createEmail();
 
         email.setAddress(address);
         email.setCode(stringUtil.generateString(EMAIL_VERIFICATION_CODE_LENGTH));
 
         return email;
-    }
-
-    @Autowired
-    public void setSomeThing(RoleRepository roleRepository, TimeUtil timeUtil, StringUtil stringUtil) {
-        tokenLength = tokenLen;
-        EntityFactory.roleRepository = roleRepository;
-        EntityFactory.timeUtil = timeUtil;
-        EntityFactory.stringUtil = stringUtil;
     }
 }

@@ -27,22 +27,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public Email getById(Long id) {
-        return emailRepository.getById(id);
-    }
-
-    @Override
-    public Email update(Email email) {
-        return emailRepository.update(email);
-    }
-
-    @Override
     public boolean isExist(String address) {
         return findByAddress(address) != null;
-    }
-
-    @Override
-    public Email findByCode(String verificationCode) {
-        return emailRepository.findByVerificationToken(verificationCode);
     }
 }

@@ -2,6 +2,7 @@ package by.grsu.iot.api.security;
 
 import by.grsu.iot.api.service.interf.UserService;
 import by.grsu.iot.model.sql.User;
+import by.grsu.iot.repository.interf.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +20,9 @@ import java.util.Collection;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserService service;
+    private final UserRepository service;
 
-    public CustomUserDetailsService(UserService service, PasswordEncoder passwordEncoder) {
+    public CustomUserDetailsService(UserRepository service, PasswordEncoder passwordEncoder) {
         this.service = service;
         this.passwordEncoder = passwordEncoder;
     }
@@ -50,7 +51,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Collection<GrantedAuthority> grantedAuthority = new ArrayList<>();
 
-        user.getRoles().forEach(role -> grantedAuthority.add(new SimpleGrantedAuthority(role.getRole().getValue())));
+        user.getRoles().forEach(role -> grantedAuthority.add(new SimpleGrantedAuthority(role.getRoleType().getValue())));
 
         return grantedAuthority;
     }

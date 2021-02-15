@@ -38,22 +38,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/auth/**").permitAll()
 
+                .antMatchers("/device").hasRole("USER")
+                .antMatchers("/device/**").hasRole("USER")
+
+                .antMatchers("/deviceState/**").permitAll()
+                .antMatchers("/deviceState").permitAll()
+
                 .antMatchers("/project").hasRole("USER")
                 .antMatchers("/project/**").hasRole("USER")
 
-                .antMatchers("/sensor").hasRole("USER")
-                .antMatchers("/sensor/**").hasRole("USER")
-
-                .antMatchers("/value/**").permitAll()
-
-                .antMatchers("/search/**").permitAll()
-
-                .antMatchers("/user/**").permitAll()
-
-                .antMatchers("/device").permitAll()
-
-                .antMatchers("/device/state/**").permitAll()
-                .antMatchers("/device/state").permitAll()
+                .antMatchers("/validation").permitAll()
+                .antMatchers("/validation/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()

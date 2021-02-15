@@ -6,13 +6,11 @@ public class ExceptionResponse {
 
     private Date timestamp;
     private String message;
-    private int status;
     private String field;
 
-    public ExceptionResponse(Date timestamp, String message, int status, String field) {
+    public ExceptionResponse(Date timestamp, String message, String field) {
         this.timestamp = timestamp;
         this.message = message;
-        this.status = status;
         this.field = field;
     }
 
@@ -25,14 +23,6 @@ public class ExceptionResponse {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getField() {

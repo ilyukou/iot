@@ -11,4 +11,6 @@ public interface EmailJpaRepository extends JpaRepository<Email, Long> {
     Optional<Email> findEmailByAddress(String address);
 
     Optional<Email> findEmailByCode(String verificationCode);
+
+    boolean existsByAddress(String address);
 }

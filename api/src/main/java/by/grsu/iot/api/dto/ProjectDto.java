@@ -13,24 +13,18 @@ import java.util.stream.Collectors;
  */
 public class ProjectDto {
 
-    private Long id;
-
     private List<Long> devices;
 
     private String name;
 
     private String title;
 
-    private Long owner;
+    private Long id;
 
     public ProjectDto(Project project) {
-        this.id = project.getId();
         this.name = project.getName();
         this.title = project.getTitle();
-
-        if (project.getUser() != null) {
-            this.owner = project.getUser().getId();
-        }
+        this.id = project.getId();
 
         if (project.getDevices() != null) {
             this.devices = project.getDevices().stream()
@@ -41,21 +35,19 @@ public class ProjectDto {
     }
 
     public ProjectDto(ProjectElasticsearch projectElasticsearch) {
-        this.id = projectElasticsearch.getProjectId();
         this.name = projectElasticsearch.getName();
         this.title = projectElasticsearch.getTitle();
-        this.owner = projectElasticsearch.getOwner();
+        this.id = projectElasticsearch.getProjectId();
     }
 
     public ProjectDto() {
     }
 
-    public ProjectDto(Long id, List<Long> devices, String name, String title, Long owner) {
-        this.id = id;
+    public ProjectDto(List<Long> devices, String name, String title, Long projectId) {
         this.devices = devices;
         this.name = name;
         this.title = title;
-        this.owner = owner;
+        this.id = projectId;
     }
 
     public Long getId() {
@@ -88,13 +80,5 @@ public class ProjectDto {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Long getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Long owner) {
-        this.owner = owner;
     }
 }

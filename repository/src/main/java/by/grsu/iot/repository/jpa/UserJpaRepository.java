@@ -12,8 +12,5 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
-
-    @Query(value = "select p.id from project p where p.user_Id = ?1", nativeQuery = true)
-    RoleType getUserRoleType(String username);
+    boolean existsByUsername(String username);
 }

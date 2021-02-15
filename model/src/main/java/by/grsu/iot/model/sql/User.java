@@ -1,13 +1,12 @@
 package by.grsu.iot.model.sql;
 
+import org.hibernate.proxy.HibernateProxyHelper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user")
@@ -21,23 +20,37 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "email_id")
     private Email email;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Project> projects = new HashSet<>();
 
+    // FIXME - LAZY INTITIAL
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String username, String password, Email email, List<Role> roles) {
+    public User(Long id, Date created, Date updated, Status status,
+                String username, String password, Email email,
+                Set<Project> projects, List<Role> roles) {
+        super(id, created, updated, status);
         this.username = username;
         this.password = password;
         this.email = email;
+        this.projects = projects;
         this.roles = roles;
+    }
+
+    public User(User user) {
+        super(user.getId(), user.getCreated(), user.getUpdated(), user.getStatus());
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.projects = user.getProjects();
+        this.roles = user.getRoles();
     }
 
     public User(BaseEntity baseEntity) {
@@ -102,6 +115,10 @@ public class User extends BaseEntity implements UserDetails {
         this.projects = projects;
     }
 
+    public void addProject(Project project){
+        this.projects.add(project);
+    }
+
     public List<Role> getRoles() {
         return roles;
     }
@@ -110,4 +127,17 @@ public class User extends BaseEntity implements UserDetails {
         this.roles = roles;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username)
+                && Objects.equals(password, user.password)
+//                && Objects.equals(email, user.email)
+//                && Objects.equals(projects, user.projects)
+//                && Objects.equals(roles, user.roles)
+                ;
+    }
 }

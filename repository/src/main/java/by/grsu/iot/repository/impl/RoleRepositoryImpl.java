@@ -4,11 +4,11 @@ import by.grsu.iot.model.sql.Role;
 import by.grsu.iot.model.sql.RoleType;
 import by.grsu.iot.repository.interf.RoleRepository;
 import by.grsu.iot.repository.jpa.RoleJpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Repository
+@Component
 public class RoleRepositoryImpl implements RoleRepository {
 
     private final RoleJpaRepository roleJpaRepository;
@@ -18,12 +18,12 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role getRoleByRoleType(RoleType roleType) {
+    public Role getRoleByRoleType(final RoleType roleType) {
         return roleJpaRepository.findByRole(roleType).orElse(null);
     }
 
     @Override
-    public Role getRoleOrCreate(RoleType roleType) {
+    public Role getRoleOrCreate(final RoleType roleType) {
         Role role = getRoleByRoleType(roleType);
 
         if (role != null) {
@@ -34,7 +34,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role create(RoleType roleType) {
+    public Role create(final RoleType roleType) {
         return roleJpaRepository.save(new Role(roleType));
     }
 }

@@ -1,18 +1,27 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.*;
+import by.grsu.iot.api.exception.ExceptionUtil;
 import by.grsu.iot.api.service.interf.DeviceService;
 import by.grsu.iot.api.util.ValidationUtil;
+import by.grsu.iot.api.validation.validator.AuthenticationRequestValidator;
+import by.grsu.iot.api.validation.validator.DeviceFormDtoValidator;
+import by.grsu.iot.model.sql.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.validation.Valid;
 import java.util.concurrent.ForkJoinPool;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
@@ -21,39 +30,60 @@ public class DeviceController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
-    private long TIME_OUT_IN_MILLIS = 30000;
-
     private final DeviceService deviceService;
-    private final ValidationUtil validationUtil;
+    private final DeviceFormDtoValidator deviceFormDtoValidator;
 
-    public DeviceController(DeviceService deviceService, ValidationUtil validationUtil) {
+    public DeviceController(DeviceService deviceService, DeviceFormDtoValidator deviceFormDtoValidator) {
         this.deviceService = deviceService;
-        this.validationUtil = validationUtil;
+        this.deviceFormDtoValidator = deviceFormDtoValidator;
+    }
+
+    @InitBinder("deviceFormDto")
+    protected void initAuthenticationRequestBinder(WebDataBinder binder) {
+        binder.setValidator(deviceFormDtoValidator);
     }
 
     @PostMapping
-    public ResponseEntity<Long> create(
+    public ResponseEntity<DeviceDto> create(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody DeviceFormDto dto
+            @RequestBody @Valid DeviceFormDto dto, BindingResult result
     ) {
-        validationUtil.isUnValidNameForSensor(dto.getName());
+
+        if (result.hasErrors()) {
+            ExceptionUtil.throwException(result);
+        }
+
+        Device device = new Device();
+
+        device.setState(dto.getState());
+        device.setStates(dto.getStates());
+        device.setName(dto.getName());
 
         return new ResponseEntity<>(
-                new DeviceDto(deviceService.create(dto.getProject(), dto.getName(), userDetails.getUsername())).getId(),
+                new DeviceDto(deviceService.create(dto.getProject(), device, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<DeviceDto> update(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody DeviceFormDto dto
+            @RequestBody @Valid DeviceFormDto dto, BindingResult result
     ) {
-        validationUtil.isUnValidNameForSensor(dto.getName());
 
-        deviceService.update(id, dto.getName(), dto.getState(), userDetails.getUsername());
+        if (result.hasErrors()) {
+            ExceptionUtil.throwException(result);
+        }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        Device device = new Device();
+
+        device.setState(dto.getState());
+        device.setStates(dto.getStates());
+        device.setName(dto.getName());
+
+        return new ResponseEntity<>(
+                new DeviceDto(deviceService.update(id, device, userDetails.getUsername())),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -71,40 +101,5 @@ public class DeviceController {
     ) {
         deviceService.deleteById(id, userDetails.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/state/{token}")
-    public DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>> getCurrentState(
-            @PathVariable String token,
-            @RequestParam String state
-    ) {
-
-        // Default time out response
-        DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>> deferredResult =
-                new DeferredResult<>(TIME_OUT_IN_MILLIS,
-                        new HttpMessageWrapper(
-                                HttpMessageEnum.info,
-                                "Time Out",
-                                null)
-                );
-
-        deferredResult.onCompletion(() -> LOG.info("Processing complete"));
-
-        ForkJoinPool.commonPool().submit(() -> {
-
-            // Result
-            ResponseEntity<HttpMessageWrapper<DeviceState>> responseEntity = new ResponseEntity<>(
-                    new HttpMessageWrapper<>(
-                            HttpMessageEnum.ok,
-                            "ok",
-                            deviceService.getStateWhenDeviceStateNotEqualState(token, state)
-                    ),
-                    HttpStatus.OK
-            );
-
-            deferredResult.setResult(responseEntity);
-
-        });
-        return deferredResult;
     }
 }

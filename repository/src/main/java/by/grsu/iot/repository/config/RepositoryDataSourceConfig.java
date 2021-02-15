@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "by.grsu.iot.repository")
 @PropertySource("classpath:application.properties")
 @EnableTransactionManagement
 public class RepositoryDataSourceConfig {

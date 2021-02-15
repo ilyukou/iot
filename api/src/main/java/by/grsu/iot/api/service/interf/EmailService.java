@@ -9,11 +9,5 @@ public interface EmailService {
 
     Email create(Email email);
 
-    Email getById(Long id);
-
-    Email update(Email email);
-
     boolean isExist(String address);
-
-    Email findByCode(String verificationCode);
 }

@@ -7,6 +7,8 @@ import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.jpa.DeviceJpaRepository;
 import by.grsu.iot.repository.util.TimeUtil;
+import org.apache.commons.lang3.SerializationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,63 +21,89 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
     private final DeviceJpaRepository deviceJpaRepository;
     private final ProjectRepository projectRepository;
-    private final TimeUtil timeUtil;
+    private final EntityFactory entityFactory;
 
-    public DeviceRepositoryImpl(DeviceJpaRepository deviceJpaRepository, ProjectRepository projectRepository, TimeUtil timeUtil) {
+    public DeviceRepositoryImpl(DeviceJpaRepository deviceJpaRepository, @Lazy ProjectRepository projectRepository, EntityFactory entityFactory) {
         this.deviceJpaRepository = deviceJpaRepository;
         this.projectRepository = projectRepository;
-        this.timeUtil = timeUtil;
+        this.entityFactory = entityFactory;
     }
 
     @Override
-    public Device create(Project project, String name) {
-        Device sensor = EntityFactory.createDevice();
-        sensor.setName(name);
-        sensor.setProject(project);
+    public Device create(final Project project, final Device device) {
+        Project p = SerializationUtils.clone(project);
+        Device d = SerializationUtils.clone(device);
 
-        Set<Device> sensors = new HashSet<>();
+        Device thing = entityFactory.createDevice();
+        thing.setName(d.getName());
+        thing.setStates(d.getStates());
+        thing.setState(d.getState());
+        thing.setProject(p);
 
-        if (project.getDevices() != null && project.getDevices().size() > 0) {
-            sensors = project.getDevices();
+        Set<Device> things = new HashSet<>();
+
+        if (p.getDevices() != null && p.getDevices().size() > 0) {
+            things = p.getDevices();
         }
 
-        sensors.add(sensor);
-        project.setDevices(sensors);
+        things.add(thing);
+        p.setDevices(things);
 
-        sensor = deviceJpaRepository.save(sensor);
+        thing = deviceJpaRepository.save(thing);
 
-        projectRepository.update(project);
+        projectRepository.update(p);
 
-        return sensor;
+        return thing;
     }
 
     @Override
-    public Device getById(Long id) {
+    public Device getById(final Long id) {
         return deviceJpaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Device update(Device device) {
-        return deviceJpaRepository.save(device);
+    public Set<Device> getDevicesByProject(final Project project) {
+        Project p = SerializationUtils.clone(project);
+
+        return deviceJpaRepository.findDevicesByProject(p).orElse(new HashSet<>());
     }
 
     @Override
-    public void delete(Long id) {
+    public Device update(final Device device) {
+        Device d = SerializationUtils.clone(device);
 
+        return deviceJpaRepository.save(d);
     }
 
     @Override
-    public Device getByToken(String token) {
+    public Device getByToken(final String token) {
         return deviceJpaRepository.findDeviceByToken(token).orElse(null);
     }
 
     @Override
-    public boolean isExist(Long id) {
-        return deviceJpaRepository.existsById(id);
+    public boolean delete(final Long id) {
+        if(!isExist(id)){
+            return false;
+        }
+
+        Device device = getById(id);
+
+        Project project = projectRepository.getById(device.getProject().getId());
+        Set<Device> devices = project.getDevices();
+
+        devices.remove(device);
+
+        project.setDevices(devices);
+
+        projectRepository.update(project);
+
+        deviceJpaRepository.deleteById(device.getId());
+
+        return !isExist(device.getId());
     }
 
     @Override
-    public boolean isExist(String token) {
-        return getByToken(token) != null;
+    public boolean isExist(final Long id) {
+        return deviceJpaRepository.existsById(id);
     }
 }

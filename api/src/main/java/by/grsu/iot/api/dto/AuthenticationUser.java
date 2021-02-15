@@ -5,14 +5,14 @@ package by.grsu.iot.api.dto;
  */
 public class AuthenticationUser {
 
-    private Long id;
+    private Long tokenValidity;
     private String username;
     private String token;
 
-    public AuthenticationUser(String username, String token, Long id) {
+    public AuthenticationUser(String username, String token, Long tokenValidity) {
         this.username = username;
         this.token = token;
-        this.id = id;
+        this.tokenValidity = tokenValidity;
     }
 
     public AuthenticationUser() {
@@ -34,11 +34,11 @@ public class AuthenticationUser {
         this.token = token;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTokenValidity() {
+        return tokenValidity;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTokenValidity(Long tokenValidity) {
+        this.tokenValidity = tokenValidity;
     }
 }

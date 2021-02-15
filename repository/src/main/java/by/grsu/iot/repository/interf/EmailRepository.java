@@ -3,15 +3,43 @@ package by.grsu.iot.repository.interf;
 
 import by.grsu.iot.model.sql.Email;
 
+/**
+ * Repository for CRUD operation with {@link Email}
+ */
 public interface EmailRepository {
 
-    Email findByAddress(String address);
+    /**
+     * Find {@link Email} by {@link Email#getAddress()}
+     * @param address {@link Email#getAddress()}
+     * @return {@link Email} from repository.
+     */
+    Email findByAddress(final String address);
 
-    Email create(Email email);
+    /**
+     * Create {@link Email}
+     * @param email to create
+     * @return created {@link Email}
+     */
+    Email create(final Email email);
 
-    Email getById(Long id);
+    /**
+     * Get {@link Email} by {@link Email#getId()}
+     * @param id {@link Email#getId()}
+     * @return {@link Email} from repository.
+     */
+    Email getById(final Long id);
 
-    Email update(Email email);
+    /**
+     * Update {@link Email}
+     * @param email to update
+     * @return updated {@link Email}
+     */
+    Email update(final Email email);
 
-    Email findByVerificationToken(String verificationToken);
+    /**
+     *  Is exist {@link Email} by {@link Email#getAddress()}
+     * @param address {@link Email#getAddress()}
+     * @return {@code true} if exist or {@code false} if not exist
+     */
+    boolean isExist(String address);
 }

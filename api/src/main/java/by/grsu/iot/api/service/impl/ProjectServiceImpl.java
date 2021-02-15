@@ -1,14 +1,14 @@
 package by.grsu.iot.api.service.impl;
 
 
+import by.grsu.iot.api.dto.ProjectThing;
 import by.grsu.iot.api.exception.BadRequestException;
 import by.grsu.iot.api.exception.EntityNotFoundException;
+import by.grsu.iot.api.exception.NotAccessForOperationException;
 import by.grsu.iot.api.service.activemq.EntityProducer;
 import by.grsu.iot.api.service.interf.ProjectService;
 import by.grsu.iot.model.activemq.ActActiveMQ;
-import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.model.sql.RoleType;
-import by.grsu.iot.model.sql.User;
+import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import org.slf4j.Logger;
@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -43,11 +45,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project create(String name, String username, String title) {
-
-        if (name == null || username == null || title == null) {
-            String ms = "Name or username must be not null";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
+        if (!userRepository.isExistByUsername(username)){
+            throw new EntityNotFoundException("Not found user with such username={" + username + "}");
         }
 
         Project project = projectRepository.create(name, username, title);
@@ -63,42 +62,42 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void update(Long id, String name, String username) {
+    public Project update(Long id, String name, String title, String username) {
+        if (!projectRepository.isExist(id)) {
+            throw new EntityNotFoundException("Project does not exist with given id {" + id + "}");
+        }
+
         Project project = getById(id, username);
 
-        if (project == null) {
-            String ms = "Project does not exist with given id {" + id + "}";
-            LOG.info(ms);
-            throw new EntityNotFoundException(ms);
-        }
-
         if (!project.getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
+            throw new NotAccessForOperationException("Project does not belong this user with given username={" + username + "}");
         }
 
-        project.setName(name);
+        if(name != null){
+            project.setName(name);
+        }
+
+        if(title != null){
+            project.setTitle(title);
+        }
 
         project = update(project);
 
         entityProducer.sendMessage(project, ActActiveMQ.UPDATE);
+
+        return project;
     }
 
     @Override
     public Project getById(Long id, String username) {
-        Project project = projectRepository.getById(id);
-
-        if (project == null) {
-            String ms = "Project does not exist with given id {" + id + "}";
-            LOG.info(ms);
-            throw new EntityNotFoundException(ms);
+        if (!projectRepository.isExist(id)) {
+            throw new EntityNotFoundException("Project does not exist with given id {" + id + "}");
         }
 
+        Project project = projectRepository.getById(id);
+
         if (!project.getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
         return project;
@@ -106,37 +105,23 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean deleteById(Long id, String username) {
+
+        if (!projectRepository.isExist(id)) {
+            throw new EntityNotFoundException("Project does not exist with given id {" + id + "}");
+        }
+
         Project project = projectRepository.getById(id);
 
-        if (project == null) {
-            return false;
-        }
-
         if (!project.getUser().getUsername().equals(username)) {
-            String ms = "Project does not belong this user with giver username {" + username + "}";
-            LOG.info(ms);
-            throw new IllegalArgumentException(ms);
+            throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
 
-        boolean result = projectRepository.disableProjectByProjectId(id);
+        boolean result = projectRepository.delete(id);
 
         entityProducer.sendMessage(project, ActActiveMQ.DELETE);
 
         return result;
-    }
-
-    @Override
-    public List<Long> getProjectIdsByUsername(String username) {
-        User user = userRepository.getByUsername(username);
-
-        if (user == null) {
-            String ms = "Not found User by username {" + username + "}";
-            LOG.info(ms);
-            throw new EntityNotFoundException(ms);
-        }
-
-        return projectRepository.getProjects(user.getId());
     }
 
     @Override
@@ -145,61 +130,75 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getByIds(List<Long> ids, String username) {
-        if(ids.size() == 0 || ids.size() > 10){
-            throw new IllegalArgumentException();
-        }
-
-        if(!canUserReadProjects(ids, username)){
-            throw new IllegalArgumentException();
-        }
-
-        return projectRepository.getProjectsByIds(ids);
-    }
-
-    @Override
-    public boolean canUserReadProjects(List<Long> ids, String username) {
-        for (Long id: ids){
-            if(!canUserReadProject(id, username)){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean canUserReadProject(Long id, String username) {
-        if(userRepository.getUserRole(username) == RoleType.Admin){
-            return true;
-        }
-
-        if(projectRepository.isUserProject(id, username)){
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
     public List<Project> getProjectsFromPage(Integer count, String username) {
         User user = userRepository.getByUsername(username);
 
         if(user == null){
-            throw new BadRequestException();
+            throw new EntityNotFoundException("User does not exist with given username={" + username + "}");
         }
 
         if(user.getProjects().size() == 0){
             return new ArrayList<>();
         };
 
-        return getProjectFromTo(count * PROJECT_PER_PAGE, (count + 1) * PROJECT_PER_PAGE, new LinkedList<>(user.getProjects()));
+        return getProjectFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, new LinkedList<>(user.getProjects()), count);
     }
 
-    private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects){
+    @Override
+    public Integer getCountOfProjectPage(String requestedUsername, String usernameRequestingThis) {
+        Set<Project> projectSet;
 
-        if(from > projects.size() || to > projects.size() || from >= to){
-            throw new BadRequestException();
+        if(requestedUsername.equals(usernameRequestingThis)){
+            projectSet = userRepository.getByUsername(requestedUsername).getProjects();
+        } else {
+            projectSet = userRepository.getByUsername(requestedUsername).getProjects().stream()
+                    .filter(project -> project.getAccessType().equals(AccessType.PUBLIC))
+                    .collect(Collectors.toSet());
+        }
+
+        if(projectSet.size() == 0){
+            return 0;
+        }
+
+        if(projectSet.size() <= PROJECT_PER_PAGE){
+            return 1;
+        }
+
+        if(projectSet.size() % PROJECT_PER_PAGE == 0){
+            return Math.toIntExact(projectSet.size() / PROJECT_PER_PAGE);
+        }
+
+        int c = Math.toIntExact(projectSet.size() % PROJECT_PER_PAGE);
+
+        return Math.toIntExact((projectSet.size() - c) / PROJECT_PER_PAGE) + 1;
+    }
+
+    @Override
+    public List<ProjectThing> getThings(Long id, String username) {
+        List<ProjectThing> projectThings = new ArrayList<>();
+
+        Project project = projectRepository.getById(id);
+
+        if(project == null){
+            throw new EntityNotFoundException("Not found Project with such id={" + id + "}");
+        }
+
+        project.getDevices().forEach(device -> projectThings.add(new ProjectThing(device)));
+
+        return projectThings;
+    }
+
+    private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects, Integer count){
+
+        if(from > projects.size()){
+            throw new BadRequestException("count", "Project size={" + projects.size() + "}, " +
+                    "last page is {" + Math.ceil(projects.size() / PROJECT_PER_PAGE) + ", " +
+                    "you required page={" + count + "}, " +
+                    "project size per page={"+PROJECT_PER_PAGE+"}");
+        }
+
+        if(to > projects.size()){
+            to = (long) projects.size();
         }
 
         return projects.subList(from.intValue(), to.intValue());

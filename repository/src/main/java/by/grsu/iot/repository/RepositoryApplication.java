@@ -8,10 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-@SpringBootApplication
-@EnableJpaRepositories(basePackages = {"by.grsu.iot"})
-@EntityScan(basePackages = {"by.grsu.iot"})
-@ComponentScan(basePackages = {"by.grsu.iot"})
+@SpringBootApplication(scanBasePackages = {"by.grsu.iot.repository", "by.grsu.iot.model"})
+@EntityScan(basePackages = {"by.grsu.iot.model"})
+@EnableJpaRepositories(basePackages = {"by.grsu.iot.repository"})
 public class RepositoryApplication {
     public static void main(String[] args) {
         SpringApplication.run(RepositoryApplication.class);
