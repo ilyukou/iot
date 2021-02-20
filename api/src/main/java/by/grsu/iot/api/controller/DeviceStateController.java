@@ -1,9 +1,9 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.api.dto.DeviceState;
+import by.grsu.iot.service.domain.DeviceState;
 import by.grsu.iot.api.dto.HttpMessageEnum;
 import by.grsu.iot.api.dto.HttpMessageWrapper;
-import by.grsu.iot.api.service.interf.DeviceService;
+import by.grsu.iot.service.interf.DeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package by.grsu.iot.repository.impl;
 
-import by.grsu.iot.model.elastic.DeviceState;
+import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.repository.RepositoryApplication;
 import by.grsu.iot.repository.config.ElasticsearchTestConfig;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
@@ -26,7 +26,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +49,7 @@ public class DeviceStateQueueRepositoryImplTest {
 
     private final List<String> tokens = Arrays.asList(tokenFirst, tokenSecond);
 
-    private final String index = DeviceState.class.getAnnotation(Document.class).indexName();
+    private final String index = DeviceStateElasticsearch.class.getAnnotation(Document.class).indexName();
 
     @BeforeAll
     public CreateIndexResponse setUp() throws IOException {
@@ -105,10 +104,10 @@ public class DeviceStateQueueRepositoryImplTest {
     public void put(){
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenFirst));
 
-        DeviceState deviceState = new DeviceState(tokenFirst, "off", new Date().getTime());
+        DeviceStateElasticsearch deviceState = new DeviceStateElasticsearch(tokenFirst, "off", new Date().getTime());
         deviceStateQueueRepository.put(deviceState);
 
-        DeviceState actual = deviceStateQueueRepository.get(tokenFirst);
+        DeviceStateElasticsearch actual = deviceStateQueueRepository.get(tokenFirst);
         Assert.assertEquals(deviceState.getToken(), actual.getToken());
         Assert.assertEquals(deviceState.getState(), actual.getState());
         Assert.assertEquals(deviceState.getTime(), actual.getTime());
@@ -120,10 +119,10 @@ public class DeviceStateQueueRepositoryImplTest {
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenFirst));
         Assert.assertNull(deviceStateQueueRepository.get(tokenFirst));
 
-        DeviceState deviceState = new DeviceState(tokenFirst, "off", new Date().getTime());
+        DeviceStateElasticsearch deviceState = new DeviceStateElasticsearch(tokenFirst, "off", new Date().getTime());
         deviceStateQueueRepository.put(deviceState);
 
-        DeviceState actual = deviceStateQueueRepository.get(tokenFirst);
+        DeviceStateElasticsearch actual = deviceStateQueueRepository.get(tokenFirst);
         Assert.assertEquals(deviceState.getToken(), actual.getToken());
         Assert.assertEquals(deviceState.getState(), actual.getState());
         Assert.assertEquals(deviceState.getTime(), actual.getTime());
@@ -135,10 +134,10 @@ public class DeviceStateQueueRepositoryImplTest {
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenFirst));
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenSecond));
 
-        DeviceState firstDeviceState = new DeviceState(tokenFirst, "off", new Date().getTime());
+        DeviceStateElasticsearch firstDeviceState = new DeviceStateElasticsearch(tokenFirst, "off", new Date().getTime());
         deviceStateQueueRepository.put(firstDeviceState);
 
-        DeviceState secondDeviceState = new DeviceState(tokenSecond, "off", new Date().getTime());
+        DeviceStateElasticsearch secondDeviceState = new DeviceStateElasticsearch(tokenSecond, "off", new Date().getTime());
         deviceStateQueueRepository.put(secondDeviceState);
 
         Assert.assertTrue(deviceStateQueueRepository.isExist(tokenFirst));
@@ -154,10 +153,10 @@ public class DeviceStateQueueRepositoryImplTest {
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenFirst));
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenSecond));
 
-        DeviceState firstDeviceState = new DeviceState(tokenFirst, "off", new Date().getTime());
+        DeviceStateElasticsearch firstDeviceState = new DeviceStateElasticsearch(tokenFirst, "off", new Date().getTime());
         deviceStateQueueRepository.put(firstDeviceState);
 
-        DeviceState secondDeviceState = new DeviceState(tokenSecond, "off", new Date().getTime());
+        DeviceStateElasticsearch secondDeviceState = new DeviceStateElasticsearch(tokenSecond, "off", new Date().getTime());
         deviceStateQueueRepository.put(secondDeviceState);
 
         Assert.assertTrue(deviceStateQueueRepository.isExist(tokenFirst));
@@ -172,12 +171,12 @@ public class DeviceStateQueueRepositoryImplTest {
     public void getAndDelete(){
         Assert.assertFalse(deviceStateQueueRepository.isExist(tokenFirst));
 
-        DeviceState deviceState = new DeviceState(tokenFirst, "off", new Date().getTime());
+        DeviceStateElasticsearch deviceState = new DeviceStateElasticsearch(tokenFirst, "off", new Date().getTime());
         deviceStateQueueRepository.put(deviceState);
 
         Assert.assertTrue(deviceStateQueueRepository.isExist(tokenFirst));
 
-        DeviceState actual = deviceStateQueueRepository.getAndDelete(tokenFirst);
+        DeviceStateElasticsearch actual = deviceStateQueueRepository.getAndDelete(tokenFirst);
         Assert.assertEquals(deviceState.getToken(), actual.getToken());
         Assert.assertEquals(deviceState.getState(), actual.getState());
         Assert.assertEquals(deviceState.getTime(), actual.getTime());

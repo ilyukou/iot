@@ -1,11 +1,11 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.ProjectDto;
-import by.grsu.iot.api.dto.ProjectFormDto;
-import by.grsu.iot.api.dto.ProjectThing;
-import by.grsu.iot.api.exception.ExceptionUtil;
-import by.grsu.iot.api.service.interf.ProjectService;
-import by.grsu.iot.api.validation.validator.ProjectFormDtoValidator;
+import by.grsu.iot.model.api.ProjectFormDto;
+import by.grsu.iot.service.domain.ProjectThing;
+import by.grsu.iot.service.exception.ExceptionUtil;
+import by.grsu.iot.service.interf.ProjectService;
+import by.grsu.iot.service.validation.validator.ProjectFormDtoValidator;
 import by.grsu.iot.model.sql.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

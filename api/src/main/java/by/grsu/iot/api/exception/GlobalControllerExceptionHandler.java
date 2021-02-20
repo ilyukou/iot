@@ -1,7 +1,10 @@
 package by.grsu.iot.api.exception;
 
 import by.grsu.iot.api.dto.ExceptionResponse;
-import by.grsu.iot.api.security.jwt.InvalidJwtAuthenticationException;
+import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
+import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.exception.NotAccessForOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

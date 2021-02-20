@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.api.dto.validation.ValidationRule;
-import by.grsu.iot.api.service.interf.ValidationService;
+import by.grsu.iot.service.domain.ValidationRule;
+import by.grsu.iot.service.interf.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

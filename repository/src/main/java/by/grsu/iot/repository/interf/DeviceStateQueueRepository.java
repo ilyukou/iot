@@ -1,43 +1,43 @@
 package by.grsu.iot.repository.interf;
 
-import by.grsu.iot.model.elastic.DeviceState;
+import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 
 /**
- * Repository for CRUD operation with {@link DeviceState}
+ * Repository for CRUD operation with {@link DeviceStateElasticsearch}
  * see also {@link by.grsu.iot.model.sql.Device}
  */
 public interface DeviceStateQueueRepository {
 
     /**
-     * Put {@link DeviceState} int queue
+     * Put {@link DeviceStateElasticsearch} int queue
      * @param deviceState to put
      */
-    void put(DeviceState deviceState);
+    void put(DeviceStateElasticsearch deviceState);
 
     /**
-     * Get {@link DeviceState} by {@link DeviceState#getToken()}
-     * @param deviceToken {@link DeviceState#getToken()}
-     * @return {@link DeviceState} from queue or {@code null}
+     * Get {@link DeviceStateElasticsearch} by {@link DeviceStateElasticsearch#getToken()}
+     * @param deviceToken {@link DeviceStateElasticsearch#getToken()}
+     * @return {@link DeviceStateElasticsearch} from queue or {@code null}
      */
-    DeviceState get(String deviceToken);
+    DeviceStateElasticsearch get(String deviceToken);
 
     /**
-     * Is exist {@link DeviceState} by {@link DeviceState#getToken()}
-     * @param deviceToken {@link DeviceState#getToken()}
+     * Is exist {@link DeviceStateElasticsearch} by {@link DeviceStateElasticsearch#getToken()}
+     * @param deviceToken {@link DeviceStateElasticsearch#getToken()}
      * @return {@code true} ir exist or {@code false}
      */
     boolean isExist(String deviceToken);
 
     /**
-     * Delete {@link DeviceState} by {@link DeviceState#getToken()}
-     * @param deviceToken {@link DeviceState#getToken()}
+     * Delete {@link DeviceStateElasticsearch} by {@link DeviceStateElasticsearch#getToken()}
+     * @param deviceToken {@link DeviceStateElasticsearch#getToken()}
      */
     void delete(String deviceToken);
 
     /**
-     * Get {@link DeviceState} from queue and delete
-     * @param deviceToken {@link DeviceState#getToken()}
-     * @return {@link DeviceState}
+     * Get {@link DeviceStateElasticsearch} from queue and delete
+     * @param deviceToken {@link DeviceStateElasticsearch#getToken()}
+     * @return {@link DeviceStateElasticsearch}
      */
-    DeviceState getAndDelete(String deviceToken);
+    DeviceStateElasticsearch getAndDelete(String deviceToken);
 }

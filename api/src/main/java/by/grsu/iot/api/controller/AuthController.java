@@ -1,15 +1,15 @@
 package by.grsu.iot.api.controller;
 
 import javax.validation.Valid;
-import by.grsu.iot.api.dto.AuthenticationRequest;
+import by.grsu.iot.model.api.AuthenticationRequest;
 import by.grsu.iot.api.dto.AuthenticationUser;
-import by.grsu.iot.api.dto.RegistrationRequest;
-import by.grsu.iot.api.exception.ExceptionUtil;
-import by.grsu.iot.api.security.jwt.JwtProperties;
-import by.grsu.iot.api.security.jwt.JwtTokenProvider;
-import by.grsu.iot.api.service.interf.UserService;
-import by.grsu.iot.api.validation.validator.AuthenticationRequestValidator;
-import by.grsu.iot.api.validation.validator.RegistrationRequestValidator;
+import by.grsu.iot.model.api.RegistrationRequest;
+import by.grsu.iot.service.exception.ExceptionUtil;
+import by.grsu.iot.service.security.jwt.JwtProperties;
+import by.grsu.iot.service.security.jwt.JwtTokenProvider;
+import by.grsu.iot.service.interf.UserService;
+import by.grsu.iot.service.validation.validator.AuthenticationRequestValidator;
+import by.grsu.iot.service.validation.validator.RegistrationRequestValidator;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
 import org.slf4j.Logger;

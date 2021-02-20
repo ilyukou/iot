@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
  */
 public class ProjectDto {
 
-    private List<Long> devices;
-
     private String name;
 
     private String title;
@@ -25,13 +23,6 @@ public class ProjectDto {
         this.name = project.getName();
         this.title = project.getTitle();
         this.id = project.getId();
-
-        if (project.getDevices() != null) {
-            this.devices = project.getDevices().stream()
-                    .filter(Device::isActive)
-                    .map(Device::getId)
-                    .collect(Collectors.toList());
-        }
     }
 
     public ProjectDto(ProjectElasticsearch projectElasticsearch) {
@@ -43,8 +34,7 @@ public class ProjectDto {
     public ProjectDto() {
     }
 
-    public ProjectDto(List<Long> devices, String name, String title, Long projectId) {
-        this.devices = devices;
+    public ProjectDto(String name, String title, Long projectId) { ;
         this.name = name;
         this.title = title;
         this.id = projectId;
@@ -56,14 +46,6 @@ public class ProjectDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Long> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<Long> devices) {
-        this.devices = devices;
     }
 
     public String getName() {

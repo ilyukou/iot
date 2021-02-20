@@ -12,7 +12,7 @@ public class Role extends BaseEntity {
     @Column(name = "role")
     private RoleType role;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private List<User> users;
 
     public Role(RoleType role) {

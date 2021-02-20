@@ -1,12 +1,10 @@
 package by.grsu.iot.model.sql;
 
-import org.hibernate.proxy.HibernateProxyHelper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user")
@@ -20,11 +18,15 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "email_id")
     private Email email;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "telegramUser_id")
+    private TelegramUser telegramUser;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Project> projects = new HashSet<>();
 
     // FIXME - LAZY INTITIAL
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
@@ -125,6 +127,18 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public TelegramUser getTelegramUser() {
+        return telegramUser;
+    }
+
+    public void setTelegramUser(TelegramUser telegramUser) {
+        this.telegramUser = telegramUser;
+    }
+
+    public boolean hasTelegramUser(){
+        return this.telegramUser != null;
     }
 
     @Override

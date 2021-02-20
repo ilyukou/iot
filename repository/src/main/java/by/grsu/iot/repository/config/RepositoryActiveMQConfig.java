@@ -9,7 +9,7 @@ import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
 
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-repository.properties")
 @Configuration
 public class RepositoryActiveMQConfig {
 

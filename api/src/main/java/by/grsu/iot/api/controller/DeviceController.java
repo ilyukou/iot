@@ -1,11 +1,10 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.*;
-import by.grsu.iot.api.exception.ExceptionUtil;
-import by.grsu.iot.api.service.interf.DeviceService;
-import by.grsu.iot.api.util.ValidationUtil;
-import by.grsu.iot.api.validation.validator.AuthenticationRequestValidator;
-import by.grsu.iot.api.validation.validator.DeviceFormDtoValidator;
+import by.grsu.iot.model.api.DeviceFormDto;
+import by.grsu.iot.service.exception.ExceptionUtil;
+import by.grsu.iot.service.interf.DeviceService;
+import by.grsu.iot.service.validation.validator.DeviceFormDtoValidator;
 import by.grsu.iot.model.sql.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
-import java.util.concurrent.ForkJoinPool;
 
 import static org.springframework.http.ResponseEntity.ok;
 

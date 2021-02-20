@@ -31,8 +31,11 @@ public class EntityFactory {
 
     private final long EMAIL_VERIFICATION_CODE_LENGTH = 30;
 
-    @Value("${iot.sensor.token.length}")
-    private Long tokenLen;
+    @Value("${by.grsu.iot.repository.email.token.length}")
+    private Integer EMAIL_TOKEN_LENGTH;
+
+    @Value("${by.grsu.iot.repository.device.token.length}")
+    private Long DEVICE_TOKEN_LENGTH;
 
     public EntityFactory(TimeUtil timeUtil, StringUtil stringUtil) {
         this.timeUtil = timeUtil;
@@ -66,7 +69,7 @@ public class EntityFactory {
         Device sensor = new Device(createBaseEntity());
 
         sensor.setStatus(status);
-        sensor.setToken(stringUtil.generateToken(tokenLen));
+        sensor.setToken(stringUtil.generateToken(DEVICE_TOKEN_LENGTH));
 
         // Default values
         sensor.addState("off");
@@ -99,7 +102,7 @@ public class EntityFactory {
         Email email = createEmail();
 
         email.setAddress(address);
-        email.setCode(stringUtil.generateString(EMAIL_VERIFICATION_CODE_LENGTH));
+        email.setCode(stringUtil.generateString(EMAIL_TOKEN_LENGTH));
 
         return email;
     }

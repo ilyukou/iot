@@ -90,4 +90,12 @@ public class Device extends IotThing {
 
         return ModelUtil.listEqualsIgnoreOrder(states, device.states);
     }
+
+    public Device updateField(Device device) {
+        if(device.getName() != null){
+            setName(device.getName());
+        }
+
+        return this;
+    }
 }

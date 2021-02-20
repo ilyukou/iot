@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-repository.properties")
 @Configuration
 public class RepositoryElasticSearchConfig {
 

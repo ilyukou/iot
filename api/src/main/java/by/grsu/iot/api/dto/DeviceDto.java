@@ -29,7 +29,7 @@ public class DeviceDto {
         this.id = device.getId();
         this.name = device.getName();
         this.token = device.getToken();
-
+        this.states = device.getStates();
         this.state = device.getState();
 
         if (device.getProject() != null) {

@@ -1,7 +1,6 @@
 package by.grsu.iot.repository.impl;
 
-import by.grsu.iot.model.elastic.DeviceState;
-import by.grsu.iot.model.sql.Device;
+import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
 import by.grsu.iot.repository.elasticsearchRepository.DeviceStateElasticsearchRepository;
 import org.springframework.stereotype.Repository;
@@ -16,12 +15,12 @@ public class DeviceStateQueueRepositoryImpl implements DeviceStateQueueRepositor
     }
 
     @Override
-    public void put(DeviceState deviceState) {
+    public void put(DeviceStateElasticsearch deviceState) {
         deviceStateElasticsearchRepository.save(deviceState);
     }
 
     @Override
-    public DeviceState get(String deviceToken) {
+    public DeviceStateElasticsearch get(String deviceToken) {
         return deviceStateElasticsearchRepository.findByToken(deviceToken);
     }
 
@@ -36,8 +35,8 @@ public class DeviceStateQueueRepositoryImpl implements DeviceStateQueueRepositor
     }
 
     @Override
-    public DeviceState getAndDelete(String deviceToken) {
-        DeviceState deviceState = get(deviceToken);
+    public DeviceStateElasticsearch getAndDelete(String deviceToken) {
+        DeviceStateElasticsearch deviceState = get(deviceToken);
 
         if(deviceState != null){
             delete(deviceState.getToken());

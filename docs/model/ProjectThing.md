@@ -1,12 +1,12 @@
 #### Iot Things
 Filed name | Type | Note
 ------------ | ------------- | -------------
-type | String | entity name - "device", "sensor"
+entity | String | entity name - "device", "sensor"
 id | Long | entity id
 
 ```json
 {
-    "type" : "device",
+    "entity" : "device",
     "id" : 1
 }
 

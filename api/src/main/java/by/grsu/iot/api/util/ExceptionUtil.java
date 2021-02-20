@@ -1,9 +1,9 @@
 package by.grsu.iot.api.util;
 
-import by.grsu.iot.api.exception.ApiException;
-import by.grsu.iot.api.exception.BadRequestException;
-import by.grsu.iot.api.exception.EntityNotFoundException;
-import by.grsu.iot.api.exception.NotAccessForOperationException;
+import by.grsu.iot.service.exception.ApiException;
+import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.exception.NotAccessForOperationException;
 import org.springframework.validation.BindingResult;
 
 
