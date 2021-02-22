@@ -1,20 +1,24 @@
 package by.grsu.iot.service.impl;
 
+import by.grsu.iot.model.api.ProjectForm;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.service.activemq.EntityProducer;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
 import by.grsu.iot.service.interf.ProjectService;
 import by.grsu.iot.model.activemq.ActActiveMQ;
 import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
+import by.grsu.iot.service.validation.factory.DataBinderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.DataBinder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,22 +37,35 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final EntityProducer entityProducer;
+    private final DataBinderFactory dataBinderFactory;
 
     @Autowired
-    public ProjectServiceImpl(UserRepository userRepository, ProjectRepository projectRepository,
-                              EntityProducer entityProducer) {
+    public ProjectServiceImpl(
+            UserRepository userRepository,
+            ProjectRepository projectRepository,
+            EntityProducer entityProducer,
+            DataBinderFactory dataBinderFactory
+    ) {
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.entityProducer = entityProducer;
+        this.dataBinderFactory = dataBinderFactory;
     }
 
     @Override
-    public Project create(String name, String username, String title) {
+    public Project create(ProjectForm projectForm, String username) {
+        DataBinder dataBinder = dataBinderFactory.createDataBinder(projectForm);
+        dataBinder.validate();
+
+        if (dataBinder.getBindingResult().hasErrors()) {
+            ExceptionUtil.throwException(dataBinder.getBindingResult());
+        }
+
         if (!userRepository.isExistByUsername(username)){
             throw new EntityNotFoundException("Not found user with such username={" + username + "}");
         }
 
-        Project project = projectRepository.create(name, username, title);
+        Project project = projectRepository.create(projectForm.getName(), username, projectForm.getTitle());
 
         entityProducer.sendMessage(project, ActActiveMQ.CREATE);
 
@@ -61,7 +78,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project update(Long id, String name, String title, String username) {
+    public Project update(Long id, ProjectForm projectForm, String username) {
+        DataBinder dataBinder = dataBinderFactory.createDataBinder(projectForm);
+        dataBinder.validate();
+
+        if (dataBinder.getBindingResult().hasErrors()) {
+            ExceptionUtil.throwException(dataBinder.getBindingResult());
+        }
+
         if (!projectRepository.isExist(id)) {
             throw new EntityNotFoundException("Project does not exist with given id {" + id + "}");
         }
@@ -72,12 +96,12 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAccessForOperationException("Project does not belong this user with given username={" + username + "}");
         }
 
-        if(name != null){
-            project.setName(name);
+        if(projectForm.getName() != null){
+            project.setName(projectForm.getName());
         }
 
-        if(title != null){
-            project.setTitle(title);
+        if(projectForm.getTitle() != null){
+            project.setTitle(projectForm.getTitle());
         }
 
         project = update(project);

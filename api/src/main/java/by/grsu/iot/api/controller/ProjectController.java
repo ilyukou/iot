@@ -1,11 +1,11 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.ProjectDto;
-import by.grsu.iot.model.api.ProjectFormDto;
+import by.grsu.iot.model.api.ProjectForm;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.interf.ProjectService;
-import by.grsu.iot.service.validation.validator.ProjectFormDtoValidator;
+import by.grsu.iot.service.validation.validator.ProjectFormValidator;
 import by.grsu.iot.model.sql.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,30 +30,20 @@ import static org.springframework.http.ResponseEntity.badRequest;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final ProjectFormDtoValidator projectFormDtoValidator;
 
-    public ProjectController(ProjectService projectService, ProjectFormDtoValidator projectFormDtoValidator) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.projectFormDtoValidator = projectFormDtoValidator;
-    }
-
-    @InitBinder("projectFormDto")
-    protected void initAuthenticationRequestBinder(WebDataBinder binder) {
-        binder.setValidator(projectFormDtoValidator);
     }
 
     @PostMapping
     public ResponseEntity<ProjectDto> create(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody @Valid ProjectFormDto projectDto, BindingResult result) {
-
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
+            @RequestBody ProjectForm projectForm
+    ) {
 
         return new ResponseEntity<>(
                 new ProjectDto(
-                        projectService.create(projectDto.getName(), userDetails.getUsername(),projectDto.getTitle())),
+                        projectService.create(projectForm, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 
@@ -61,16 +51,11 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> update(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody @Valid ProjectFormDto projectDto, BindingResult result
+            @RequestBody ProjectForm projectForm
     ) {
 
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
-
         return new ResponseEntity<>(
-                new ProjectDto(projectService.update(id, projectDto.getName(), projectDto.getTitle(),
-                                userDetails.getUsername())),
+                new ProjectDto(projectService.update(id, projectForm, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 

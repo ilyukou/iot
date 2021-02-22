@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TelegramUserRepositoryImpl {
+public class TelegramUserRepositoryImplTest {
 
     @Autowired
     private TelegramUserRepository telegramUserRepository;

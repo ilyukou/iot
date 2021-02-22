@@ -1,8 +1,10 @@
 package by.grsu.iot.service.impl;
 
+import by.grsu.iot.model.api.DeviceForm;
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
 import by.grsu.iot.service.interf.DeviceService;
 import by.grsu.iot.service.domain.DeviceState;
@@ -11,11 +13,13 @@ import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
+import by.grsu.iot.service.validation.factory.DataBinderFactory;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.DataBinder;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -29,35 +33,41 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
     private final DeviceStateQueueRepository deviceStateQueueRepository;
+    private final DataBinderFactory dataBinderFactory;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ProjectRepository projectRepository, DeviceStateQueueRepository deviceStateQueueRepository) {
+    public DeviceServiceImpl(
+            DeviceRepository deviceRepository,
+            ProjectRepository projectRepository,
+            DeviceStateQueueRepository deviceStateQueueRepository,
+            DataBinderFactory dataBinderFactory
+    ) {
         this.deviceRepository = deviceRepository;
         this.projectRepository = projectRepository;
         this.deviceStateQueueRepository = deviceStateQueueRepository;
+        this.dataBinderFactory = dataBinderFactory;
     }
 
 
     @Override
-    public Device create(Long projectId, Device device, String username) {
-        Project project = projectRepository.getById(projectId);
+    public Device create(DeviceForm deviceForm, String username) {
+        DataBinder dataBinder = dataBinderFactory.createDataBinder(deviceForm);
+        dataBinder.validate();
+
+        if (dataBinder.getBindingResult().hasErrors()) {
+            ExceptionUtil.throwException(dataBinder.getBindingResult());
+        }
+
+        Project project = projectRepository.getById(deviceForm.getProject());
 
         if(project == null){
-            throw new EntityNotFoundException("Project does not exist with given id={" + projectId + "}");
+            throw new EntityNotFoundException("Project does not exist with given id={" + deviceForm.getProject() + "}");
         }
 
         if (!project.getUser().getUsername().equals(username)) {
             throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        if(device.getStates().size() < 2){
-            throw new BadRequestException("state", "States size is less than 2");
-        }
-
-        if(!device.getStates().contains(device.getState())){
-            throw new BadRequestException("state", "State not contains in states");
-        }
-
-        return deviceRepository.create(project, device);
+        return deviceRepository.create(project, new Device(deviceForm));
     }
 
     @Override
@@ -93,7 +103,14 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device update(Long id, Device device, String username) {
+    public Device update(Long id, DeviceForm deviceForm, String username) {
+        DataBinder dataBinder = dataBinderFactory.createDataBinder(deviceForm);
+        dataBinder.validate();
+
+        if (dataBinder.getBindingResult().hasErrors()) {
+            ExceptionUtil.throwException(dataBinder.getBindingResult());
+        }
+
         Device deviceFromRep = deviceRepository.getById(id);
 
         if(deviceFromRep == null){
@@ -104,17 +121,9 @@ public class DeviceServiceImpl implements DeviceService {
             throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        if(device.getStates().size() < 2){
-            throw new BadRequestException("state", "States size is less than 2");
-        }
+        deviceFromRep = SerializationUtils.clone(deviceFromRep.updateField(deviceForm));
 
-        if(!device.getStates().contains(device.getState())){
-            throw new BadRequestException("state", "State not contains in states");
-        }
-
-        device = SerializationUtils.clone(deviceFromRep.updateField(device));
-
-        return update(device);
+        return update(deviceFromRep);
     }
 
     @Override

@@ -9,8 +9,8 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 @Transactional
+@Repository
 public class TelegramUserRepositoryImpl implements TelegramUserRepository {
 
     private static final String DEFAULT_CREATED_STATE = "start";

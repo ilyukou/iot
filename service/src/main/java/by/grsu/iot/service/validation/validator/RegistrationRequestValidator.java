@@ -16,7 +16,6 @@ public class RegistrationRequestValidator implements Validator {
         this.userValidationService = userValidationService;
     }
 
-
     @Override
     public boolean supports(Class<?> clazz) {
         return RegistrationRequest.class.equals(clazz);

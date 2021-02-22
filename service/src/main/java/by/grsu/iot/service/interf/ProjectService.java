@@ -1,18 +1,19 @@
 package by.grsu.iot.service.interf;
 
+import by.grsu.iot.model.api.ProjectForm;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.model.sql.Project;
 
 import java.util.List;
 
 public interface ProjectService {
-    Project create(String name, String username, String title);
+    Project create(ProjectForm projectForm, String username);
 
     Project getById(Long id, String username);
 
     Project update(Project project);
 
-    Project update(Long id, String name, String title, String username);
+    Project update(Long id, ProjectForm projectForm, String username);
 
     boolean deleteById(Long id, String username);
 

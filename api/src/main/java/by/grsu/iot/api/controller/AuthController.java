@@ -40,38 +40,22 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-    private final RegistrationRequestValidator registrationRequestValidator;
-    private final AuthenticationRequestValidator authenticationRequestValidator;
     private final JwtProperties jwtProperties;
-    private final EntityFactory entityFactory;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService,
-                          RegistrationRequestValidator registrationRequestValidator, AuthenticationRequestValidator authenticationRequestValidator, JwtProperties jwtProperties, EntityFactory entityFactory) {
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider jwtTokenProvider,
+            UserService userService,
+            JwtProperties jwtProperties
+    ) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
-        this.registrationRequestValidator = registrationRequestValidator;
-        this.authenticationRequestValidator = authenticationRequestValidator;
         this.jwtProperties = jwtProperties;
-        this.entityFactory = entityFactory;
-    }
-
-    @InitBinder("authenticationRequest")
-    protected void initAuthenticationRequestBinder(WebDataBinder binder) {
-        binder.setValidator(authenticationRequestValidator);
-    }
-
-    @InitBinder("registrationRequest")
-    protected void initRegistrationRequestBinder(WebDataBinder binder) {
-        binder.setValidator(registrationRequestValidator);
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<AuthenticationUser> signIn(@RequestBody @Valid AuthenticationRequest data, BindingResult result) {
-
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
+    public ResponseEntity<AuthenticationUser> signIn(@RequestBody AuthenticationRequest data) {
 
         try {
             UsernamePasswordAuthenticationToken authReq
@@ -93,18 +77,9 @@ public class AuthController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<Void> singUp(@RequestBody @Valid RegistrationRequest data, BindingResult result) {
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
+    public ResponseEntity<Void> singUp(@RequestBody RegistrationRequest data) {
 
-        User user = entityFactory.createUser();
-
-        user.setEmail(entityFactory.createEmail(data.getEmail()));
-        user.setUsername(data.getUsername());
-        user.setPassword(data.getPassword());
-
-        userService.create(user);
+        userService.create(data);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

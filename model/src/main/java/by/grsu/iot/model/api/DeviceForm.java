@@ -2,20 +2,20 @@ package by.grsu.iot.model.api;
 
 import java.util.List;
 
-public class DeviceFormDto {
+public class DeviceForm {
     private Long project;
     private String name;
     private String state;
     private List<String> states;
 
-    public DeviceFormDto(Long project, String name, String state, List<String> states) {
+    public DeviceForm(Long project, String name, String state, List<String> states) {
         this.project = project;
         this.name = name;
         this.state = state;
         this.states = states;
     }
 
-    public DeviceFormDto() {
+    public DeviceForm() {
     }
 
     public Long getProject() {

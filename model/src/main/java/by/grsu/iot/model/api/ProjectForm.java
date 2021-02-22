@@ -1,16 +1,16 @@
 package by.grsu.iot.model.api;
 
-public class ProjectFormDto {
+public class ProjectForm {
     private String name;
 
     private String title;
 
-    public ProjectFormDto(String name, String title) {
+    public ProjectForm(String name, String title) {
         this.name = name;
         this.title = title;
     }
 
-    public ProjectFormDto() {
+    public ProjectForm() {
     }
 
     public String getName() {

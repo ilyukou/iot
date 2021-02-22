@@ -1,9 +1,10 @@
 package by.grsu.iot.service.interf;
 
+import by.grsu.iot.model.api.RegistrationRequest;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
-
+import by.grsu.iot.service.validation.validator.RegistrationRequestValidator;
 
 /**
  * Service layer for CRUD operation with {@link User}
@@ -12,12 +13,12 @@ public interface UserService {
 
     /**
      * Create {@link User}.
-     * Method throw {@link BadRequestException} if {@link User} exist by {@link User#getUsername()}
-     * or {@link User#getEmail()}
-     * @param user to create
+     * Method throw {@link BadRequestException} if {@code registrationRequest} not valid see {@link RegistrationRequestValidator}
+     * or {@link User} exist with such {@link User#getUsername()} or {@link User#getEmail()}
+     * @param registrationRequest request
      * @return created {@link User}
      */
-    User create(final User user);
+    User create(final RegistrationRequest registrationRequest);
 
     /**
      * Get {@link User} by {@link User#getUsername()}

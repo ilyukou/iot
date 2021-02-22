@@ -5,7 +5,7 @@ import by.grsu.iot.service.exception.BadRequestException;
 import java.util.List;
 
 public interface DeviceValidationService {
-    public void validateName(String name) throws BadRequestException;
-    public void validateStates(List<String> states) throws BadRequestException;
-    public void validateState(String state) throws BadRequestException;
+    void validateName(String name) throws BadRequestException;
+    void validateStates(List<String> states) throws BadRequestException;
+    void validateState(String state) throws BadRequestException;
 }

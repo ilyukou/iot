@@ -1,18 +1,19 @@
 package by.grsu.iot.service.interf;
 
+import by.grsu.iot.model.api.DeviceForm;
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.service.domain.DeviceState;
 
 public interface DeviceService {
 
-    Device create(Long projectId, Device device, String username);
+    Device create(DeviceForm deviceForm, String username);
 
     Device getById(Long id, String username);
 
     boolean deleteById(Long id, String username);
 
-    Device update(Long id, Device device, String username);
+    Device update(Long id, DeviceForm deviceForm, String username);
 
     Device update(Device device);
 

@@ -1,5 +1,6 @@
 package by.grsu.iot.model.sql;
 
+import by.grsu.iot.model.api.DeviceForm;
 import by.grsu.iot.model.util.ModelUtil;
 
 import javax.persistence.*;
@@ -49,6 +50,20 @@ public class Device extends IotThing {
     public Device() {
     }
 
+    public Device(DeviceForm deviceForm) {
+        this.state = deviceForm.getState();
+        this.states = deviceForm.getStates();
+        setName(deviceForm.getName());
+    }
+
+    public Device updateField(DeviceForm deviceForm) {
+        this.state = deviceForm.getState();
+        this.states = deviceForm.getStates();
+        setName(deviceForm.getName());
+
+        return this;
+    }
+
     public Project getProject() {
         return project;
     }
@@ -89,13 +104,5 @@ public class Device extends IotThing {
         if(states.size() == 0  && device.states.size() == 0) return true;
 
         return ModelUtil.listEqualsIgnoreOrder(states, device.states);
-    }
-
-    public Device updateField(Device device) {
-        if(device.getName() != null){
-            setName(device.getName());
-        }
-
-        return this;
     }
 }

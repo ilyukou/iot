@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional
 @Repository
 public interface TelegramUserJpaRepository extends JpaRepository<TelegramUser, Long> {
     Optional<TelegramUser> findTelegramUserByUserId(Integer userId);

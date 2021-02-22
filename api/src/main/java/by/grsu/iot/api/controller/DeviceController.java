@@ -1,10 +1,10 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.*;
-import by.grsu.iot.model.api.DeviceFormDto;
+import by.grsu.iot.model.api.DeviceForm;
 import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.interf.DeviceService;
-import by.grsu.iot.service.validation.validator.DeviceFormDtoValidator;
+import by.grsu.iot.service.validation.validator.DeviceFormValidator;
 import by.grsu.iot.model.sql.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,36 +28,19 @@ public class DeviceController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
     private final DeviceService deviceService;
-    private final DeviceFormDtoValidator deviceFormDtoValidator;
 
-    public DeviceController(DeviceService deviceService, DeviceFormDtoValidator deviceFormDtoValidator) {
+    public DeviceController(DeviceService deviceService) {
         this.deviceService = deviceService;
-        this.deviceFormDtoValidator = deviceFormDtoValidator;
-    }
-
-    @InitBinder("deviceFormDto")
-    protected void initAuthenticationRequestBinder(WebDataBinder binder) {
-        binder.setValidator(deviceFormDtoValidator);
     }
 
     @PostMapping
     public ResponseEntity<DeviceDto> create(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody @Valid DeviceFormDto dto, BindingResult result
+            @RequestBody DeviceForm deviceForm
     ) {
 
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
-
-        Device device = new Device();
-
-        device.setState(dto.getState());
-        device.setStates(dto.getStates());
-        device.setName(dto.getName());
-
         return new ResponseEntity<>(
-                new DeviceDto(deviceService.create(dto.getProject(), device, userDetails.getUsername())),
+                new DeviceDto(deviceService.create(deviceForm, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 
@@ -65,21 +48,10 @@ public class DeviceController {
     public ResponseEntity<DeviceDto> update(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody @Valid DeviceFormDto dto, BindingResult result
+            @RequestBody DeviceForm deviceForm
     ) {
-
-        if (result.hasErrors()) {
-            ExceptionUtil.throwException(result);
-        }
-
-        Device device = new Device();
-
-        device.setState(dto.getState());
-        device.setStates(dto.getStates());
-        device.setName(dto.getName());
-
         return new ResponseEntity<>(
-                new DeviceDto(deviceService.update(id, device, userDetails.getUsername())),
+                new DeviceDto(deviceService.update(id, deviceForm, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 

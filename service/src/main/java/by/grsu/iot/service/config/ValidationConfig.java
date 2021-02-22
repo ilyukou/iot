@@ -2,10 +2,13 @@ package by.grsu.iot.service.config;
 
 import by.grsu.iot.service.domain.ValidationRule;
 import by.grsu.iot.service.domain.ValidationStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.Validator;
 
 import java.util.Arrays;
 import java.util.HashMap;

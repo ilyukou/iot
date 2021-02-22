@@ -11,12 +11,12 @@ public class StringUtil {
             return false;
         }
 
-        // пробелы допустимы
+        // Space are allowed
         if(space){
             return true;
         }
 
-        // пробелы недопустимы
+        // Space aren't allowed
         if(StringUtil.isStringHasSpace(string)){
             return false;
         }
