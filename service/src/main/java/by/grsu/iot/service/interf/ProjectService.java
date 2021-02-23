@@ -1,6 +1,7 @@
 package by.grsu.iot.service.interf;
 
 import by.grsu.iot.model.api.ProjectForm;
+import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.model.sql.Project;
 
@@ -23,5 +24,5 @@ public interface ProjectService {
 
     Integer getCountOfProjectPage(String requestedUsername, String usernameRequestingThis);
 
-    List<ProjectThing> getThings(Long id, String username);
+    List<? extends IotThing> getThings(Long id, String username);
 }

@@ -1,6 +1,7 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.ProjectDto;
+import by.grsu.iot.api.dto.ThingWrapper;
 import by.grsu.iot.model.api.ProjectForm;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.service.exception.ExceptionUtil;
@@ -114,11 +115,14 @@ public class ProjectController {
 
 
     @GetMapping("/thing/{id}")
-    public ResponseEntity<List<ProjectThing>> getProjectThing(
+    public ResponseEntity<List<ThingWrapper>> getProjectThing(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ){
         return new ResponseEntity<>(
-                projectService.getThings(id, userDetails.getUsername()), HttpStatus.OK);
+                projectService.getThings(id, userDetails.getUsername()).stream()
+                        .map(ThingWrapper::new)
+                        .collect(Collectors.toList())
+                , HttpStatus.OK);
     }
 }

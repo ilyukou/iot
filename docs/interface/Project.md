@@ -98,7 +98,7 @@ Code | Body | Description
 
 ___
 ### Get project things - device, sensor and others.
-##### Request /thing/{id}
+##### Request /project/thing/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
@@ -106,7 +106,7 @@ GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of pr
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | Array of [ProjectThing](../model/ProjectThing.md) | OK
+200 | Array of [ThingWrapper](../model/ThingWrapper.md) | OK
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
 404 | - | Not found Project

@@ -197,8 +197,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectThing> getThings(Long id, String username) {
-        List<ProjectThing> projectThings = new ArrayList<>();
+    public List<? extends IotThing> getThings(Long id, String username) {
 
         Project project = projectRepository.getById(id);
 
@@ -206,9 +205,7 @@ public class ProjectServiceImpl implements ProjectService {
             throw new EntityNotFoundException("Not found Project with such id={" + id + "}");
         }
 
-        project.getDevices().forEach(device -> projectThings.add(new ProjectThing(device)));
-
-        return projectThings;
+        return new ArrayList<>(project.getDevices());
     }
 
     private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects, Integer count){
