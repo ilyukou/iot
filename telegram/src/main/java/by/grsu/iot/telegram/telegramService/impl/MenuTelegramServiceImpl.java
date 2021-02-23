@@ -31,42 +31,15 @@ public class MenuTelegramServiceImpl implements MenuTelegramService {
     private final MenuTelegramMessageService menuTelegramMessageService;
     private final ProjectTelegramService projectTelegramService;
     private final LogoutTelegramService logoutTelegramService;
-    private final BackTelegramService backTelegramService;
-    private final TelegramUserService telegramUserService;
 
-    public MenuTelegramServiceImpl(MenuTelegramMessageService menuTelegramMessageService,
-                                   ProjectTelegramService projectTelegramService,
-                                   LogoutTelegramService logoutTelegramService,
-                                   BackTelegramService backTelegramService,
-                                   TelegramUserService telegramUserService) {
+    public MenuTelegramServiceImpl(
+            MenuTelegramMessageService menuTelegramMessageService,
+            ProjectTelegramService projectTelegramService,
+            LogoutTelegramService logoutTelegramService
+    ) {
         this.menuTelegramMessageService = menuTelegramMessageService;
         this.projectTelegramService = projectTelegramService;
         this.logoutTelegramService = logoutTelegramService;
-        this.backTelegramService = backTelegramService;
-        this.telegramUserService = telegramUserService;
-    }
-
-    @Override
-    public TelegramResponse handleReceivedUpdate(TelegramUser user, Update update) {
-        if(!update.hasCallbackQuery()){
-            throw new BadRequestException();
-        }
-
-        if(update.getCallbackQuery().getData().equals(projectTelegramService.getServiceState())){
-            user.addState(projectTelegramService.getServiceState());
-            user = telegramUserService.update(user);
-            return projectTelegramService.getWelcomeTelegramResponse(user, update);
-        }
-
-        if(update.getCallbackQuery().getData().equals(logoutTelegramService.getServiceState())){
-            return logoutTelegramService.getWelcomeTelegramResponse(user, update);
-        }
-
-        if(update.getCallbackQuery().getData().equals(backTelegramService.getServiceState())){
-            return getWelcomeTelegramResponse(user, update);
-        }
-
-        throw new BadRequestException();
     }
 
     @Override
@@ -87,10 +60,5 @@ public class MenuTelegramServiceImpl implements MenuTelegramService {
     @Override
     public List<? extends TelegramService> getSubServices() {
         return Arrays.asList(projectTelegramService, logoutTelegramService);
-    }
-
-    @Override
-    public TelegramResponse refresh(TelegramUser user, Update update) {
-        throw new BadRequestException();
     }
 }

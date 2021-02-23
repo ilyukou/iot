@@ -67,9 +67,4 @@ public class BackTelegramServiceImpl implements BackTelegramService {
     public List<? extends TelegramService> getSubServices() {
         throw new IllegalArgumentException();
     }
-
-    @Override
-    public TelegramResponse refresh(TelegramUser user, Update update) {
-        throw new IllegalArgumentException();
-    }
 }

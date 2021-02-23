@@ -12,6 +12,7 @@ import by.grsu.iot.telegram.interf.TelegramService;
 import by.grsu.iot.telegram.telegramService.interf.MenuTelegramService;
 import by.grsu.iot.telegram.message.interf.AuthTelegramMessageService;
 import by.grsu.iot.telegram.telegramService.interf.AuthTelegramService;
+import by.grsu.iot.telegram.util.UpdateUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -60,7 +61,12 @@ public class AuthTelegramServiceImpl implements AuthTelegramService {
 
     @Override
     public TelegramResponse getWelcomeTelegramResponse(TelegramUser user, Update update) {
-        return handleReceivedUpdate(user, update);
+        if(telegramUserService.isExist(UpdateUtil.getChatId(update))){
+            return new TelegramResponse(getSendMessage(user, update));
+
+        } else {
+            return handleReceivedUpdate(user, update);
+        }
     }
 
     @Override
@@ -80,33 +86,27 @@ public class AuthTelegramServiceImpl implements AuthTelegramService {
 
     @Override
     public List<? extends TelegramService> getSubServices() {
-        throw new IllegalArgumentException();
-    }
-
-    @Override
-    public TelegramResponse refresh(TelegramUser user, Update update) {
-        return null;
+        return new ArrayList<>();
     }
 
     private TelegramResponse handlerNotExistUser(final Update update){
 
-        TelegramUser user = telegramUserService.create(update.getMessage().getFrom());
+
+        TelegramUser user = telegramUserService.create(UpdateUtil.getFrom(update));
 
         user.addState(getServiceState());
 
         user = telegramUserService.update(user);
 
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(user.getUserId()));
-        message.setText(
-                authTelegramMessageService.getWelcomeText() + "\n"
-                        + "\n" + authTelegramMessageService.getCredentialText()
-        );
-        message.setParseMode(ParseMode.HTML);
-
-        return new TelegramResponse(message);
+        return new TelegramResponse(getSendMessage(user, update));
     }
-    
+
+    @Override
+    public String getMessageTextAndRefresh(Update update) {
+        return authTelegramMessageService.getWelcomeText() + "\n"
+                + "\n" + authTelegramMessageService.getCredentialText();
+    }
+
     private TelegramResponse handlerExistUser(final TelegramUser user, final Update update){
         if(!update.hasMessage() || !update.getMessage().hasText()){
             throw new BadRequestException("Bad request");

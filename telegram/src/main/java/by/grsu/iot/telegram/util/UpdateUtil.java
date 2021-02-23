@@ -4,6 +4,7 @@ import by.grsu.iot.telegram.domain.TelegramResponse;
 import by.grsu.iot.telegram.template.InlineKeyboardMarkupTemplate;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 public class UpdateUtil {
@@ -31,6 +32,38 @@ public class UpdateUtil {
         }
 
         return null;
+    }
+
+    public static User getFrom(Update update){
+        if(update.hasCallbackQuery()){
+            return update.getCallbackQuery().getFrom();
+        }
+
+        if(update.hasMessage()){
+            return update.getMessage().getFrom();
+        }
+
+        if(update.hasEditedMessage()){
+            return update.getEditedMessage().getFrom();
+        }
+
+        if(update.hasCallbackQuery()){
+            return update.getCallbackQuery().getFrom();
+        }
+
+        if(update.hasChosenInlineQuery()){
+            return update.getChosenInlineQuery().getFrom();
+        }
+
+        if(update.hasPreCheckoutQuery()){
+            return update.getPreCheckoutQuery().getFrom();
+        }
+
+        if(update.hasInlineQuery()){
+            return update.getInlineQuery().getFrom();
+        }
+
+        throw new IllegalArgumentException();
     }
 
 //    public static EditMessageText builder(Integer userId, String text, InlineKeyboardMarkup markup, String){
