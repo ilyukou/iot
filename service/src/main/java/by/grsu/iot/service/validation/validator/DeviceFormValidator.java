@@ -23,9 +23,25 @@ public class DeviceFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        DeviceForm obj = (DeviceForm) target;
-
         try {
+            if (target == null){
+                throw new BadRequestException("Device is null");
+            }
+
+            DeviceForm obj = (DeviceForm) target;
+
+            if (obj.getName() == null){
+                throw new BadRequestException("name", "Name is null");
+            }
+
+            if (obj.getState() == null){
+                throw new BadRequestException("state", "State is null");
+            }
+
+            if (obj.getStates() == null){
+                throw new BadRequestException("states", "States is null");
+            }
+
             deviceValidationService.validateName(obj.getName());
             deviceValidationService.validateState(obj.getState());
             deviceValidationService.validateStates(obj.getStates());

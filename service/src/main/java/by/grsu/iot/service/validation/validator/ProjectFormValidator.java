@@ -23,9 +23,21 @@ public class ProjectFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ProjectForm obj = (ProjectForm) target;
-
         try {
+            if (target == null){
+                throw new BadRequestException("Project is null");
+            }
+
+            ProjectForm obj = (ProjectForm) target;
+
+            if (obj.getName() == null){
+                throw new BadRequestException("name", "Name is null");
+            }
+
+            if (obj.getTitle() == null){
+                throw new BadRequestException("title", "Title is null");
+            }
+
             projectValidationService.validateName(obj.getName());
             projectValidationService.validateTitle(obj.getTitle());
 
