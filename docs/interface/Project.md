@@ -114,7 +114,7 @@ Code | Body | Description
 
 ___
 ### Get device page
-##### Request /project/thing/page?project=1&count=1
+##### Request /project/thing/page/{project}?count=1
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | project, count | Project - project id. Count is a number of required page (Number page start from 1). Page size is const  | - | -
