@@ -97,17 +97,33 @@ Code | Body | Description
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
 ___
-### Get project things - device, sensor and others.
-##### Request /project/thing/{id}
+### Get count of things pages in project
+##### Request /project/thing/page/count/{project}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of project | - | - | - | -
+GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | project | Project - project id | - | - | - | - | - | - | -
+
+##### Response
+Code | Body | Description
+------------ | ------------- | -------------
+200 | count | OK. Integer count - count of page. count=0 - device size is 0. count=1 - device size 0-10. count=2 device size 11-20.
+400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed.
+403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation.
+404 | [ExceptionResponse](../model/ExceptionResponse.md) | Not found Project
+500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
+
+___
+### Get device page
+##### Request /project/thing/page?project=1&count=1
+Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
+------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
+GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | project, count | Project - project id. Count is a number of required page (Number page start from 1). Page size is const  | - | -
 
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
 200 | Array of [ThingWrapper](../model/ThingWrapper.md) | OK
-400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
-403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation
-404 | - | Not found Project
+400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed.
+403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation.
+404 | [ExceptionResponse](../model/ExceptionResponse.md) | Not found Project
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
