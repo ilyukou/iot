@@ -32,4 +32,10 @@ public interface TelegramUserService {
      * @return {@link TelegramUser} or {@code null}
      */
     TelegramUser get(final Integer userId);
+
+    /**
+     * Delete {@link TelegramUser} from {@link User}
+     * @param user {@link TelegramUser}
+     */
+    void delete(TelegramUser user);
 }

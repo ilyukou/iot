@@ -50,10 +50,11 @@ public class TelegramUserRepositoryImpl implements TelegramUserRepository {
     public boolean delete(final TelegramUser telegramUser) {
         TelegramUser tlgrmUser = get(telegramUser.getUserId());
 
+        User user = tlgrmUser.getUser();
+
         tlgrmUser.setUser(null);
         update(tlgrmUser);
 
-        User user = tlgrmUser.getUser();
         user.setTelegramUser(null);
         userRepository.update(user);
 

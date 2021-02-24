@@ -35,4 +35,9 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     public TelegramUser get(Integer userId) {
         return telegramUserRepository.get(userId);
     }
+
+    @Override
+    public void delete(TelegramUser user) {
+        telegramUserRepository.delete(user);
+    }
 }

@@ -43,6 +43,9 @@ public class BackTelegramServiceImpl implements BackTelegramService {
 
     @Override
     public TelegramResponse getWelcomeTelegramResponse(TelegramUser user, Update update) {
+        if(user.peekState().equals(getServiceState())){
+            user.popState();
+        }
         user.popState();
         user = telegramUserService.update(user);
         return mapTelegramService.getWelcomeTelegramResponseByTelegramService(user, update);
@@ -51,6 +54,11 @@ public class BackTelegramServiceImpl implements BackTelegramService {
     @Override
     public String getMessageText(Update update) {
         throw new IllegalArgumentException();
+    }
+
+    @Override
+    public TelegramUser update(TelegramUser user) {
+        return telegramUserService.update(user);
     }
 
     @Override
@@ -65,11 +73,6 @@ public class BackTelegramServiceImpl implements BackTelegramService {
 
     @Override
     public List<? extends TelegramService> getSubServices() {
-        throw new IllegalArgumentException();
-    }
-
-    @Override
-    public TelegramResponse refresh(TelegramUser user, Update update) {
         throw new IllegalArgumentException();
     }
 }

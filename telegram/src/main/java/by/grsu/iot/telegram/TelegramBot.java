@@ -36,8 +36,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         LOGGER.info("username: {}", username);
     }
 
-    public void executeTelegramResponse(TelegramResponse telegramResponse) throws TelegramApiException {
+    public void executeTelegramResponse(TelegramResponse telegramResponse, Update update) throws TelegramApiException {
         LOGGER.info("Received telegramResponse {}", telegramResponse);
+
+        if(update.hasCallbackQuery()){
+            AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
+            callbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            execute(callbackQuery);
+        }
 
         if (telegramResponse.hasSendMessage()) {
             execute(telegramResponse.getSendMessage());
@@ -46,17 +52,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(telegramResponse.getAnswerCallbackQuery());
 
         } else if (telegramResponse.hasEditMessageText()) {
-
-            // try to send AnswerCallbackQuery
-            // ignore because if throw Exception, that indicate a call back query was answered
-            try {
-                AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
-                callbackQuery.setCallbackQueryId(telegramResponse.getUpdate().getCallbackQuery().getId());
-
-                execute(callbackQuery);
-            } catch (Exception e) {
-                // ignore
-            }
             execute(telegramResponse.getEditMessageText());
 
         } else if (telegramResponse.hasDeleteMessage()) {
@@ -90,7 +85,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         LOGGER.info("Received update {}", update);
         try {
-            executeTelegramResponse(updateService.handleReceivedUpdate(update));
+            executeTelegramResponse(updateService.handleReceivedUpdate(update), update);
         } catch (TelegramApiException e) {
             LOGGER.warn("Error while send response {0}", e);
         }
