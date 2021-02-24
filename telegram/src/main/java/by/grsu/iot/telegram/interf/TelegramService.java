@@ -23,6 +23,7 @@ public interface TelegramService {
         if (isCallbackQueryHasTransition(user, update)){
             TelegramService service = getTransitionService(user, update);
             user.addState(service.getServiceState());
+            user = update(user);
             return service.getWelcomeTelegramResponse(user, update);
         }
 
@@ -45,6 +46,8 @@ public interface TelegramService {
                 "\n" +
                 new Date().toString();
     }
+
+    TelegramUser update(TelegramUser user);
 
     String getServiceLabel();
 

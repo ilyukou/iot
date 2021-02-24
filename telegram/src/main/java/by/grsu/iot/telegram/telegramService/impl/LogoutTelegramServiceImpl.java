@@ -55,6 +55,11 @@ public class LogoutTelegramServiceImpl implements LogoutTelegramService {
     }
 
     @Override
+    public TelegramUser update(TelegramUser user) {
+        return telegramUserService.update(user);
+    }
+
+    @Override
     public String getServiceLabel() {
         return LABEL;
     }

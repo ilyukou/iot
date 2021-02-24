@@ -12,7 +12,7 @@ import java.util.Objects;
  * Superclass which contains base filed (id, created time, updated time and status) for any object
  */
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public class BaseEntity implements Serializable, Comparable<BaseEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,5 +89,16 @@ public class BaseEntity implements Serializable {
                 && Objects.equals(created, that.created)
                 && Objects.equals(updated, that.updated)
                 && Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int compareTo(BaseEntity o) {
+        if (this.id.equals(o.id)) {
+            return 0;
+        } else if (this.id < o.id) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }

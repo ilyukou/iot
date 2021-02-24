@@ -107,6 +107,11 @@ public class AuthTelegramServiceImpl implements AuthTelegramService {
                 + "\n" + authTelegramMessageService.getCredentialText();
     }
 
+    @Override
+    public TelegramUser update(TelegramUser user) {
+        return telegramUserService.update(user);
+    }
+
     private TelegramResponse handlerExistUser(final TelegramUser user, final Update update){
         if(!update.hasMessage() || !update.getMessage().hasText()){
             throw new BadRequestException("Bad request");

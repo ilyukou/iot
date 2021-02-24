@@ -164,12 +164,18 @@ public class ProjectServiceImpl implements ProjectService {
             return new ArrayList<>();
         };
 
-        return getProjectFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, new LinkedList<>(user.getProjects()), count);
+        List<Project> projects = user.getProjects().stream().sorted().collect(Collectors.toList());
+
+        return getProjectFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects, count);
     }
 
     @Override
     public Integer getCountOfProjectPage(String requestedUsername, String usernameRequestingThis) {
         Set<Project> projectSet;
+
+        if(requestedUsername == null){
+            requestedUsername = usernameRequestingThis;
+        }
 
         if(requestedUsername.equals(usernameRequestingThis)){
             projectSet = userRepository.getByUsername(requestedUsername).getProjects();

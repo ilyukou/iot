@@ -1,7 +1,10 @@
 package by.grsu.iot.telegram.telegramService.impl;
 
+import by.grsu.iot.model.sql.Project;
+import by.grsu.iot.model.sql.TelegramUser;
+import by.grsu.iot.service.interf.ProjectService;
+import by.grsu.iot.service.interf.TelegramUserService;
 import by.grsu.iot.telegram.interf.TelegramService;
-import by.grsu.iot.telegram.message.interf.ProjectTelegramMessageService;
 import by.grsu.iot.telegram.telegramService.interf.BackTelegramService;
 import by.grsu.iot.telegram.telegramService.interf.ProjectTelegramService;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,16 +24,41 @@ public class ProjectTelegramServiceImpl implements ProjectTelegramService {
     private String LABEL;
 
     private final BackTelegramService backTelegramService;
-    private final ProjectTelegramMessageService projectTelegramMessageService;
+    private final TelegramUserService telegramUserService;
+    private final ProjectService projectService;
 
-    public ProjectTelegramServiceImpl(BackTelegramService backTelegramService, ProjectTelegramMessageService projectTelegramMessageService) {
+    public ProjectTelegramServiceImpl(
+            BackTelegramService backTelegramService,
+            TelegramUserService telegramUserService,
+            ProjectService projectService
+    ) {
         this.backTelegramService = backTelegramService;
-        this.projectTelegramMessageService = projectTelegramMessageService;
+        this.telegramUserService = telegramUserService;
+        this.projectService = projectService;
     }
 
     @Override
     public String getMessageText(Update update) {
-        return projectTelegramMessageService.getWelcomeText();
+        if(!update.hasCallbackQuery() || !update.getCallbackQuery().getData().contains("project")){
+            return "Error";
+        }
+
+        String[] data = update.getCallbackQuery().getData().split("-");
+
+        if (data.length != 2){
+            return "Error id";
+        }
+
+        Project project = projectService.getById(Long.valueOf(data[1]));
+
+        return "<strong>" + project.getName() + "</strong>"
+                + "\n\n"
+                + "<i>" + project.getTitle() + "</i>";
+    }
+
+    @Override
+    public TelegramUser update(TelegramUser user) {
+        return telegramUserService.update(user);
     }
 
     @Override

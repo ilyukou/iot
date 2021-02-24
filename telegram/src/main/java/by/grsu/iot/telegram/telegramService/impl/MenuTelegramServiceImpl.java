@@ -1,14 +1,11 @@
 package by.grsu.iot.telegram.telegramService.impl;
 
 import by.grsu.iot.model.sql.TelegramUser;
-import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.interf.TelegramUserService;
-import by.grsu.iot.telegram.domain.TelegramResponse;
 import by.grsu.iot.telegram.interf.TelegramService;
-import by.grsu.iot.telegram.telegramService.interf.BackTelegramService;
 import by.grsu.iot.telegram.telegramService.interf.LogoutTelegramService;
 import by.grsu.iot.telegram.telegramService.interf.MenuTelegramService;
-import by.grsu.iot.telegram.telegramService.interf.ProjectTelegramService;
+import by.grsu.iot.telegram.telegramService.interf.ProjectListTelegramService;
 import by.grsu.iot.telegram.message.interf.MenuTelegramMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -29,22 +26,30 @@ public class MenuTelegramServiceImpl implements MenuTelegramService {
     private String STATE;
 
     private final MenuTelegramMessageService menuTelegramMessageService;
-    private final ProjectTelegramService projectTelegramService;
+    private final ProjectListTelegramService projectListTelegramService;
     private final LogoutTelegramService logoutTelegramService;
+    private final TelegramUserService telegramUserService;
 
     public MenuTelegramServiceImpl(
             MenuTelegramMessageService menuTelegramMessageService,
-            ProjectTelegramService projectTelegramService,
-            LogoutTelegramService logoutTelegramService
+            ProjectListTelegramService projectListTelegramService,
+            LogoutTelegramService logoutTelegramService,
+            TelegramUserService telegramUserService
     ) {
         this.menuTelegramMessageService = menuTelegramMessageService;
-        this.projectTelegramService = projectTelegramService;
+        this.projectListTelegramService = projectListTelegramService;
         this.logoutTelegramService = logoutTelegramService;
+        this.telegramUserService = telegramUserService;
     }
 
     @Override
     public String getMessageText(Update update) {
         return menuTelegramMessageService.getWelcomeText();
+    }
+
+    @Override
+    public TelegramUser update(TelegramUser user) {
+        return telegramUserService.update(user);
     }
 
     @Override
@@ -59,6 +64,6 @@ public class MenuTelegramServiceImpl implements MenuTelegramService {
 
     @Override
     public List<? extends TelegramService> getSubServices() {
-        return Arrays.asList(projectTelegramService, logoutTelegramService);
+        return Arrays.asList(projectListTelegramService, logoutTelegramService);
     }
 }
