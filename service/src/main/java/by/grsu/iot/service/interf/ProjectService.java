@@ -5,6 +5,7 @@ import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.model.sql.Project;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ProjectService {
@@ -25,4 +26,8 @@ public interface ProjectService {
     Integer getCountOfProjectPage(String requestedUsername, String usernameRequestingThis);
 
     List<? extends IotThing> getThings(Long id, String username);
+
+    Integer getCountThingPages(Long projectId, String username);
+
+    List<? extends IotThing> getThingPage(Long projectId, Integer count, String username);
 }

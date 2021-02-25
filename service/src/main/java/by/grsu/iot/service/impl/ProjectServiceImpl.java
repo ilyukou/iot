@@ -33,6 +33,7 @@ public class ProjectServiceImpl implements ProjectService {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     private static final Long PROJECT_PER_PAGE = 10L;
+    private static final Long DEVICE_PER_PAGE = 25L;
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
@@ -166,7 +167,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Project> projects = user.getProjects().stream().sorted().collect(Collectors.toList());
 
-        return getProjectFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects, count);
+        return getProjectFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects);
     }
 
     @Override
@@ -185,21 +186,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .collect(Collectors.toSet());
         }
 
-        if(projectSet.size() == 0){
-            return 0;
-        }
-
-        if(projectSet.size() <= PROJECT_PER_PAGE){
-            return 1;
-        }
-
-        if(projectSet.size() % PROJECT_PER_PAGE == 0){
-            return Math.toIntExact(projectSet.size() / PROJECT_PER_PAGE);
-        }
-
-        int c = Math.toIntExact(projectSet.size() % PROJECT_PER_PAGE);
-
-        return Math.toIntExact((projectSet.size() - c) / PROJECT_PER_PAGE) + 1;
+        return getCountOfPage(projectSet.size(), PROJECT_PER_PAGE );
     }
 
     @Override
@@ -214,13 +201,38 @@ public class ProjectServiceImpl implements ProjectService {
         return new ArrayList<>(project.getDevices());
     }
 
-    private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects, Integer count){
+    @Override
+    public Integer getCountThingPages(Long projectId, String username) {
+        Project project = projectRepository.getById(projectId);
+
+        if (project == null){
+            throw new EntityNotFoundException("Not found project with such id={" + projectId + "}");
+        }
+
+        if (!project.getUser().getUsername().equals(username)){
+            throw new NotAccessForOperationException("That user not has project with such id");
+        }
+
+        return getCountOfPage(project.getDevices().size(), DEVICE_PER_PAGE );
+    }
+
+    @Override
+    public List<? extends IotThing> getThingPage(Long projectId, Integer count, String username) {
+        Project project = projectRepository.getById(projectId);
+
+        if(project == null){
+            throw new EntityNotFoundException("Project does not exist with given id={" + projectId + "}");
+        }
+
+        List<? extends IotThing> projects = project.getDevices().stream().sorted().collect(Collectors.toList());
+
+        return getIotThingFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects);
+    }
+
+    private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects){
 
         if(from > projects.size()){
-            throw new BadRequestException("count", "Project size={" + projects.size() + "}, " +
-                    "last page is {" + Math.ceil(projects.size() / PROJECT_PER_PAGE) + ", " +
-                    "you required page={" + count + "}, " +
-                    "project size per page={"+PROJECT_PER_PAGE+"}");
+            throw new BadRequestException("count", "Not exist such page");
         }
 
         if(to > projects.size()){
@@ -228,5 +240,36 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         return projects.subList(from.intValue(), to.intValue());
+    }
+
+    private List<? extends IotThing> getIotThingFromTo(Long from, Long to, List<? extends IotThing> devices){
+
+        if(from > devices.size()){
+            throw new BadRequestException("count", "Not exist such page");
+        }
+
+        if(to > devices.size()){
+            to = (long) devices.size();
+        }
+
+        return devices.subList(from.intValue(), to.intValue());
+    }
+
+    private Integer getCountOfPage(Integer arraySize, Long elementPerPage){
+        if(arraySize == 0){
+            return 0;
+        }
+
+        if(arraySize <= elementPerPage){
+            return 1;
+        }
+
+        if(arraySize % elementPerPage == 0){
+            return Math.toIntExact(arraySize / elementPerPage);
+        }
+
+        int c = Math.toIntExact(arraySize % elementPerPage);
+
+        return Math.toIntExact((arraySize - c) / elementPerPage) + 1;
     }
 }

@@ -113,14 +113,24 @@ public class ProjectController {
         }
     }
 
-
-    @GetMapping("/thing/{id}")
-    public ResponseEntity<List<ThingWrapper>> getProjectThing(
+    @GetMapping("/thing/page/count/{project}")
+    public ResponseEntity<Integer> getCountThingPages(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long id
+            @PathVariable Long project
     ){
         return new ResponseEntity<>(
-                projectService.getThings(id, userDetails.getUsername()).stream()
+                projectService.getCountThingPages(project, userDetails.getUsername())
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/thing/page/{project}")
+    public ResponseEntity<List<ThingWrapper>> getThingPage(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long project,
+            @RequestParam Integer count
+    ){
+        return new ResponseEntity<>(
+                projectService.getThingPage(project, count, userDetails.getUsername()).stream()
                         .map(ThingWrapper::new)
                         .collect(Collectors.toList())
                 , HttpStatus.OK);
