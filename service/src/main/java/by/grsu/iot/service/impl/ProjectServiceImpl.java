@@ -16,6 +16,8 @@ import by.grsu.iot.service.validation.factory.DataBinderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.DataBinder;
@@ -26,14 +28,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@PropertySource("classpath:application-const.properties")
 @Transactional
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
-    private static final Long PROJECT_PER_PAGE = 10L;
-    private static final Long DEVICE_PER_PAGE = 25L;
+    @Value("${by.grsu.iot.service.project.per-page}")
+    private Long PROJECT_PER_PAGE;
+
+    @Value("${by.grsu.iot.service.device.per-page}")
+    private Long DEVICE_PER_PAGE;
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;

@@ -7,6 +7,7 @@ ___
 * [Device](interface/Device.md) - interface for CRUD operation with device
 * [DeviceState](interface/DeviceState.md) - interface for changing device state
 * [Validation](interface/Validation.md) - requirements for transferred entities
+* [Const](interface/Const.md) - application const
 
 #### List of API Entities which using into API Interfaces
 * [AuthenticationRequest](model/AuthenticationRequest.md)
