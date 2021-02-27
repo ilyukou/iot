@@ -6,9 +6,9 @@ name | String | Device name.
 state | String | Current Device state.
 states | Array of String | Array of possible states
 token | String | Device token.
-activity | String | Time last activity
-update | String | Last update time
-create | String | Create time
+activity | Long | UTC time last activity
+update | Long |  UTC last update time
+create | Long | UTC create time
 
 ```json
 {
@@ -17,9 +17,9 @@ create | String | Create time
   "state" : "off",
   "states" : ["off","on"],
   "token" : "123Qwerty",
-  "activity": "2021-02-24T09:43:12.000+00:00",
-  "update": "2021-02-24T09:43:12.000+00:00",
-  "create": "2021-02-24T09:43:12.000+00:00"
+  "activity": 1614413325798,
+  "update": 1614413325798,
+  "create": 1614413325798
 }
 
 ```
