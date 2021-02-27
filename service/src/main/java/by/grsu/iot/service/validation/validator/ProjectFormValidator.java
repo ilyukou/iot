@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Service
-public class ProjectFormValidator implements Validator {
+public class ProjectFormValidator implements ApplicationValidator {
 
     private final ProjectValidationService projectValidationService;
 

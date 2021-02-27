@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Service
-public class DeviceStateValidator implements Validator{
+public class DeviceStateValidator implements ApplicationValidator{
 
     private final DeviceValidationService deviceValidationService;
 

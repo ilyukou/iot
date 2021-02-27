@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Service
-public class RegistrationRequestValidator implements Validator {
+public class RegistrationRequestValidator implements ApplicationValidator {
 
     private final UserValidationService userValidationService;
 
