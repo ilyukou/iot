@@ -7,17 +7,17 @@ public class IotThingDto {
     private Long id;
     private String name;
     private String token;
-    private Date activity;
-    private Date update;
-    private Date create;
+    private Long activity;
+    private Long update;
+    private Long create;
 
     public IotThingDto(Long id, String name, String token, Date activity, Date update, Date create) {
         this.id = id;
         this.name = name;
         this.token = token;
-        this.activity = activity;
-        this.update = update;
-        this.create = create;
+        this.activity = activity.getTime();
+        this.update = update.getTime();
+        this.create = create.getTime();
     }
 
     public IotThingDto() {
@@ -47,27 +47,27 @@ public class IotThingDto {
         this.token = token;
     }
 
-    public Date getActivity() {
+    public Long getActivity() {
         return activity;
     }
 
-    public void setActivity(Date activity) {
+    public void setActivity(Long activity) {
         this.activity = activity;
     }
 
-    public Date getUpdate() {
+    public Long getUpdate() {
         return update;
     }
 
-    public void setUpdate(Date update) {
+    public void setUpdate(Long update) {
         this.update = update;
     }
 
-    public Date getCreate() {
+    public Long getCreate() {
         return create;
     }
 
-    public void setCreate(Date create) {
+    public void setCreate(Long create) {
         this.create = create;
     }
 }
