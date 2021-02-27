@@ -1,9 +1,6 @@
 package by.grsu.iot.service.validation.factory;
 
-import by.grsu.iot.model.api.AuthenticationRequest;
-import by.grsu.iot.model.api.DeviceForm;
-import by.grsu.iot.model.api.ProjectForm;
-import by.grsu.iot.model.api.RegistrationRequest;
+import by.grsu.iot.model.api.*;
 import org.springframework.validation.DataBinder;
 
 public interface DataBinderFactory {
@@ -15,4 +12,6 @@ public interface DataBinderFactory {
     DataBinder createDataBinder(ProjectForm projectForm);
 
     DataBinder createDataBinder(DeviceForm deviceForm);
+
+    DataBinder createDataBinder(DeviceFormUpdate deviceFormUpdate);
 }

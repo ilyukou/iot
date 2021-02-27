@@ -1,6 +1,7 @@
 package by.grsu.iot.service.impl;
 
 import by.grsu.iot.model.api.DeviceForm;
+import by.grsu.iot.model.api.DeviceFormUpdate;
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
@@ -103,8 +104,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device update(Long id, DeviceForm deviceForm, String username) {
-        DataBinder dataBinder = dataBinderFactory.createDataBinder(deviceForm);
+    public Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username) {
+        DataBinder dataBinder = dataBinderFactory.createDataBinder(deviceFormUpdate);
         dataBinder.validate();
 
         if (dataBinder.getBindingResult().hasErrors()) {
@@ -121,7 +122,7 @@ public class DeviceServiceImpl implements DeviceService {
             throw new NotAccessForOperationException("Project does not belong this user with giver username {" + username + "}");
         }
 
-        deviceFromRep = SerializationUtils.clone(deviceFromRep.updateField(deviceForm));
+        deviceFromRep = SerializationUtils.clone(deviceFromRep.updateField(deviceFormUpdate));
 
         return update(deviceFromRep);
     }

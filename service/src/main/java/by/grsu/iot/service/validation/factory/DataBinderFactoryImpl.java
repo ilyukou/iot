@@ -1,9 +1,6 @@
 package by.grsu.iot.service.validation.factory;
 
-import by.grsu.iot.model.api.AuthenticationRequest;
-import by.grsu.iot.model.api.DeviceForm;
-import by.grsu.iot.model.api.ProjectForm;
-import by.grsu.iot.model.api.RegistrationRequest;
+import by.grsu.iot.model.api.*;
 import by.grsu.iot.service.validation.validator.*;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.DataBinder;
@@ -14,16 +11,18 @@ public class DataBinderFactoryImpl implements DataBinderFactory{
     private final AuthenticationRequestValidator authenticationRequestValidator;
     private final RegistrationRequestValidator registrationRequestValidator;
     private final DeviceFormValidator deviceFormValidator;
+    private final DeviceFormUpdateValidator deviceFormUpdateValidator;
     private final ProjectFormValidator projectFormValidator;
 
     public DataBinderFactoryImpl(
             AuthenticationRequestValidator authenticationRequestValidator,
             RegistrationRequestValidator registrationRequestValidator,
             DeviceFormValidator deviceFormValidator,
-            ProjectFormValidator projectFormValidator) {
+            DeviceFormUpdateValidator deviceFormUpdateValidator, ProjectFormValidator projectFormValidator) {
         this.authenticationRequestValidator = authenticationRequestValidator;
         this.registrationRequestValidator = registrationRequestValidator;
         this.deviceFormValidator = deviceFormValidator;
+        this.deviceFormUpdateValidator = deviceFormUpdateValidator;
         this.projectFormValidator = projectFormValidator;
     }
 
@@ -59,6 +58,15 @@ public class DataBinderFactoryImpl implements DataBinderFactory{
         DataBinder dataBinder = new DataBinder(deviceForm);
 
         dataBinder.setValidator(deviceFormValidator);
+
+        return dataBinder;
+    }
+
+    @Override
+    public DataBinder createDataBinder(DeviceFormUpdate deviceFormUpdate) {
+        DataBinder dataBinder = new DataBinder(deviceFormUpdate);
+
+        dataBinder.setValidator(deviceFormUpdateValidator);
 
         return dataBinder;
     }

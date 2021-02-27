@@ -21,7 +21,7 @@ ___
 ##### Request /device/{id}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-PUT | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceForm](../model/DeviceForm.md) | Device#states size min 2. Device#state includes Device#states. | -
+PUT | [AuthenticationUser#token](../model/AuthenticationUser.md) | id | ID of device | - | [DeviceFormUpdate](../model/DeviceFormUpdate.md) | Device#states size min 2. Device#state includes Device#states. | -
 
 ##### Response
 Code | Body | Description

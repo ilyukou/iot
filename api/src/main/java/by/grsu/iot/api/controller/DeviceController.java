@@ -2,6 +2,7 @@ package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.dto.*;
 import by.grsu.iot.model.api.DeviceForm;
+import by.grsu.iot.model.api.DeviceFormUpdate;
 import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.interf.DeviceService;
 import by.grsu.iot.service.validation.validator.DeviceFormValidator;
@@ -48,7 +49,7 @@ public class DeviceController {
     public ResponseEntity<DeviceDto> update(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody DeviceForm deviceForm
+            @RequestBody DeviceFormUpdate deviceForm
     ) {
         return new ResponseEntity<>(
                 new DeviceDto(deviceService.update(id, deviceForm, userDetails.getUsername())),

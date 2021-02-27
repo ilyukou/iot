@@ -1,6 +1,7 @@
 package by.grsu.iot.service.interf;
 
 import by.grsu.iot.model.api.DeviceForm;
+import by.grsu.iot.model.api.DeviceFormUpdate;
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.service.domain.DeviceState;
@@ -13,7 +14,7 @@ public interface DeviceService {
 
     boolean deleteById(Long id, String username);
 
-    Device update(Long id, DeviceForm deviceForm, String username);
+    Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username);
 
     Device update(Device device);
 

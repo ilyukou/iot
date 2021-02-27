@@ -26,11 +26,11 @@ public class ProjectValidationServiceImpl implements ProjectValidationService {
         }
 
         if(name.length() < nameRule.getMin()){
-            throw new BadRequestException("name", "Name size is less than " + nameRule.getMin());
+            throw new BadRequestException("name", "Name length is less than " + nameRule.getMin());
         }
 
         if(name.length() > nameRule.getMax()){
-            throw new BadRequestException("name", "Name size is more than " + nameRule.getMax());
+            throw new BadRequestException("name", "Name length is more than " + nameRule.getMax());
         }
 
         if(!StringUtil.isStringValidByParam(nameRule.getSpace(), name)){
@@ -45,11 +45,11 @@ public class ProjectValidationServiceImpl implements ProjectValidationService {
         }
 
         if(title.length() < titleRule.getMin()){
-            throw new BadRequestException("title", "Title size is less than " + titleRule.getMin());
+            throw new BadRequestException("title", "Title length is less than " + titleRule.getMin());
         }
 
         if(title.length() > titleRule.getMax()){
-            throw new BadRequestException("title", "Title size is more than " + titleRule.getMax());
+            throw new BadRequestException("title", "Title length is more than " + titleRule.getMax());
         }
 
         if(!StringUtil.isStringValidByParam(nameRule.getSpace(), title)){
