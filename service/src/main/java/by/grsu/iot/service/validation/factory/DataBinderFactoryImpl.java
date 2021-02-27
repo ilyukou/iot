@@ -1,6 +1,7 @@
 package by.grsu.iot.service.validation.factory;
 
 import by.grsu.iot.model.api.*;
+import by.grsu.iot.service.domain.DeviceState;
 import by.grsu.iot.service.validation.validator.*;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.DataBinder;
@@ -13,17 +14,20 @@ public class DataBinderFactoryImpl implements DataBinderFactory{
     private final DeviceFormValidator deviceFormValidator;
     private final DeviceFormUpdateValidator deviceFormUpdateValidator;
     private final ProjectFormValidator projectFormValidator;
+    private final DeviceStateValidator deviceStateValidator;
 
     public DataBinderFactoryImpl(
             AuthenticationRequestValidator authenticationRequestValidator,
             RegistrationRequestValidator registrationRequestValidator,
             DeviceFormValidator deviceFormValidator,
-            DeviceFormUpdateValidator deviceFormUpdateValidator, ProjectFormValidator projectFormValidator) {
+            DeviceFormUpdateValidator deviceFormUpdateValidator, ProjectFormValidator projectFormValidator,
+            DeviceStateValidator deviceStateValidator) {
         this.authenticationRequestValidator = authenticationRequestValidator;
         this.registrationRequestValidator = registrationRequestValidator;
         this.deviceFormValidator = deviceFormValidator;
         this.deviceFormUpdateValidator = deviceFormUpdateValidator;
         this.projectFormValidator = projectFormValidator;
+        this.deviceStateValidator = deviceStateValidator;
     }
 
     @Override
@@ -67,6 +71,15 @@ public class DataBinderFactoryImpl implements DataBinderFactory{
         DataBinder dataBinder = new DataBinder(deviceFormUpdate);
 
         dataBinder.setValidator(deviceFormUpdateValidator);
+
+        return dataBinder;
+    }
+
+    @Override
+    public DataBinder createDataBinder(DeviceState deviceState) {
+        DataBinder dataBinder = new DataBinder(deviceState);
+
+        dataBinder.setValidator(deviceStateValidator);
 
         return dataBinder;
     }

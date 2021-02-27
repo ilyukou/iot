@@ -163,7 +163,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Device getByToken(String token) {
-        return deviceRepository.getByToken(token);
+        Device device =  deviceRepository.getByToken(token);
+
+        if (device == null){
+            throw new EntityNotFoundException("Not found Device with such token");
+        }
+
+        return device;
     }
 
     @Override
