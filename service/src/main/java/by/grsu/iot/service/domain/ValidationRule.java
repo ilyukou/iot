@@ -1,36 +1,28 @@
 package by.grsu.iot.service.domain;
 
 public class ValidationRule {
-    private int min;
-    private int max;
-    private boolean space;
+    private Integer min;
+    private Integer max;
+    private Boolean space;
 
-    public ValidationRule(int min, int max, boolean space) {
+    public ValidationRule(Integer min, Integer max, Boolean space) {
         this.min = min;
         this.max = max;
+        this.space = space;
     }
 
     public ValidationRule() {
     }
 
-    public int getMin() {
+    public Integer getMin() {
         return min;
     }
 
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
+    public Integer getMax() {
         return max;
     }
 
-
-    public boolean getSpace() {
+    public Boolean getSpace() {
         return space;
-    }
-
-    public void setSpace(boolean space) {
-        this.space = space;
     }
 }

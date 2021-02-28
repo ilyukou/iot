@@ -52,7 +52,7 @@ public class ProjectValidationServiceImpl implements ProjectValidationService {
             throw new BadRequestException("title", "Title length is more than " + titleRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(nameRule.getSpace(), title)){
+        if(!StringUtil.isStringValidByParam(titleRule.getSpace(), title)){
             throw new BadRequestException("title", "Title string has space");
         }
     }
