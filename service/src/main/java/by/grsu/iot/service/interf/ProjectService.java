@@ -2,6 +2,7 @@ package by.grsu.iot.service.interf;
 
 import by.grsu.iot.model.api.ProjectForm;
 import by.grsu.iot.model.sql.IotThing;
+import by.grsu.iot.service.domain.PaginationInfo;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.model.sql.Project;
 
@@ -30,4 +31,8 @@ public interface ProjectService {
     Integer getCountThingPages(Long projectId, String username);
 
     List<? extends IotThing> getThingPage(Long projectId, Integer count, String username);
+
+    PaginationInfo getPaginationInfoAboutProjectThing(Long projectId, String username);
+
+    PaginationInfo getPaginationInfoAboutUserProjects(String requestedUsername, String usernameRequestingThis);
 }

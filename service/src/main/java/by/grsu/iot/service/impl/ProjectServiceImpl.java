@@ -1,6 +1,7 @@
 package by.grsu.iot.service.impl;
 
 import by.grsu.iot.model.api.ProjectForm;
+import by.grsu.iot.service.domain.PaginationInfo;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.service.activemq.EntityProducer;
 import by.grsu.iot.service.exception.BadRequestException;
@@ -12,6 +13,7 @@ import by.grsu.iot.model.activemq.ActActiveMQ;
 import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
+import by.grsu.iot.service.interf.UserService;
 import by.grsu.iot.service.validation.factory.DataBinderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,18 +47,20 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final EntityProducer entityProducer;
     private final DataBinderFactory dataBinderFactory;
+    private final UserService userService;
 
     @Autowired
     public ProjectServiceImpl(
             UserRepository userRepository,
             ProjectRepository projectRepository,
             EntityProducer entityProducer,
-            DataBinderFactory dataBinderFactory
-    ) {
+            DataBinderFactory dataBinderFactory,
+            UserService userService) {
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.entityProducer = entityProducer;
         this.dataBinderFactory = dataBinderFactory;
+        this.userService = userService;
     }
 
     @Override
@@ -233,6 +237,26 @@ public class ProjectServiceImpl implements ProjectService {
         List<? extends IotThing> projects = project.getDevices().stream().sorted().collect(Collectors.toList());
 
         return getIotThingFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects);
+    }
+
+    @Override
+    public PaginationInfo getPaginationInfoAboutProjectThing(Long projectId, String username) {
+        return new PaginationInfo(
+                getCountThingPages(projectId, username),
+
+                // FIXME - add method for getting iotThing.size
+                getById(projectId).getDevices().size(),
+                DEVICE_PER_PAGE
+        );
+    }
+
+    @Override
+    public PaginationInfo getPaginationInfoAboutUserProjects(String requestedUsername, String usernameRequestingThis) {
+        return new PaginationInfo(
+                getCountOfProjectPage(requestedUsername, usernameRequestingThis),
+                userService.getByUsername(requestedUsername).getProjects().size(),
+                PROJECT_PER_PAGE
+        );
     }
 
     private List<Project> getProjectFromTo(Long from, Long to, List<Project> projects){

@@ -65,8 +65,8 @@ Code | Body | Description
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
 ___
-### Get count of project page
-##### Request /project/page/count?username=String
+### Get pagination info of project in user
+##### Request /project/pagination?username=String
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | username |  String username is OPTIONAL field. If not present return your repositories. If present return {username} repositories.  | - | - | - | - | - | - | -
@@ -74,7 +74,7 @@ GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | username |  S
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | count | OK. Integer count - count of page. count=0 - project size is 0. count=1 - project size 0-10. count=2 project size 11-20.
+200 | [PaginationInfo](../model/PaginationInfo.md) | -
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed.
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation.
 404 | [ExceptionResponse](../model/ExceptionResponse.md) | Not found User with such username
@@ -97,8 +97,8 @@ Code | Body | Description
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
 ___
-### Get count of things pages in project
-##### Request /project/thing/page/count/{project}
+### Get pagination info of things in project
+##### Request /project/thing/pagination/{project}
 Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
 ------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | project | Project - project id | - | - | - | - | - | - | -
@@ -106,7 +106,7 @@ GET | [AuthenticationUser#token](../model/AuthenticationUser.md) | project | Pro
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | count | OK. Integer count - count of page. count=0 - device size is 0. count=1 - device size 0-10. count=2 device size 11-20.
+200 | [PaginationInfo](../model/PaginationInfo.md) | -
 400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed.
 403 | [ExceptionResponse](../model/ExceptionResponse.md) | Forbidden. Not access for this operation.
 404 | [ExceptionResponse](../model/ExceptionResponse.md) | Not found Project

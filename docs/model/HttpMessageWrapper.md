@@ -9,7 +9,7 @@ status | T | Any Object
 {
     "status" : "HttpMessageEnum",
     "message" : "String",
-    "body" : "T"
+    "body" : T
 }
 
 ```

@@ -3,6 +3,7 @@ package by.grsu.iot.api.controller;
 import by.grsu.iot.api.dto.ProjectDto;
 import by.grsu.iot.api.dto.ThingWrapper;
 import by.grsu.iot.model.api.ProjectForm;
+import by.grsu.iot.service.domain.PaginationInfo;
 import by.grsu.iot.service.domain.ProjectThing;
 import by.grsu.iot.service.exception.ExceptionUtil;
 import by.grsu.iot.service.interf.ProjectService;
@@ -78,14 +79,20 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/page/count")
-    public ResponseEntity<Integer> getProjects(
+    @GetMapping("/pagination")
+    public ResponseEntity<PaginationInfo> getProjects(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) String username
     ) {
-        return new ResponseEntity<>(
-                projectService.getCountOfProjectPage(username, userDetails.getUsername())
-                ,HttpStatus.OK);
+        if (username == null){
+            return new ResponseEntity<>(
+                    projectService.getPaginationInfoAboutUserProjects(userDetails.getUsername(), userDetails.getUsername())
+                    ,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(
+                    projectService.getPaginationInfoAboutUserProjects(username, userDetails.getUsername())
+                    ,HttpStatus.OK);
+        }
     }
 
     @GetMapping("/page")
@@ -113,13 +120,14 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/thing/page/count/{project}")
-    public ResponseEntity<Integer> getCountThingPages(
+    @GetMapping("/thing/pagination/{project}")
+    public ResponseEntity<PaginationInfo> getCountThingPages(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long project
     ){
         return new ResponseEntity<>(
-                projectService.getCountThingPages(project, userDetails.getUsername())
+                projectService.getPaginationInfoAboutProjectThing(project, userDetails.getUsername())
+//                projectService.getCountThingPages(project, userDetails.getUsername())
                 , HttpStatus.OK);
     }
 
