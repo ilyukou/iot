@@ -33,7 +33,7 @@ public class ProjectValidationServiceImpl implements ProjectValidationService {
             throw new BadRequestException("name", "Name length is more than " + nameRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(nameRule.getSpace(), name)){
+        if(!StringUtil.isValid(nameRule.getSpace(), name)){
             throw new BadRequestException("name", "Name string has space");
         }
     }
@@ -52,7 +52,7 @@ public class ProjectValidationServiceImpl implements ProjectValidationService {
             throw new BadRequestException("title", "Title length is more than " + titleRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(titleRule.getSpace(), title)){
+        if(!StringUtil.isValid(titleRule.getSpace(), title)){
             throw new BadRequestException("title", "Title string has space");
         }
     }

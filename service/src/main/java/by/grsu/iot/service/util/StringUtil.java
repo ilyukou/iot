@@ -2,25 +2,21 @@ package by.grsu.iot.service.util;
 
 public class StringUtil {
 
-    public static boolean isStringHasSpace(String string){
+    public static boolean hasSpace(String string) {
         return string.contains(" ");
     }
 
-    public static boolean isStringValidByParam(boolean space, String string){
-        if(string == null){
+    public static boolean isValid(boolean spaceAllowed, String string) {
+        if (string == null) {
             return false;
         }
 
         // Space are allowed
-        if(space){
+        if (spaceAllowed) {
             return true;
         }
 
         // Space aren't allowed
-        if(StringUtil.isStringHasSpace(string)){
-            return false;
-        }
-
-        return true;
+        return !StringUtil.hasSpace(string);
     }
 }

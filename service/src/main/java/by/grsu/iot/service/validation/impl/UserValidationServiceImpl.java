@@ -1,9 +1,9 @@
 package by.grsu.iot.service.validation.impl;
 
 import by.grsu.iot.service.domain.ValidationRule;
+import by.grsu.iot.service.domain.ValidationStorage;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.util.StringUtil;
-import by.grsu.iot.service.domain.ValidationStorage;
 import by.grsu.iot.service.validation.interf.UserValidationService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class UserValidationServiceImpl implements UserValidationService {
             throw new BadRequestException("password", "Password size is more than " + passwordRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(passwordRule.getSpace(), password)){
+        if(!StringUtil.isValid(passwordRule.getSpace(), password)){
             throw new BadRequestException("password", "Password string has space");
         }
     }
@@ -52,7 +52,7 @@ public class UserValidationServiceImpl implements UserValidationService {
             throw new BadRequestException("username", "Username size is more than " + usernameRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(usernameRule.getSpace(), username)){
+        if(!StringUtil.isValid(usernameRule.getSpace(), username)){
             throw new BadRequestException("username", "Username string has space");
         }
     }

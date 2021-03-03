@@ -6,14 +6,11 @@ import by.grsu.iot.service.util.CollectionUtil;
 import by.grsu.iot.service.util.StringUtil;
 import by.grsu.iot.service.domain.ValidationStorage;
 import by.grsu.iot.service.validation.interf.DeviceValidationService;
-import org.springframework.beans.Mergeable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @PropertySource("classpath:application-const.properties")
 @Service
@@ -47,7 +44,7 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
             throw new BadRequestException("name", "Name length is more than " + nameRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(nameRule.getSpace(), name)){
+        if(!StringUtil.isValid(nameRule.getSpace(), name)){
             throw new BadRequestException("name", "Name string has space");
         }
     }
@@ -75,7 +72,7 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
                 throw new BadRequestException("states", "State[" + i + "] length is more than " + nameRule.getMax());
             }
 
-            if(!StringUtil.isStringValidByParam(stateRule.getSpace(), states.get(i))){
+            if(!StringUtil.isValid(stateRule.getSpace(), states.get(i))){
                 throw new BadRequestException("states", "State[" + i + "] string has space");
             }
         }
@@ -99,7 +96,7 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
             throw new BadRequestException("state", "State length is more than " + nameRule.getMax());
         }
 
-        if(!StringUtil.isStringValidByParam(stateRule.getSpace(), state)){
+        if(!StringUtil.isValid(stateRule.getSpace(), state)){
             throw new BadRequestException("state", "State string has space");
         }
     }
