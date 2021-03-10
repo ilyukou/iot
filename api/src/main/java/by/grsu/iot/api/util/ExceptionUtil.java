@@ -1,9 +1,9 @@
 package by.grsu.iot.api.util;
 
-import by.grsu.iot.service.exception.ApiException;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
+import by.grsu.iot.service.exception.ServiceException;
 import org.springframework.validation.BindingResult;
 
 
@@ -15,17 +15,17 @@ public class ExceptionUtil {
 
         Object obj = getExceptionObject(bindingResult);
 
-        if(obj instanceof ApiException){
-            
-            if(obj instanceof BadRequestException){
+        if (obj instanceof ServiceException) {
+
+            if (obj instanceof BadRequestException) {
                 throw new BadRequestException(field, message);
             }
 
-            if(obj instanceof EntityNotFoundException){
+            if (obj instanceof EntityNotFoundException) {
                 throw new EntityNotFoundException(field, message);
             }
 
-            if(obj instanceof NotAccessForOperationException){
+            if (obj instanceof NotAccessForOperationException) {
                 throw new NotAccessForOperationException(field, message);
             }
         }
@@ -33,11 +33,11 @@ public class ExceptionUtil {
         throw new RuntimeException(message);
     }
 
-    public static String getField(BindingResult bindingResult){
+    public static String getField(BindingResult bindingResult) {
         Object obj = getExceptionObject(bindingResult);
 
-        if(obj instanceof ApiException){
-            ApiException exception = (ApiException) obj;
+        if (obj instanceof ServiceException) {
+            ServiceException exception = (ServiceException) obj;
             return exception.getField();
         }
 

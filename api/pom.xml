@@ -10,22 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>api</artifactId>
-    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <mainClass>by.grsu.iot.api.ApiApplication</mainClass>
+    </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>by.grsu</groupId>
-            <artifactId>model</artifactId>
-            <version>0.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>by.grsu</groupId>
-            <artifactId>repository</artifactId>
-            <version>0.1</version>
-        </dependency>
-
         <dependency>
             <groupId>by.grsu</groupId>
             <artifactId>service</artifactId>
@@ -38,6 +30,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>by.grsu.iot.api.ApiApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -3,9 +3,9 @@
 ___
 ### Get device state
 ##### Request /deviceState/{token}?state=yourState
-Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | - | state, token | String state - device state, default "off"; String token - device token | - | - | - | -
+Method | Header | Parameter | Description | Body | Description
+------------ | ------------- | -------------  | ------------- | ------------- | -------------
+GET | - | state, token | String state - device state, default "off"; String token - device token | - | - | -
 
 If state not equals state in server - return state from server, else wait 30 second (each second take fresh data from the server and compare it again). After 30 second return TimeOutMessage.
 
@@ -28,9 +28,9 @@ Code | Body | Description
 ___
 ### Set device state
 ##### Request /deviceState/{token}?state=off
-Method | Header | Parameter | Description | Restriction | Body | Description | Restriction
------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-POST | - | token, state | token of device, new device state | - | - | - | -
+Method | Header | Parameter | Description | Body | Description
+------------ | ------------- | -------------  | ------------- | ------------- | -------------
+POST | - | state, token | String state - device state, default "off"; String token - device token | - | - | -
 
 ##### Response
 Code | Body | Description

@@ -4,18 +4,19 @@
 
 #include <ArduinoJson.h>
 
-const char* ssid = "11";
-const char* password = "91108752";
+const char* ssid = "WIFI_SSID";
+const char* password = "WIFI_PASSWORD";
 
-String SERVER_IP = "http://192.168.100.6:8080";
-String TOKEN = "jxCcAKvy72kyCttUiZhU";
-String STATE = "off";
+String SERVER_IP = "SERVER_IP";
+String TOKEN = "DEVICE_TOKEN";
+
+String STATE = "off"; // default state
 
 void setup() {
   Serial.begin(115200);
   Serial.println();
 
-  WiFi.begin("11", "password");
+  WiFi.begin(ssid, password);
 
   Serial.print("Connecting");
   while (WiFi.status() != WL_CONNECTED)
@@ -28,7 +29,7 @@ void setup() {
   Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
   
-  pinMode(D7, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
+  pinMode(D7, OUTPUT);     // Initialize the LED_BUILTIN pin as an output. Port D7
 }
 
 // the loop function runs over and over again forever
@@ -41,11 +42,11 @@ void loop() {
 void execute(){
     if(STATE == "off"){
         digitalWrite(D7, LOW);
-        STATE = "off";
-
     } else if(STATE == "on"){
         digitalWrite(D7, HIGH);
-        STATE = "on";
+    } else {
+        Serial.println("Not found such state for execute ")
+        Serial.print(STATE);
     }
 }
 

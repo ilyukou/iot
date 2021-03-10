@@ -1,37 +1,28 @@
-package by.grsu.iot.api.controller;
+package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.api.dto.*;
-import by.grsu.iot.model.api.DeviceForm;
-import by.grsu.iot.model.api.DeviceFormUpdate;
-import by.grsu.iot.service.exception.ExceptionUtil;
-import by.grsu.iot.service.interf.DeviceService;
-import by.grsu.iot.service.validation.validator.DeviceFormValidator;
-import by.grsu.iot.model.sql.Device;
+import by.grsu.iot.model.dto.DeviceDto;
+import by.grsu.iot.service.domain.form.DeviceForm;
+import by.grsu.iot.service.domain.form.DeviceFormUpdate;
+import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/device")
-public class DeviceController {
+@RequestMapping("/crud/device")
+public class DeviceCrudController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceCrudController.class);
 
-    private final DeviceService deviceService;
+    private final DeviceCrudService deviceCrudService;
 
-    public DeviceController(DeviceService deviceService) {
-        this.deviceService = deviceService;
+    public DeviceCrudController(DeviceCrudService deviceCrudService) {
+        this.deviceCrudService = deviceCrudService;
     }
 
     @PostMapping
@@ -39,9 +30,8 @@ public class DeviceController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody DeviceForm deviceForm
     ) {
-
         return new ResponseEntity<>(
-                new DeviceDto(deviceService.create(deviceForm, userDetails.getUsername())),
+                new DeviceDto(deviceCrudService.create(deviceForm, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 
@@ -49,10 +39,10 @@ public class DeviceController {
     public ResponseEntity<DeviceDto> update(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody DeviceFormUpdate deviceForm
+            @RequestBody DeviceFormUpdate deviceFormUpdate
     ) {
         return new ResponseEntity<>(
-                new DeviceDto(deviceService.update(id, deviceForm, userDetails.getUsername())),
+                new DeviceDto(deviceCrudService.update(id, deviceFormUpdate, userDetails.getUsername())),
                 HttpStatus.OK);
     }
 
@@ -61,7 +51,7 @@ public class DeviceController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        return new ResponseEntity<>(new DeviceDto(deviceService.getById(id, userDetails.getUsername())), HttpStatus.OK);
+        return new ResponseEntity<>(new DeviceDto(deviceCrudService.getById(id, userDetails.getUsername())), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +59,7 @@ public class DeviceController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        deviceService.deleteById(id, userDetails.getUsername());
+        deviceCrudService.deleteById(id, userDetails.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

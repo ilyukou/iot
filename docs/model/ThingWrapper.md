@@ -4,4 +4,4 @@
 Filed name | Type | Note
 ------------ | ------------- | -------------
 type | [ThingEnum](ThingEnum.md) | -
-entity | Object | any object. if ThingEnum=device, that "entity" : [Device](Device.md)
+entity | Object | any object. if ThingEnum=device, that "entity" : [Device](device/DeviceDto.md)

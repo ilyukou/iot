@@ -3,4 +3,4 @@
 
 Filed name | Type | Note
 ------------ | ------------- | -------------
-device | String | [Device](Device.md)
+device | String | [Device](device/DeviceDto.md)

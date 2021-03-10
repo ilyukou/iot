@@ -1,12 +1,11 @@
 package by.grsu.iot.api.controller;
 
 import by.grsu.iot.service.domain.DeviceState;
-import by.grsu.iot.api.dto.HttpMessageEnum;
-import by.grsu.iot.api.dto.HttpMessageWrapper;
+import by.grsu.iot.model.dto.HttpMessageEnum;
+import by.grsu.iot.model.dto.HttpMessageWrapper;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/deviceState")
 public class DeviceStateController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceStateController.class);
 
     private final DeviceStateService deviceStateService;
 

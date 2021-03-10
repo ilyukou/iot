@@ -1,14 +1,15 @@
 package by.grsu.iot.api.exception;
 
-import by.grsu.iot.api.dto.ExceptionResponse;
-import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
+import by.grsu.iot.service.domain.ExceptionResponse;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
+import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
-
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
@@ -44,8 +44,10 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
     @ExceptionHandler({EntityNotFoundException.class})
-    public void notFoundError() {
-        // Nothing to do
+    public ResponseEntity<ExceptionResponse> notFoundError() {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "404", null)
+                , HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
@@ -58,8 +60,10 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({InvalidJwtAuthenticationException.class})
-    public void invalidJwtAuthenticationException() {
-        // Nothing to do
+    public ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException() {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "Authentication exception", null)
+                , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
@@ -76,5 +80,13 @@ public class GlobalControllerExceptionHandler {
         return new ResponseEntity<>(
                 new ExceptionResponse(new Date(), exception.getMessage(), exception.getField())
                 , HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<ExceptionResponse> authenticationException(final HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "Authentication exception", null)
+                , HttpStatus.UNAUTHORIZED);
     }
 }

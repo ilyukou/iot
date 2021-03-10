@@ -1,12 +1,12 @@
-## Const Controller
-### Request mapping <em>/const</em>
+## Properties Controller
+### Request mapping <em>/properties</em>
 
 ___
 ### Get const field for application
-##### Request /const
-Method | Parameter | Description | Restriction | Body | Description | Restriction
------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-GET | - | - | - | - | - | -
+##### Request /properties
+Method | Parameter | Description | Body | Description
+------------ | ------------- | ------------- | ------------- | ------------- | 
+GET | - | - | - | -
 
 ##### Response
 Code | Body | Description
@@ -19,7 +19,7 @@ Example Map<String, String>:
 
 ```
 {
-    "by.grsu.iot.service.device.per-page": "25",
-    "by.grsu.iot.service.project.per-page": "10"
+    "device.per-page": 25,
+    "per-page": 10
 }
 ```
