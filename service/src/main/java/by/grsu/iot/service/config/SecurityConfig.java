@@ -37,8 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // CORS
 
-                .antMatchers("/crud/user").permitAll()
-                .antMatchers("/crud/user/**").permitAll()
+                .antMatchers("/auth").permitAll()
+                .antMatchers("/auth/**").permitAll()
 
                 .antMatchers("/crud/project").hasRole("USER")
                 .antMatchers("/crud/project/**").hasRole("USER")
