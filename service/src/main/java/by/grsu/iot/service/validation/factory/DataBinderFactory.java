@@ -1,24 +1,34 @@
 package by.grsu.iot.service.validation.factory;
 
 import by.grsu.iot.service.validation.validator.ApplicationValidator;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.DataBinder;
 
-/**
- * Factory for {@link DataBinder}
- *
- * @author Ilya Ilyukou
- * @see DataBinder
- */
-public interface DataBinderFactory {
+import java.util.List;
 
-    /**
-     * Create a {@link DataBinder} and with set {@link ApplicationValidator}
-     * If factory not contains {@link ApplicationValidator} for argument, than
-     * throw {@link IllegalArgumentException}
-     *
-     * @param t   any object
-     * @param <T> any object
-     * @return {@link DataBinder} for validate argument.
-     */
-    <T> DataBinder createDataBinder(T t) throws IllegalArgumentException;
+@Component
+public class DataBinderFactory {
+
+    private static List<? extends ApplicationValidator> validators;
+
+    public DataBinderFactory(List<? extends ApplicationValidator> validators) {
+        DataBinderFactory.validators = validators;
+    }
+
+    public static <T> DataBinder createDataBinder(T t) throws IllegalArgumentException {
+        DataBinder dataBinder = new DataBinder(t);
+
+        validators.forEach(validator -> {
+            if (validator.supports(t.getClass())) {
+                dataBinder.setValidator(validator);
+            }
+        });
+
+        if (dataBinder.getValidators().size() == 0) {
+            throw new IllegalArgumentException("Not found " + ApplicationValidator.class
+                    + " for such class " + t.getClass());
+        }
+
+        return dataBinder;
+    }
 }

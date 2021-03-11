@@ -1,18 +1,25 @@
 version: '2.2'
 services:
-  api:
-    image: ilyukou/api:0.1
-    container_name: api
-    command: -timeout 60s
-    ports:
-      - "8080:8080"
-    environment:
-      TZ: Europe/Minsk
-    restart: always
-    depends_on:
-      - mysql
-      - elasticsearch
-      - activemq
+
+#  frontend:
+#    container_name: frontend
+#    image: azer777/react:0.1
+#    ports:
+#      - '3000:80'
+#
+#  api:
+#    image: ilyukou/api:0.1
+#    container_name: api
+#    command: -timeout 60s
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      TZ: Europe/Minsk
+#    restart: always
+#    depends_on:
+#      - mysql
+#      - elasticsearch
+#      - activemq
 
 #  async_handler:
 #    image: ilyukou/async_handler:0.1.4
@@ -66,7 +73,7 @@ services:
     image: rmohr/activemq:5.15.6
     container_name: activemq
     ports:
-      - "61617:61617"
+      - "61616:61616"
       - "8162:8162"
     restart: always
     healthcheck:

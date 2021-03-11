@@ -2,6 +2,7 @@ package by.grsu.iot.repository.interf;
 
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
+
 import java.util.Set;
 
 /**
@@ -55,8 +56,11 @@ public interface DeviceRepository {
 
     /**
      * Is exist {@link Device} by {@link Device#getId()}
+     *
      * @param id {@link Device#getId()}
      * @return {@code true} if exist or {@code false}
      */
     boolean isExist(final Long id);
+
+    String getDeviceOwnerUsername(Long device);
 }

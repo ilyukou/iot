@@ -34,8 +34,9 @@ public interface ProjectRepository {
     Project getById(final Long id);
 
     /**
-     * Not recommended use {@link User#getProjects()} because {@link User#projects}
+     * Not recommended use {@link User#getProjects()} because {@link User#getProjects()}
      * has {@code FetchType.LAZY}
+     *
      * @param user {@link Project#getUser()}
      * @return {@link Set<Project>} or empty {@link Set}
      */
@@ -50,8 +51,11 @@ public interface ProjectRepository {
 
     /**
      * Delete {@link Project} by {@link Project#getId()}
+     *
      * @param id {@link Project#getId()}
      * @return {@code true} if deleted or {@code false}
      */
     boolean delete(final Long id);
+
+    String getProjectOwnerUsername(Long project);
 }

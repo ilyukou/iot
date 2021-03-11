@@ -1,7 +1,6 @@
 package by.grsu.iot.repository.interf;
 
 import by.grsu.iot.model.sql.User;
-import org.springframework.stereotype.Repository;
 
 /**
  * Repository for CRUD operation with {@link User}
@@ -38,9 +37,12 @@ public interface UserRepository {
 
     /**
      * Is exist {@link User} with such username
+     *
      * @param username {@link User#getUsername()}
      * @return {@code true} if exist, or {@code false} if not exist
      */
     boolean isExistByUsername(final String username);
+
+    String findUsername(Long userId);
 }
 

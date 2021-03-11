@@ -6,7 +6,7 @@ ___
 ##### Request /crud/project
 Method | Header | Parameter | Description | Body | Description
 ------------ | -------------  | ------------- | ------------- | ------------- | -------------
-GET | [Authorization](../../model/user/AuthenticationUser.md) | - | - | [ProjectForm](../../model/project/ProjectForm.md) | - 
+POST | [Authorization](../../model/user/AuthenticationUser.md) | - | - | [ProjectForm](../../model/project/ProjectForm.md) | - 
 
 ##### Response
 Code | Body | Description

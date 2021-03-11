@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,4 +17,7 @@ public interface ProjectJpaRepository extends JpaRepository<Project, Long> {
     List<Long> findProjectsIdByUserId(Long userId);
 
     Optional<Set<Project>> findProjectsByUser(User user);
+
+    @Query(value = "select p.user_id from project p where p.id = ?1", nativeQuery = true)
+    Long findUserId(Long projectId);
 }

@@ -1,11 +1,10 @@
 package by.grsu.iot.service.validation.validator;
 
-import by.grsu.iot.model.api.RegistrationRequest;
+import by.grsu.iot.service.domain.RegistrationRequest;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.validation.interf.UserValidationService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 @Service
 public class RegistrationRequestValidator implements ApplicationValidator {

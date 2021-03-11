@@ -2,11 +2,12 @@ package by.grsu.iot.service.impl;
 
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.model.sql.Device;
+import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
 import by.grsu.iot.service.domain.DeviceState;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.ExceptionUtil;
-import by.grsu.iot.service.interf.DeviceService;
+import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.validation.factory.DataBinderFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,40 +19,43 @@ import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-@PropertySource("classpath:application-const.properties")
+@PropertySource("classpath:application-service.properties")
 @Service
 public class DeviceStateServiceImpl implements DeviceStateService {
 
-    @Value("${by.grsu.iot.service.device.state.set.long-polling.time}")
+    private final DeviceRepository deviceRepository;
+    @Value("${device.state.set.long-polling.time}")
     private Long DEVICE_SET_TIME;
-
-    @Value("${by.grsu.iot.service.device.state.get.long-polling.time}")
+    @Value("${device.state.get.long-polling.time}")
     private Long DEVICE_GET_TIME;
 
-    @Value("${by.grsu.iot.service.device.state.waiting.time}")
-    private Long DEVICE_WAITING_TIME;
-
     private final DeviceStateQueueRepository deviceStateQueueRepository;
-    private final DeviceService deviceService;
+    private final DeviceCrudService deviceCrudService;
+    @Value("${device.state.check.repeat.time}")
+    private Long DEVICE_WAITING_TIME;
     private final DataBinderFactory dataBinderFactory;
 
     public DeviceStateServiceImpl(
             DeviceStateQueueRepository deviceStateQueueRepository,
-            DeviceService deviceService, DataBinderFactory dataBinderFactory) {
+            DeviceCrudService deviceCrudService,
+            DeviceRepository deviceRepository,
+            DataBinderFactory dataBinderFactory
+    ) {
         this.deviceStateQueueRepository = deviceStateQueueRepository;
-        this.deviceService = deviceService;
+        this.deviceCrudService = deviceCrudService;
+        this.deviceRepository = deviceRepository;
         this.dataBinderFactory = dataBinderFactory;
     }
 
     @Override
     public DeviceState getState(String remoteState, String token) {
-        Device device = deviceService.getByToken(token);
+        Device device = deviceCrudService.getByToken(token);
 
         if (deviceStateQueueRepository.isExist(token)){
             DeviceStateElasticsearch elasticsearch = deviceStateQueueRepository.getAndDelete(token);
             device.setState(elasticsearch.getState());
 
-            return new DeviceState(deviceService.update(device));
+            return new DeviceState(deviceRepository.update(device));
         }
 
         if (!device.getState().equals(remoteState)){
@@ -65,7 +69,7 @@ public class DeviceStateServiceImpl implements DeviceStateService {
                 DeviceStateElasticsearch elasticsearch = deviceStateQueueRepository.getAndDelete(token);
                 device.setState(elasticsearch.getState());
 
-                return new DeviceState(deviceService.update(device));
+                return new DeviceState(deviceRepository.update(device));
             }
 
             try {
@@ -80,7 +84,7 @@ public class DeviceStateServiceImpl implements DeviceStateService {
 
     @Override
     public DeviceState setState(String newState, String token) {
-        Device device = deviceService.getByToken(token);
+        Device device = deviceCrudService.getByToken(token);
         validate(newState, device);
 
         if (deviceStateQueueRepository.isExist(token)){
@@ -108,7 +112,7 @@ public class DeviceStateServiceImpl implements DeviceStateService {
         }
 
         deviceStateQueueRepository.delete(token);
-        Device check = deviceService.getByToken(token);
+        Device check = deviceCrudService.getByToken(token);
 
         if (check.getState().equals(device.getState())){
             return null;

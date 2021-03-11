@@ -1,7 +1,7 @@
 package by.grsu.iot.service.impl;
 
 import by.grsu.iot.service.ServiceApplication;
-import by.grsu.iot.service.interf.UserService;
+import by.grsu.iot.service.interf.crud.UserCrudService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UserServiceImplTest {
 
     @Autowired
-    private UserService userService;
+    private UserCrudService userCrudService;
 
     @Before
     public void setUp(){
@@ -25,6 +25,6 @@ public class UserServiceImplTest {
 
     @Test
     public void injectedComponentsAreNotNull(){
-        Assert.assertNotNull(userService);
+        Assert.assertNotNull(userCrudService);
     }
 }

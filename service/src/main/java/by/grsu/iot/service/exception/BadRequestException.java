@@ -1,7 +1,7 @@
 package by.grsu.iot.service.exception;
 
 // 401
-public class BadRequestException extends ApiException {
+public class BadRequestException extends ServiceException {
 
     public BadRequestException() {
         super();

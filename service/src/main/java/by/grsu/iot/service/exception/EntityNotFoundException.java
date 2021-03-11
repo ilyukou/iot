@@ -1,7 +1,7 @@
 package by.grsu.iot.service.exception;
 
 // 404
-public class EntityNotFoundException extends ApiException {
+public class EntityNotFoundException extends ServiceException {
     public EntityNotFoundException(String message) {
         super(message);
     }

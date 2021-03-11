@@ -3,6 +3,7 @@ package by.grsu.iot.repository.jpa;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,4 +15,7 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
     Optional<Device> findDeviceByToken(String token);
 
     Optional<Set<Device>> findDevicesByProject(Project project);
+
+    @Query(value = "select d.project_id from device d where d.id = ?1", nativeQuery = true)
+    Long findProjectId(Long deviceId);
 }

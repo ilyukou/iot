@@ -5,7 +5,7 @@ import by.grsu.iot.service.domain.ValidationRule;
 import java.util.Map;
 
 /**
- * Validation Service for validate entity in controller layer
+ * Service for getting validation rules for entity
  */
 public interface ValidationService {
 

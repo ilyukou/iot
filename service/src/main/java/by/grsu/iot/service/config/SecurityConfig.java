@@ -37,22 +37,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // CORS
 
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/crud/user").permitAll()
+                .antMatchers("/crud/user/**").permitAll()
 
-                .antMatchers("/device").hasRole("USER")
-                .antMatchers("/device/**").hasRole("USER")
+                .antMatchers("/crud/project").hasRole("USER")
+                .antMatchers("/crud/project/**").hasRole("USER")
+
+                .antMatchers("/crud/device").hasRole("USER")
+                .antMatchers("/crud/device/**").hasRole("USER")
+
+                .antMatchers("/pagination/**").hasRole("USER")
+                .antMatchers("/pagination").hasRole("USER")
 
                 .antMatchers("/deviceState/**").permitAll()
                 .antMatchers("/deviceState").permitAll()
 
-                .antMatchers("/project").hasRole("USER")
-                .antMatchers("/project/**").hasRole("USER")
-
                 .antMatchers("/validation").permitAll()
                 .antMatchers("/validation/**").permitAll()
 
-                .antMatchers("/validation").permitAll()
-                .antMatchers("/const/**").permitAll()
+                .antMatchers("/properties/**").permitAll()
+                .antMatchers("/properties").permitAll()
 
                 .anyRequest().authenticated()
                 .and()

@@ -11,7 +11,6 @@
         <module>repository</module>
         <module>api</module>
         <module>service</module>
-        <module>telegram</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -78,6 +77,10 @@
             <artifactId>spring-data-elasticsearch</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>

@@ -1,7 +1,7 @@
 package by.grsu.iot.service.exception;
 
 // 403
-public class NotAccessForOperationException extends ApiException {
+public class NotAccessForOperationException extends ServiceException {
     public NotAccessForOperationException(String message) {
         super(message);
     }

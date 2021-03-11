@@ -1,10 +1,10 @@
 package by.grsu.iot.service.validation.impl;
 
 import by.grsu.iot.service.domain.ValidationRule;
+import by.grsu.iot.service.domain.ValidationStorage;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.util.CollectionUtil;
 import by.grsu.iot.service.util.StringUtil;
-import by.grsu.iot.service.domain.ValidationStorage;
 import by.grsu.iot.service.validation.interf.DeviceValidationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@PropertySource("classpath:application-const.properties")
+@PropertySource("classpath:application-service.properties")
 @Service
 public class DeviceValidationServiceImpl implements DeviceValidationService {
 
-    @Value("${by.grsu.iot.service.device.states.size.min}")
+    @Value("${device.states.size.min}")
     private Integer STATES_MIN_SIZE;
 
-    @Value("${by.grsu.iot.service.device.states.size.max}")
+    @Value("${device.states.size.max}")
     private Integer STATES_MAX_SIZE;
 
     private final ValidationRule nameRule;

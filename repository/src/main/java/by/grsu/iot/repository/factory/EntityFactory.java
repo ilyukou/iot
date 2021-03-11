@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,10 @@ public class EntityFactory {
 
     private final TimeUtil timeUtil;
     private final StringUtil stringUtil;
+    private final RoleRepository roleRepository;
 
     // BaseEntity default fields
-    private final Status DEFAULT_STATUS = Status.NOT_ACTIVE;
+    private final Status DEFAULT_STATUS = Status.ACTIVE;
 
     // User default fields
     private final RoleType DEFAULT_ROLE_TYPE = RoleType.User;
@@ -29,7 +31,8 @@ public class EntityFactory {
     private final AccessType PROJECT_ACCESS_TYPE = AccessType.PRIVATE;
     private final Status PROJECT_STATUS = Status.ACTIVE;
 
-    private final long EMAIL_VERIFICATION_CODE_LENGTH = 30;
+    private final String DEFAULT_STATE = "off";
+    private final List<String> DEFAULT_STATES = Arrays.asList("off", "on");
 
     @Value("${by.grsu.iot.repository.email.token.length}")
     private Integer EMAIL_TOKEN_LENGTH;
@@ -37,9 +40,10 @@ public class EntityFactory {
     @Value("${by.grsu.iot.repository.device.token.length}")
     private Long DEVICE_TOKEN_LENGTH;
 
-    public EntityFactory(TimeUtil timeUtil, StringUtil stringUtil) {
+    public EntityFactory(TimeUtil timeUtil, StringUtil stringUtil, RoleRepository roleRepository) {
         this.timeUtil = timeUtil;
         this.stringUtil = stringUtil;
+        this.roleRepository = roleRepository;
     }
 
     private BaseEntity createBaseEntity() {
@@ -55,34 +59,28 @@ public class EntityFactory {
         return baseEntity;
     }
 
-    public User createUser() {
+    public User createUser(String address) {
         User user = new User(createBaseEntity());
 
-//        List<Role> roles = new ArrayList<>();
-//        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
-//        user.setRoles(roles);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
+        user.setRoles(roles);
+
+        user.setEmail(createEmail(address));
 
         return user;
     }
 
-    public Device createDevice(Status status) {
-        Device sensor = new Device(createBaseEntity());
-
-        sensor.setStatus(status);
-        sensor.setToken(stringUtil.generateToken(DEVICE_TOKEN_LENGTH));
-
-        // Default values
-        sensor.addState("off");
-        sensor.addState("on");
-
-        // Default state
-        sensor.setState("off");
-
-        return sensor;
-    }
-
     public Device createDevice() {
-        return createDevice(Status.ACTIVE);
+        Device device = new Device(createBaseEntity());
+
+        device.setToken(stringUtil.generateToken(DEVICE_TOKEN_LENGTH));
+
+        device.setStates(DEFAULT_STATES);
+
+        device.setState(DEFAULT_STATE);
+
+        return device;
     }
 
     public Project createProject() {
@@ -94,12 +92,8 @@ public class EntityFactory {
         return project;
     }
 
-    public Email createEmail() {
-        return new Email(createBaseEntity());
-    }
-
     public Email createEmail(String address) {
-        Email email = createEmail();
+        Email email = new Email(createBaseEntity());
 
         email.setAddress(address);
         email.setCode(stringUtil.generateString(EMAIL_TOKEN_LENGTH));

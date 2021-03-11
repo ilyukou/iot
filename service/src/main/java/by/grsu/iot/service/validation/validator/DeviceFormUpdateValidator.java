@@ -1,12 +1,10 @@
 package by.grsu.iot.service.validation.validator;
 
-import by.grsu.iot.model.api.DeviceForm;
-import by.grsu.iot.model.api.DeviceFormUpdate;
+import by.grsu.iot.service.domain.form.DeviceFormUpdate;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.validation.interf.DeviceValidationService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 @Service
 public class DeviceFormUpdateValidator implements ApplicationValidator {

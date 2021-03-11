@@ -106,4 +106,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return !isExist(id);
     }
+
+    @Override
+    public String getProjectOwnerUsername(Long project) {
+        Long userId = projectJpaRepository.findUserId(project);
+
+        return userRepository.findUsername(userId);
+    }
 }

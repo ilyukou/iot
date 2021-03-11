@@ -6,7 +6,6 @@ import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.jpa.DeviceJpaRepository;
-import by.grsu.iot.repository.util.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -105,5 +104,12 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     @Override
     public boolean isExist(final Long id) {
         return deviceJpaRepository.existsById(id);
+    }
+
+    @Override
+    public String getDeviceOwnerUsername(Long device) {
+        Long project = deviceJpaRepository.findProjectId(device);
+
+        return projectRepository.getProjectOwnerUsername(project);
     }
 }

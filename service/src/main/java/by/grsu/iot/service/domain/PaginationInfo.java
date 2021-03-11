@@ -11,6 +11,9 @@ public class PaginationInfo {
         this.elementPerPage = elementPerPage;
     }
 
+    public PaginationInfo() {
+    }
+
     public Integer getPages() {
         return pages;
     }

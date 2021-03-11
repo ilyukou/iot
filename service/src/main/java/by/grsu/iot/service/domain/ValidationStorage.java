@@ -4,6 +4,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * In-memory storage for validation rules for application entities
+ */
 @Component
 public class ValidationStorage {
 

@@ -64,8 +64,7 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        return bearerToken;
+        return req.getHeader("Authorization");
     }
 
     public boolean validateToken(String token) {
