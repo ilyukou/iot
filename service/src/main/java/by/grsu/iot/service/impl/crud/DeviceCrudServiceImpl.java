@@ -3,12 +3,13 @@ package by.grsu.iot.service.impl.crud;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.service.domain.form.DeviceForm;
-import by.grsu.iot.service.domain.form.DeviceFormUpdate;
+import by.grsu.iot.service.domain.request.device.DeviceForm;
+import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
+import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.service.validation.DeviceValidation;
+import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,45 +23,54 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
-    private final DeviceValidation deviceValidation;
+    private final DeviceAccessValidationService deviceAccessValidationService;
 
     public DeviceCrudServiceImpl(
             DeviceRepository deviceRepository,
             ProjectRepository projectRepository,
-            DeviceValidation deviceValidation
-    ) {
+            DeviceAccessValidationService deviceAccessValidationService) {
         this.deviceRepository = deviceRepository;
         this.projectRepository = projectRepository;
-        this.deviceValidation = deviceValidation;
+        this.deviceAccessValidationService = deviceAccessValidationService;
     }
 
 
     @Override
     public Device create(DeviceForm deviceForm, String username) {
-        deviceValidation.validateCreateDevice(username, deviceForm.getProject(), deviceForm);
+        deviceAccessValidationService.checkCreateAccess(username, deviceForm.getProject());
+
+        if (!deviceForm.getStates().contains(deviceForm.getState())){
+            throw new BadRequestException("states", "States not contains state");
+        }
 
         return deviceRepository.create(projectRepository.getById(deviceForm.getProject()), deviceForm.convert());
     }
 
     @Override
     public Device getById(Long id, String username) {
-        deviceValidation.validateReadDevice(username, id);
+        deviceAccessValidationService.checkReadAccess(username, id);
 
         return deviceRepository.getById(id);
     }
 
     @Override
-    public void deleteById(Long id, String username) {
-        deviceValidation.validateDeleteDevice(username, id);
+    public void delete(Long id, String username) {
+        deviceAccessValidationService.checkDeleteAccess(username, id);
 
         deviceRepository.delete(id);
     }
 
     @Override
     public Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username) {
-        deviceValidation.validateUpdateDevice(username, id, deviceFormUpdate);
+        deviceAccessValidationService.checkUpdateAccess(username, id);
 
-        Device device = ObjectUtil.updateField(deviceRepository.getById(id), deviceFormUpdate);
+        Device device = deviceRepository.getById(id);
+
+        if (!deviceFormUpdate.getStates().contains(device.getState())){
+            throw new BadRequestException("states", "States not contains state");
+        }
+
+        device = ObjectUtil.updateField(deviceRepository.getById(id), deviceFormUpdate);
 
         return deviceRepository.update(device);
     }

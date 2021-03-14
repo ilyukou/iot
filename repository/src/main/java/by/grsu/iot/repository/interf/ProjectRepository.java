@@ -3,6 +3,7 @@ package by.grsu.iot.repository.interf;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,4 +59,16 @@ public interface ProjectRepository {
     boolean delete(final Long id);
 
     String getProjectOwnerUsername(Long project);
+
+    List<Long> getUserPublicProjectIds(String username);
+
+    List<Project> getByIds(List<Long> projectsId);
+
+    List<Long> getAllUserProjectsIds(String username);
+
+    Integer getUserPublicProjectSize(String username);
+
+    Integer getAllUserProjectsSize(String username);
+
+    Integer getProjectIotThingSize(Long projectId);
 }

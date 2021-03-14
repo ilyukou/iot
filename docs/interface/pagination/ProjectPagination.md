@@ -1,8 +1,8 @@
 ## Project Pagination Interface
-### Request mapping <em>/pagination/project/</em>
+### Request mapping <em>/pagination/project"</em>
 ___
 ### Get pagination info of project in user
-##### Request /project/pagination?username=String
+##### Request /pagination/project?username=String
 Method | Header | Parameter | Description | Body | Description
 ------------ |  ------------- | ------------- | ------------- | ------------- | -------------
 GET | [Authorization](../../model/user/AuthenticationUser.md) | username | String username is OPTIONAL field. If not present return your repositories. If present return {username} repositories.| - | -
@@ -18,7 +18,7 @@ Code | Body | Description
 
 ___
 ### Get project page
-##### Request /project/page/{count}?username=USERNAME
+##### Request /pagination/project/{count}?username=USERNAME
 Method | Header | Parameter | Description | Body | Description
 ------------ |  ------------- | ------------- | ------------- | ------------- | -------------
 GET | [Authorization](../../model/user/AuthenticationUser.md) | count, username  | Count is a number of required page (Number page start from 1). Page size is const; String username is OPTIONAL field. If not present return your repositories. If present return {username} repositories. | - | -

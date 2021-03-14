@@ -18,10 +18,6 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "email_id")
     private Email email;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "telegramUser_id")
-    private TelegramUser telegramUser;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Project> projects = new HashSet<>();
 
@@ -127,18 +123,6 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public TelegramUser getTelegramUser() {
-        return telegramUser;
-    }
-
-    public void setTelegramUser(TelegramUser telegramUser) {
-        this.telegramUser = telegramUser;
-    }
-
-    public boolean hasTelegramUser(){
-        return this.telegramUser != null;
     }
 
     @Override

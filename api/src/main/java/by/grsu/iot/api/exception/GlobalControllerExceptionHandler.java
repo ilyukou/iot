@@ -2,6 +2,7 @@ package by.grsu.iot.api.exception;
 
 import by.grsu.iot.service.domain.ExceptionResponse;
 import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.domain.BadRequestExceptionResponse;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
 import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
@@ -17,76 +18,76 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
+
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
-    @ExceptionHandler({IOException.class})
-    public ResponseEntity<ExceptionResponse> serverErrors(final IOException exception, final HttpServletRequest request) {
-        LOGGER.error(exception.toString(), request);
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<BadRequestExceptionResponse> badRequestException(final BadRequestException exception) {
         return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "Server error", null)
-                , HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
-    @ExceptionHandler({NullPointerException.class})
-    public ResponseEntity<ExceptionResponse> serverErrors(final NullPointerException exception, final HttpServletRequest request) {
-        LOGGER.error(exception.toString(), request);
-
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "Server error", null)
-                , HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
-    @ExceptionHandler({EntityNotFoundException.class})
-    public ResponseEntity<ExceptionResponse> notFoundError() {
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "404", null)
-                , HttpStatus.NOT_FOUND);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ExceptionResponse> validationErrorException() {
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), null, null)
+                new BadRequestExceptionResponse(new Date(), exception.getMessage(), exception.getField())
                 , HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ExceptionResponse> responseFor401(){
+        return new ResponseEntity<>(
+                new BadRequestExceptionResponse(new Date(), "Authentication exception", null)
+                , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({InvalidJwtAuthenticationException.class})
     public ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException() {
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "Authentication exception", null)
-                , HttpStatus.UNAUTHORIZED);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<ExceptionResponse> badRequestException(final BadRequestException exception, final HttpServletRequest request) {
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), exception.getMessage(), exception.getField())
-                , HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN) // 403
-    @ExceptionHandler({NotAccessForOperationException.class})
-    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final BadRequestException exception, final HttpServletRequest request) {
-        return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), exception.getMessage(), exception.getField())
-                , HttpStatus.FORBIDDEN);
+        return responseFor401();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<ExceptionResponse> authenticationException(final HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponse> authenticationException() {
+        return responseFor401();
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN) // 403
+    @ExceptionHandler({NotAccessForOperationException.class})
+    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final BadRequestException exception) {
         return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "Authentication exception", null)
-                , HttpStatus.UNAUTHORIZED);
+                new BadRequestExceptionResponse(new Date(), exception.getMessage(), exception.getField())
+                , HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
+    @ExceptionHandler({EntityNotFoundException.class})
+    public void notFoundError() {
+        // ignore
+    }
+
+    private ResponseEntity<ExceptionResponse> responseFor500(Exception e, final HttpServletRequest request){
+        LOGGER.error("Error while processing Http request; HttpServletRequest={" + request.toString() + "}", e);
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), "Server error")
+                , HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
+    @ExceptionHandler({IOException.class})
+    public ResponseEntity<ExceptionResponse> serverErrors(final IOException exception, final HttpServletRequest request) {
+        return responseFor500(exception, request);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
+    @ExceptionHandler({NullPointerException.class})
+    public ResponseEntity<ExceptionResponse> serverErrors(final NullPointerException exception,
+                                                          final HttpServletRequest request) {
+        return responseFor500(exception, request);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ExceptionResponse> validationErrorException(final IOException exception,
+                                                                      final HttpServletRequest request) {
+        return responseFor500(exception, request);
     }
 }

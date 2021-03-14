@@ -15,7 +15,7 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "project")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private Set<Device> devices = new HashSet<>();
 
     private String name;

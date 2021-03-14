@@ -2,45 +2,37 @@ package by.grsu.iot.service.impl.crud;
 
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.domain.form.ProjectForm;
-import by.grsu.iot.service.domain.form.ProjectFormUpdate;
+import by.grsu.iot.service.domain.request.project.ProjectForm;
+import by.grsu.iot.service.domain.request.project.ProjectFormUpdate;
 import by.grsu.iot.service.interf.crud.ProjectCrudService;
-import by.grsu.iot.service.interf.crud.UserCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.service.validation.ProjectValidation;
+import by.grsu.iot.service.validation.access.interf.ProjectAccessValidationService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectCrudServiceImpl implements ProjectCrudService {
 
-    private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-    private final UserCrudService userCrudService;
-    private final ProjectValidation projectValidation;
+    private final ProjectAccessValidationService projectAccessValidationService;
 
     public ProjectCrudServiceImpl(
-            UserRepository userRepository,
             ProjectRepository projectRepository,
-            UserCrudService userCrudService,
-            ProjectValidation projectValidation
+            ProjectAccessValidationService projectAccessValidationService
     ) {
-        this.userRepository = userRepository;
         this.projectRepository = projectRepository;
-        this.userCrudService = userCrudService;
-        this.projectValidation = projectValidation;
+        this.projectAccessValidationService = projectAccessValidationService;
     }
 
     @Override
     public Project create(ProjectForm projectForm, String username) {
-        projectValidation.validateCreateProject(username, projectForm);
+        projectAccessValidationService.checkCreateAccess(username);
 
         return projectRepository.create(projectForm.getName(), username, projectForm.getTitle());
     }
 
     @Override
     public Project update(Long id, ProjectFormUpdate projectFormUpdate, String username) {
-        projectValidation.validateUpdateProject(username, id, projectFormUpdate);
+        projectAccessValidationService.checkUpdateAccess(username, id);
 
         Project project = ObjectUtil.updateField(getById(id, username), projectFormUpdate);
 
@@ -49,20 +41,15 @@ public class ProjectCrudServiceImpl implements ProjectCrudService {
 
     @Override
     public Project getById(Long id, String username) {
-        projectValidation.validateReadProject(username, id);
+        projectAccessValidationService.checkReadAccess(username, id);
 
         return projectRepository.getById(id);
     }
 
     @Override
-    public boolean deleteById(Long id, String username) {
-        projectValidation.validateDeleteProject(username, id);
+    public void delete(Long id, String username) {
+        projectAccessValidationService.checkDeleteAccess(username, id);
 
-        return projectRepository.delete(id);
-    }
-
-    @Override
-    public Project getById(Long projectId) {
-        return projectRepository.getById(projectId);
+        projectRepository.delete(id);
     }
 }

@@ -1,55 +1,48 @@
 package by.grsu.iot.service.config;
 
-import by.grsu.iot.service.domain.ValidationRule;
-import by.grsu.iot.service.domain.ValidationStorage;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.grsu.iot.service.domain.DataTransferObject;
+import by.grsu.iot.service.domain.validaation.Validation;
+import by.grsu.iot.service.domain.validaation.ValidationRule;
+import by.grsu.iot.service.util.ObjectUtil;
+import org.reflections.Reflections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.Validator;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
-@PropertySource("classpath:application-validation.properties")
-public class ValidationConfig {
-
-    private final Environment env;
-
-    public ValidationConfig(Environment env) {
-        this.env = env;
-    }
+public class ValidationConfig implements WebMvcConfigurer {
 
     @Bean
-    public ValidationStorage validationStorage() {
-        return new ValidationStorage(
-                getValidation("user", Arrays.asList("password", "username")),
-                getValidation("project", Arrays.asList("name", "title")),
-                getValidation("device", Arrays.asList("name", "state"))
-        );
-    }
+    public Validation validation() {
+        Reflections reflections = new Reflections("by.grsu.iot.service.domain");
 
-    private Map<String, ValidationRule> getValidation(String entity, List<String> fields){
-        Map<String, ValidationRule> validation = new HashMap<>();
+        Set<Class<?>> classes = reflections.getSubTypesOf(DataTransferObject.class).stream()
+                .peek(aClass -> Arrays.stream(aClass.getFields()).forEach(field -> field.setAccessible(true)))
+                .filter(aClass -> ObjectUtil.hasClassAnnotatedField(aClass, by.grsu.iot.service.annotation.Validation.class))
+                .collect(Collectors.toSet());
 
-        for (String field: fields){
-            validation.put(field, getValidationRuleForField(entity, field));
+        Map<String, Map<String, ValidationRule>> map = new HashMap<>();
+
+        for (Class<?> clazz : classes) {
+            Map<String, ValidationRule> fieldsMap = new HashMap<>();
+
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(by.grsu.iot.service.annotation.Validation.class)) {
+                    fieldsMap.put(field.getName(),
+                            new ValidationRule(field.getAnnotation(by.grsu.iot.service.annotation.Validation.class)));
+                }
+            }
+
+            map.put(clazz.getSimpleName(), fieldsMap);
         }
 
-        return validation;
-    }
-
-    private ValidationRule getValidationRuleForField(String entity, String field) {
-        return new ValidationRule(
-                Integer.parseInt(env.getProperty((entity + "." + field + ".min"))),
-                Integer.parseInt(env.getProperty((entity + "." + field + ".max"))),
-                Boolean.parseBoolean(env.getProperty((entity + "." + field + ".space")))
-        );
-
+        return new Validation(map);
     }
 }

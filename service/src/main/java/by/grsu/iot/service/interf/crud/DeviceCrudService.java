@@ -3,8 +3,8 @@ package by.grsu.iot.service.interf.crud;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.service.domain.form.DeviceForm;
-import by.grsu.iot.service.domain.form.DeviceFormUpdate;
+import by.grsu.iot.service.domain.request.device.DeviceForm;
+import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
 
 /**
  * Service layer for CRUD operation with {@link Device}
@@ -14,8 +14,8 @@ public interface DeviceCrudService {
     /**
      * Create {@link Device} for {@link Project} with such {@link Project#getId()}.
      *
-     * @param deviceForm form for created
-     * @param username   who request a create device {@link User#getUsername()}
+     * @param deviceForm form with fields
+     * @param username  who request a create device {@link User#getUsername()}
      * @return created {@link Device}
      */
     Device create(DeviceForm deviceForm, String username);
@@ -35,13 +35,13 @@ public interface DeviceCrudService {
      * @param id {@link Device#getId()}
      * @param username who request a delete device {@link User#getUsername()}
      */
-    void deleteById(Long id, String username);
+    void delete(Long id, String username);
 
     /**
      * Update {@link Device}
      *
      * @param id {@link Device#getId()}
-     * @param deviceFormUpdate updated field
+     * @param deviceFormUpdate form with fields
      * @param username who request a update device {@link User#getUsername()}
      * @return updated {@link Device}
      */

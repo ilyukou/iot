@@ -28,14 +28,6 @@ public class StringUtil {
     }
 
     public String generateToken(long length) {
-        String token = generateString(length);
-
-//        if (sensorRepository.isExist(token)) {
-//            String ms = "Token with such name exist. Token={" + token + "}";
-//            LOGGER.warn(ms);
-//            throw new RuntimeException(ms);
-//        }
-
-        return token;
+        return generateString(length);
     }
 }

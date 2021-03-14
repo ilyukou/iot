@@ -1,5 +1,6 @@
 package by.grsu.iot.repository.impl;
 
+import by.grsu.iot.model.sql.AccessType;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.factory.EntityFactory;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Transactional
@@ -111,5 +113,20 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         Long project = deviceJpaRepository.findProjectId(device);
 
         return projectRepository.getProjectOwnerUsername(project);
+    }
+
+    @Override
+    public List<Device> getByIds(List<Long> ids) {
+        return deviceJpaRepository.findAllById(ids);
+    }
+
+    @Override
+    public List<Long> getProjectAllDeviceIds(Long projectId) {
+        return deviceJpaRepository.findDeviceIdsByProjectId(projectId);
+    }
+
+    @Override
+    public List<Long> getProjectPublicDeviceIds(Long projectId) {
+        return deviceJpaRepository.findDeviceByProjectIdAndAccessType(projectId, AccessType.PUBLIC);
     }
 }

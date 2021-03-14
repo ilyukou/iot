@@ -1,16 +1,13 @@
 package by.grsu.iot.service.impl.pagination;
 
 import by.grsu.iot.model.sql.IotThing;
-import by.grsu.iot.model.sql.Project;
+import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.domain.PaginationInfo;
-import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.domain.response.PaginationInfo;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
-import by.grsu.iot.service.interf.crud.ProjectCrudService;
-import by.grsu.iot.service.interf.crud.UserCrudService;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
+import by.grsu.iot.service.util.CollectionUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,95 +17,65 @@ import java.util.stream.Collectors;
 @Service
 public class ThingPaginationServiceImpl implements ThingPaginationService {
 
-    @Value("${device.per-page}")
-    private Long DEVICE_PER_PAGE;
+    @Value("${project.thing.per-page}")
+    private Long THING_PER_PAGE;
 
-    @Value("${project.per-page}")
-    private Long PROJECT_PER_PAGE;
-
-    private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-    private final ProjectCrudService projectCrudService;
-    private final UserCrudService userCrudService;
+    private final DeviceRepository deviceRepository;
 
     public ThingPaginationServiceImpl(
-            UserRepository userRepository,
             ProjectRepository projectRepository,
-            ProjectCrudService projectCrudService,
-            UserCrudService userCrudService
+            DeviceRepository deviceRepository
     ) {
-        this.userRepository = userRepository;
         this.projectRepository = projectRepository;
-        this.projectCrudService = projectCrudService;
-        this.userCrudService = userCrudService;
+        this.deviceRepository = deviceRepository;
     }
 
-    public Integer getCountThingPages(Long projectId, String username) {
-        Project project = projectRepository.getById(projectId);
-
-        if (project == null){
-            throw new EntityNotFoundException("Not found project with such id={" + projectId + "}");
-        }
-
-        if (!project.getUser().getUsername().equals(username)){
-            throw new NotAccessForOperationException("That user not has project with such id");
-        }
-
-        return getCountOfPage(project.getDevices().size(), DEVICE_PER_PAGE );
-    }
-
+    // in current version Device is a only IotThing
     @Override
-    public List<? extends IotThing> getThingsFromProjectPage(Long projectId, Integer count, String username) {
-        Project project = projectRepository.getById(projectId);
-
-        if(project == null){
+    public List<? extends IotThing> getThingsFromProjectPage(Long projectId, Integer page, String username) {
+        if(!projectRepository.isExist(projectId)){
             throw new EntityNotFoundException("Project does not exist with given id={" + projectId + "}");
         }
 
-        List<? extends IotThing> projects = project.getDevices().stream().sorted().collect(Collectors.toList());
+        List<Long> deviceIds;
 
-        return getIotThingFromTo((count - 1) * PROJECT_PER_PAGE, count * PROJECT_PER_PAGE, projects);
+        String ownerUsername = projectRepository.getProjectOwnerUsername(projectId);
+
+        if (!ownerUsername.equals(username)){
+            deviceIds = deviceRepository.getProjectPublicDeviceIds(projectId);
+        } else {
+            deviceIds = deviceRepository.getProjectAllDeviceIds(projectId);
+        }
+
+        deviceIds = deviceIds.stream().sorted().collect(Collectors.toList());
+
+        List<Long> requiredPageWithDeviceIds =
+                CollectionUtil.getArrayFromTo((page - 1) * THING_PER_PAGE, page * THING_PER_PAGE, deviceIds);
+
+
+        return deviceRepository.getByIds(requiredPageWithDeviceIds)
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Override
-    public PaginationInfo getPaginationInfoA(Long projectId, String username) {
+    public PaginationInfo getPaginationInfo(Long projectId, String username) {
+        if (!projectRepository.isExist(projectId)){
+            throw new EntityNotFoundException("Not found project with such id={" + projectId + "}");
+        }
+
+        if (!projectRepository.getProjectOwnerUsername(projectId).equals(username)){
+            throw new NotAccessForOperationException("That user not has project with such id");
+        }
+
+        Integer size = projectRepository.getProjectIotThingSize(projectId);
+
         return new PaginationInfo(
-                getCountThingPages(projectId, username),
-
-                // FIXME - add method for getting iotThing.size
-                projectCrudService.getById(projectId).getDevices().size(),
-                DEVICE_PER_PAGE
+                CollectionUtil.getCountOfArrayPortion(size, THING_PER_PAGE),
+                size,
+                THING_PER_PAGE
         );
-    }
-
-    private List<? extends IotThing> getIotThingFromTo(Long from, Long to, List<? extends IotThing> devices){
-
-        if(from > devices.size()){
-            throw new BadRequestException("count", "Not exist such page");
-        }
-
-        if(to > devices.size()){
-            to = (long) devices.size();
-        }
-
-        return devices.subList(from.intValue(), to.intValue());
-    }
-
-    private Integer getCountOfPage(Integer arraySize, Long elementPerPage){
-        if(arraySize == 0){
-            return 0;
-        }
-
-        if(arraySize <= elementPerPage){
-            return 1;
-        }
-
-        if(arraySize % elementPerPage == 0){
-            return Math.toIntExact(arraySize / elementPerPage);
-        }
-
-        int c = Math.toIntExact(arraySize % elementPerPage);
-
-        return Math.toIntExact((arraySize - c) / elementPerPage) + 1;
     }
 }

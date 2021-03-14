@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller.crud;
 
 import by.grsu.iot.model.dto.ProjectDto;
-import by.grsu.iot.service.domain.form.ProjectForm;
-import by.grsu.iot.service.domain.form.ProjectFormUpdate;
+import by.grsu.iot.service.domain.request.project.ProjectForm;
+import by.grsu.iot.service.domain.request.project.ProjectFormUpdate;
 import by.grsu.iot.service.interf.crud.ProjectCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,6 @@ public class ProjectCrudController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody ProjectForm projectForm
     ) {
-
         return new ResponseEntity<>(
                 new ProjectDto(
                         projectCrudService.create(projectForm, userDetails.getUsername())),
@@ -39,7 +38,6 @@ public class ProjectCrudController {
             @PathVariable Long id,
             @RequestBody ProjectFormUpdate projectFormUpdate
     ) {
-
         return new ResponseEntity<>(
                 new ProjectDto(projectCrudService.update(id, projectFormUpdate, userDetails.getUsername())),
                 HttpStatus.OK);
@@ -58,7 +56,7 @@ public class ProjectCrudController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        projectCrudService.deleteById(id, userDetails.getUsername());
+        projectCrudService.delete(id, userDetails.getUsername());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -44,5 +44,7 @@ public interface UserRepository {
     boolean isExistByUsername(final String username);
 
     String findUsername(Long userId);
+
+    Long getUserId(String username);
 }
 

@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.pagination;
 
 import by.grsu.iot.model.dto.ProjectDto;
-import by.grsu.iot.service.domain.PaginationInfo;
+import by.grsu.iot.service.domain.response.PaginationInfo;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,7 @@ public class ProjectPaginationController {
         }
 
         return new ResponseEntity<>(
-                projectPaginationService.getProjectsFromPage(count, username).stream()
+                projectPaginationService.getProjectsFromPage(count, username, userDetails.getUsername()).stream()
                         .map(ProjectDto::new)
                         .collect(Collectors.toList()),
                 HttpStatus.OK);

@@ -5,33 +5,28 @@ import java.util.Date;
 
 public class ExceptionResponse implements Serializable {
 
-    private Date timestamp;
+    private Long time;
     private String message;
-    private String field;
 
-    public ExceptionResponse(Date timestamp, String message, String field) {
-        this.timestamp = timestamp;
+    public ExceptionResponse(Date time, String message) {
+        this.time = time.getTime();
         this.message = message;
-        this.field = field;
+    }
+
+    public ExceptionResponse(Long time, String message) {
+        this.time = time;
+        this.message = message;
     }
 
     public ExceptionResponse() {
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Long getTime() {
+        return time;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
+    public void setTime(Long time) {
+        this.time = time;
     }
 
     public String getMessage() {
@@ -41,5 +36,4 @@ public class ExceptionResponse implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }

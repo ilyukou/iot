@@ -46,7 +46,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(
                     new ObjectMapper().writeValueAsString(
-                            new ExceptionResponse(new Date(), "Invalid token", null)
+                            new ExceptionResponse(new Date(), "Authentication exception")
                     ));
             response.setContentType("text/json");
             response.getWriter().flush();

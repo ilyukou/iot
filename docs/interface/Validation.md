@@ -2,17 +2,55 @@
 ### Request mapping <em>/validation</em>
 
 ___
-### Validation data for entity
-##### Request /validation/{entity}
+### Validation data for all model
+##### Request /validation
 Method | Parameter | Description | Body | Description
 ------------ | ------------- | ------------- | ------------- | ------------- 
-GET | entity | String entity - entity name | - | -
+GET | - | - | - | -
 
 ##### Response
 Code | Body | Description
 ------------ | ------------- | -------------
-200 | [Validation](../model/Validation.md) | OK
-400 | [ExceptionResponse](../model/ExceptionResponse.md) | Validation error or request body is an invalid JSON or cannot be parsed
+200 | Map<String, Map<String, [ValidationRule](../model/ValidationRule.md)> | First String key is a Model name, second a field
 500 | [ExceptionResponse](../model/ExceptionResponse.md) | Internal server error occurred.
 
+##### Response Body Example
+```json
+{
+  "DeviceForm": {
+    "name": {
+      "min": 2,
+      "max": 16,
+      "required": true,
+      "spaceAllowed": true
+    },
+    "state": {
+      "min": 2,
+      "max": 16,
+      "required": true,
+      "spaceAllowed": false
+    },
+    "states": {
+      "min": 2,
+      "max": 16,
+      "required": true,
+      "spaceAllowed": false
+    }
+  },
+  "ProjectForm": {
+    "name": {
+      "min": 4,
+      "max": 16,
+      "required": true,
+      "spaceAllowed": true
+    },
+    "title": {
+      "min": 0,
+      "max": 128,
+      "required": false,
+      "spaceAllowed": true
+    }
+  }
+}
 
+```

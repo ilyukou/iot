@@ -4,16 +4,13 @@ import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
-import by.grsu.iot.service.domain.DeviceState;
+import by.grsu.iot.service.domain.response.DeviceState;
 import by.grsu.iot.service.exception.BadRequestException;
-import by.grsu.iot.service.exception.ExceptionUtil;
-import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.interf.DeviceStateService;
-import by.grsu.iot.service.validation.factory.DataBinderFactory;
+import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.DataBinder;
 
 import java.util.ConcurrentModificationException;
 import java.util.Date;
@@ -23,34 +20,35 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DeviceStateServiceImpl implements DeviceStateService {
 
-    private final DeviceRepository deviceRepository;
     @Value("${device.state.set.long-polling.time}")
     private Long DEVICE_SET_TIME;
+
     @Value("${device.state.get.long-polling.time}")
     private Long DEVICE_GET_TIME;
 
-    private final DeviceStateQueueRepository deviceStateQueueRepository;
-    private final DeviceCrudService deviceCrudService;
     @Value("${device.state.check.repeat.time}")
     private Long DEVICE_WAITING_TIME;
-    private final DataBinderFactory dataBinderFactory;
+
+    private final DeviceRepository deviceRepository;
+    private final DeviceStateQueueRepository deviceStateQueueRepository;
+    private final DeviceCrudService deviceCrudService;
+
 
     public DeviceStateServiceImpl(
             DeviceStateQueueRepository deviceStateQueueRepository,
             DeviceCrudService deviceCrudService,
-            DeviceRepository deviceRepository,
-            DataBinderFactory dataBinderFactory
+            DeviceRepository deviceRepository
     ) {
         this.deviceStateQueueRepository = deviceStateQueueRepository;
         this.deviceCrudService = deviceCrudService;
         this.deviceRepository = deviceRepository;
-        this.dataBinderFactory = dataBinderFactory;
     }
 
     @Override
     public DeviceState getState(String remoteState, String token) {
         Device device = deviceCrudService.getByToken(token);
 
+        // In Queue exist request for changing state
         if (deviceStateQueueRepository.isExist(token)){
             DeviceStateElasticsearch elasticsearch = deviceStateQueueRepository.getAndDelete(token);
             device.setState(elasticsearch.getState());
@@ -85,10 +83,9 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     @Override
     public DeviceState setState(String newState, String token) {
         Device device = deviceCrudService.getByToken(token);
-        validate(newState, device);
 
         if (deviceStateQueueRepository.isExist(token)){
-            deviceStateQueueRepository.delete(token);
+            throw new BadRequestException("Another request in the queue");
         }
 
         if(newState.equals(device.getState())){
@@ -123,18 +120,5 @@ public class DeviceStateServiceImpl implements DeviceStateService {
         }
 
         throw new ConcurrentModificationException();
-    }
-
-    private void validate(String state, Device device){
-        DataBinder dataBinder = dataBinderFactory.createDataBinder(new DeviceState(state));
-        dataBinder.validate();
-
-        if (dataBinder.getBindingResult().hasErrors()) {
-            ExceptionUtil.throwException(dataBinder.getBindingResult());
-        }
-
-        if (!device.getStates().contains(state)){
-            throw new BadRequestException("state", "State not contains in state=" + device.getStates());
-        }
     }
 }

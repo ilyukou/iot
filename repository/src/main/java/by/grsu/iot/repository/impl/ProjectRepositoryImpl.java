@@ -1,5 +1,6 @@
 package by.grsu.iot.repository.impl;
 
+import by.grsu.iot.model.sql.AccessType;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Transactional
@@ -112,5 +114,37 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         Long userId = projectJpaRepository.findUserId(project);
 
         return userRepository.findUsername(userId);
+    }
+
+    @Override
+    public List<Long> getUserPublicProjectIds(String username) {
+        Long userId = userRepository.getUserId(username);
+
+        return projectJpaRepository.findProjectByUserIdAndAccessType(userId, AccessType.PUBLIC);
+    }
+
+    @Override
+    public List<Project> getByIds(List<Long> projectsId) {
+        return projectJpaRepository.findAllById(projectsId);
+    }
+
+    @Override
+    public List<Long> getAllUserProjectsIds(String username) {
+        return projectJpaRepository.findProjectsIdByUserId(userRepository.getUserId(username));
+    }
+
+    @Override
+    public Integer getUserPublicProjectSize(String username) {
+        return getUserPublicProjectIds(username).size();
+    }
+
+    @Override
+    public Integer getAllUserProjectsSize(String username) {
+        return getAllUserProjectsIds(username).size();
+    }
+
+    @Override
+    public Integer getProjectIotThingSize(Long projectId) {
+        return deviceRepository.getProjectAllDeviceIds(projectId).size();
     }
 }
