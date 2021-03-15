@@ -40,20 +40,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         thing.setState(d.getState());
         thing.setProject(p);
 
-        Set<Device> things = new HashSet<>();
-
-        if (p.getDevices() != null && p.getDevices().size() > 0) {
-            things = p.getDevices();
-        }
-
-        things.add(thing);
-        p.setDevices(things);
-
-        thing = deviceJpaRepository.save(thing);
-
-        projectRepository.update(p);
-
-        return thing;
+        return deviceJpaRepository.save(thing);
     }
 
     @Override
