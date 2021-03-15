@@ -94,19 +94,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             return false;
         }
 
-        if(project.getDevices().size() != 0){
-            project.getDevices().forEach(device -> deviceRepository.delete(device.getId()));
-        }
-
-        User user = project.getUser();
-
-        Set<Project> projects = user.getProjects();
-        projects.remove(project);
-
-        user.setProjects(projects);
-
-        user = userRepository.update(user);
-
+        deviceRepository.getProjectDeviceIds(id).forEach(deviceId -> deviceRepository.delete(deviceId));
+        
         projectJpaRepository.deleteById(project.getId());
 
         return !isExist(id);
