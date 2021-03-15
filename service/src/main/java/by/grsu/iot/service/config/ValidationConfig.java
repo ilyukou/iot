@@ -1,5 +1,6 @@
 package by.grsu.iot.service.config;
 
+import by.grsu.iot.service.annotation.StringValidation;
 import by.grsu.iot.service.domain.DataTransferObject;
 import by.grsu.iot.service.domain.validaation.Validation;
 import by.grsu.iot.service.domain.validaation.ValidationRule;
@@ -25,7 +26,7 @@ public class ValidationConfig implements WebMvcConfigurer {
 
         Set<Class<?>> classes = reflections.getSubTypesOf(DataTransferObject.class).stream()
                 .peek(aClass -> Arrays.stream(aClass.getFields()).forEach(field -> field.setAccessible(true)))
-                .filter(aClass -> ObjectUtil.hasClassAnnotatedField(aClass, by.grsu.iot.service.annotation.Validation.class))
+                .filter(aClass -> ObjectUtil.hasClassAnnotatedField(aClass, StringValidation.class))
                 .collect(Collectors.toSet());
 
         Map<String, Map<String, ValidationRule>> map = new HashMap<>();
@@ -34,9 +35,9 @@ public class ValidationConfig implements WebMvcConfigurer {
             Map<String, ValidationRule> fieldsMap = new HashMap<>();
 
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(by.grsu.iot.service.annotation.Validation.class)) {
+                if (field.isAnnotationPresent(StringValidation.class)) {
                     fieldsMap.put(field.getName(),
-                            new ValidationRule(field.getAnnotation(by.grsu.iot.service.annotation.Validation.class)));
+                            new ValidationRule(field.getAnnotation(StringValidation.class)));
                 }
             }
 

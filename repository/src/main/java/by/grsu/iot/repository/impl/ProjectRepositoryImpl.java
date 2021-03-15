@@ -28,14 +28,17 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final ProjectJpaRepository projectJpaRepository;
     private final UserRepository userRepository;
     private final DeviceRepository deviceRepository;
-    private final TimeUtil timeUtil;
     private final EntityFactory entityFactory;
 
-    public ProjectRepositoryImpl(ProjectJpaRepository projectJpaRepository, UserRepository userRepository, DeviceRepository deviceRepository, TimeUtil timeUtil, EntityFactory entityFactory) {
+    public ProjectRepositoryImpl(
+            ProjectJpaRepository projectJpaRepository,
+            UserRepository userRepository,
+            DeviceRepository deviceRepository,
+            EntityFactory entityFactory
+    ) {
         this.projectJpaRepository = projectJpaRepository;
         this.userRepository = userRepository;
         this.deviceRepository = deviceRepository;
-        this.timeUtil = timeUtil;
         this.entityFactory = entityFactory;
     }
 
@@ -62,7 +65,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Project update(final Project project) {
         Project p = SerializationUtils.clone(project);
 
-        p.setUpdated(timeUtil.getCurrentDate());
+        p.setUpdated(TimeUtil.getCurrentDate());
         return projectJpaRepository.save(p);
     }
 
@@ -134,17 +137,12 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Integer getUserPublicProjectSize(String username) {
-        return getUserPublicProjectIds(username).size();
-    }
-
-    @Override
     public Integer getAllUserProjectsSize(String username) {
         return getAllUserProjectsIds(username).size();
     }
 
     @Override
     public Integer getProjectIotThingSize(Long projectId) {
-        return deviceRepository.getProjectAllDeviceIds(projectId).size();
+        return deviceRepository.getProjectDeviceIds(projectId).size();
     }
 }

@@ -1,6 +1,6 @@
 package by.grsu.iot.service.domain.request.user;
 
-import by.grsu.iot.service.annotation.Validation;
+import by.grsu.iot.service.annotation.StringValidation;
 import by.grsu.iot.service.domain.DataTransferObject;
 
 /**
@@ -8,10 +8,10 @@ import by.grsu.iot.service.domain.DataTransferObject;
  */
 public class AuthenticationRequest implements DataTransferObject {
 
-    @Validation(min = 5, max = 32)
+    @StringValidation(min = 5, max = 32)
     private String username;
 
-    @Validation(min = 8, max = 128)
+    @StringValidation(min = 8, max = 128)
     private String password;
 
     public AuthenticationRequest(String username, String password) {

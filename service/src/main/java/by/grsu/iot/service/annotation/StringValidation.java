@@ -6,13 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation is used to mark fields that require validation
+ * Annotation is used to mark fields that require validation.
+ *
+ * If annotation present on {@link java.util.Collection} that validate a collection element
  *
  * @author Ilyukou Ilya
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Validation {
+public @interface StringValidation {
 
     /**
      * @return size the element must be higher or equal to

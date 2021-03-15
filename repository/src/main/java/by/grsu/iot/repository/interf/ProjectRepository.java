@@ -66,8 +66,6 @@ public interface ProjectRepository {
 
     List<Long> getAllUserProjectsIds(String username);
 
-    Integer getUserPublicProjectSize(String username);
-
     Integer getAllUserProjectsSize(String username);
 
     Integer getProjectIotThingSize(Long projectId);

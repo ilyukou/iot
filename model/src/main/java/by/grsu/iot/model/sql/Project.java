@@ -20,17 +20,14 @@ public class Project extends BaseEntity {
 
     private String name;
 
-    private AccessType accessType;
-
     private String title;
 
     public Project(Long id, Date created, Date updated, Status status,
-                   User user, Set<Device> devices, String name, AccessType accessType, String title) {
+                   User user, Set<Device> devices, String name, String title) {
         super(id, created, updated, status);
         this.user = user;
         this.devices = devices;
         this.name = name;
-        this.accessType = accessType;
         this.title = title;
     }
 
@@ -41,7 +38,6 @@ public class Project extends BaseEntity {
                 null,
                 project.getDevices().stream().map(Device::new).collect(Collectors.toSet()),
                 project.getName(),
-                project.getAccessType(),
                 project.getTitle());
     }
 
@@ -77,14 +73,6 @@ public class Project extends BaseEntity {
         this.name = name;
     }
 
-    public AccessType getAccessType() {
-        return accessType;
-    }
-
-    public void setAccessType(AccessType accessType) {
-        this.accessType = accessType;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -103,7 +91,6 @@ public class Project extends BaseEntity {
 //                Objects.equals(user, project.user)
 //                && Objects.equals(devices, project.devices) &&
                         Objects.equals(name, project.name)
-                && accessType == project.accessType
                 && Objects.equals(title, project.title);
     }
 }

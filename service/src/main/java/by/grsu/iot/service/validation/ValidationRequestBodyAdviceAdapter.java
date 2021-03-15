@@ -1,6 +1,7 @@
 package by.grsu.iot.service.validation;
 
-import by.grsu.iot.service.annotation.Validation;
+import by.grsu.iot.service.annotation.CollectionValidation;
+import by.grsu.iot.service.annotation.StringValidation;
 import by.grsu.iot.service.util.EntityFieldValidationUtil;
 import by.grsu.iot.service.util.ObjectUtil;
 import org.springframework.core.MethodParameter;
@@ -23,11 +24,14 @@ public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter,
                                 Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
 
-        if (!ObjectUtil.hasClassAnnotatedField(body.getClass(), Validation.class)) {
-            return body;
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), StringValidation.class)) {
+            EntityFieldValidationUtil.validateString(body);
         }
 
-        EntityFieldValidationUtil.validateObject(body);
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), CollectionValidation.class)){
+            EntityFieldValidationUtil.validateCollection(body);
+        }
+
 
         return body;
     }

@@ -2,6 +2,7 @@ package by.grsu.iot.repository.factory;
 
 import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.RoleRepository;
+import by.grsu.iot.repository.util.StringUtil;
 import by.grsu.iot.repository.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,6 @@ import java.util.List;
 @Component
 public class EntityFactory {
 
-    private final TimeUtil timeUtil;
-    private final StringUtil stringUtil;
     private final RoleRepository roleRepository;
 
     // BaseEntity default fields
@@ -40,9 +39,9 @@ public class EntityFactory {
     @Value("${by.grsu.iot.repository.device.token.length}")
     private Long DEVICE_TOKEN_LENGTH;
 
-    public EntityFactory(TimeUtil timeUtil, StringUtil stringUtil, RoleRepository roleRepository) {
-        this.timeUtil = timeUtil;
-        this.stringUtil = stringUtil;
+    public EntityFactory(
+            RoleRepository roleRepository
+    ) {
         this.roleRepository = roleRepository;
     }
 
@@ -51,7 +50,7 @@ public class EntityFactory {
 
         baseEntity.setStatus(DEFAULT_STATUS);
 
-        Date date = timeUtil.getCurrentDate();
+        Date date = TimeUtil.getCurrentDate();
 
         baseEntity.setCreated(date);
         baseEntity.setUpdated(date);
@@ -74,7 +73,7 @@ public class EntityFactory {
     public Device createDevice() {
         Device device = new Device(createBaseEntity());
 
-        device.setToken(stringUtil.generateToken(DEVICE_TOKEN_LENGTH));
+        device.setToken(StringUtil.generateToken(DEVICE_TOKEN_LENGTH));
 
         device.setStates(DEFAULT_STATES);
 
@@ -87,7 +86,6 @@ public class EntityFactory {
         Project project = new Project(createBaseEntity());
 
         project.setStatus(PROJECT_STATUS);
-        project.setAccessType(PROJECT_ACCESS_TYPE);
 
         return project;
     }
@@ -96,7 +94,7 @@ public class EntityFactory {
         Email email = new Email(createBaseEntity());
 
         email.setAddress(address);
-        email.setCode(stringUtil.generateString(EMAIL_TOKEN_LENGTH));
+        email.setCode(StringUtil.generateString(EMAIL_TOKEN_LENGTH));
 
         return email;
     }

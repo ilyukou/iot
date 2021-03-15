@@ -1,6 +1,6 @@
 package by.grsu.iot.service.domain.request.user;
 
-import by.grsu.iot.service.annotation.Validation;
+import by.grsu.iot.service.annotation.StringValidation;
 import by.grsu.iot.service.domain.DataTransferObject;
 
 import javax.validation.constraints.Email;
@@ -10,10 +10,10 @@ import javax.validation.constraints.Email;
  */
 public class RegistrationRequest implements DataTransferObject {
 
-    @Validation(min = 5, max = 32)
+    @StringValidation(min = 5, max = 32)
     private String username;
 
-    @Validation(min = 8, max = 128)
+    @StringValidation(min = 8, max = 128)
     private String password;
 
     @Email(message = "Email should be valid")

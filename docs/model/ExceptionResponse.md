@@ -1,13 +1,13 @@
 #### Exception Response
 Filed name | Type | Note
 ------------ | ------------- | -------------
-timestamp | String | Time stamp
+timestamp | Long| Time
 message | String | Error message
 field | String | Entity field
 
 ```json
 {
-  "timestamp": "2021-02-04T19:15:38.535+00:00",
+  "timestamp": 1615747571156,
   "message": "Password size is less than 8",
   "field": "password"
 }

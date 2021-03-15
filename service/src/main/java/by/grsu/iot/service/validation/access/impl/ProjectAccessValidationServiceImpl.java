@@ -21,6 +21,20 @@ public class ProjectAccessValidationServiceImpl implements ProjectAccessValidati
     }
 
     @Override
+    public void checkPaginationInfoReadAccess(String whoBeingAskedUsername, String whoRequestedUsername) throws NotAccessForOperationException {
+        if (!whoBeingAskedUsername.equals(whoRequestedUsername)){
+            throw new NotAccessForOperationException("That user not has such project");
+        }
+    }
+
+    @Override
+    public void checkPageReadAccess(String whoBeingAskedUsername, String whoRequestedUsername) throws NotAccessForOperationException {
+        if (!whoBeingAskedUsername.equals(whoRequestedUsername)){
+            throw new NotAccessForOperationException("That user not has such project");
+        }
+    }
+
+    @Override
     public void checkReadAccess(String username, Long projectId) throws NotAccessForOperationException {
         throwExceptionIfUserNotOwnerProject(username, projectId);
     }

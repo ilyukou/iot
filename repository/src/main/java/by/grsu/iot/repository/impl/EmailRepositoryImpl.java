@@ -15,11 +15,11 @@ import java.util.Date;
 public class EmailRepositoryImpl implements EmailRepository {
 
     private final EmailJpaRepository emailJpaRepository;
-    private final TimeUtil timeUtil;
 
-    public EmailRepositoryImpl(EmailJpaRepository emailJpaRepository, TimeUtil timeUtil) {
+    public EmailRepositoryImpl(
+            EmailJpaRepository emailJpaRepository
+    ) {
         this.emailJpaRepository = emailJpaRepository;
-        this.timeUtil = timeUtil;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class EmailRepositoryImpl implements EmailRepository {
     public Email create(final Email email) {
         Email e = SerializationUtils.clone(email);
 
-        Date date = timeUtil.getCurrentDate();
+        Date date = TimeUtil.getCurrentDate();
         e.setUpdated(date);
         e.setCreated(date);
         return emailJpaRepository.save(e);
@@ -46,7 +46,7 @@ public class EmailRepositoryImpl implements EmailRepository {
     public Email update(final Email email) {
         Email e = SerializationUtils.clone(email);
 
-        e.setUpdated(timeUtil.getCurrentDate());
+        e.setUpdated(TimeUtil.getCurrentDate());
         return emailJpaRepository.save(e);
     }
 

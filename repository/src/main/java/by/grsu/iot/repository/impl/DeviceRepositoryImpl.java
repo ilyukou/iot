@@ -1,6 +1,5 @@
 package by.grsu.iot.repository.impl;
 
-import by.grsu.iot.model.sql.AccessType;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.factory.EntityFactory;
@@ -121,12 +120,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     }
 
     @Override
-    public List<Long> getProjectAllDeviceIds(Long projectId) {
+    public List<Long> getProjectDeviceIds(Long projectId) {
         return deviceJpaRepository.findDeviceIdsByProjectId(projectId);
-    }
-
-    @Override
-    public List<Long> getProjectPublicDeviceIds(Long projectId) {
-        return deviceJpaRepository.findDeviceByProjectIdAndAccessType(projectId, AccessType.PUBLIC);
     }
 }

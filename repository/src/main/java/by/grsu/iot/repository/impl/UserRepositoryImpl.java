@@ -16,14 +16,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
     private final EmailRepository emailRepository;
-    private final TimeUtil timeUtil;
 
-    public UserRepositoryImpl(UserJpaRepository userJpaRepository,
-                              EmailRepository emailRepository,
-                              TimeUtil timeUtil) {
+    public UserRepositoryImpl(
+            UserJpaRepository userJpaRepository,
+            EmailRepository emailRepository
+    ) {
         this.userJpaRepository = userJpaRepository;
         this.emailRepository = emailRepository;
-        this.timeUtil = timeUtil;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User update(final User user) {
         User u = SerializationUtils.clone(user);
 
-        u.setUpdated(timeUtil.getCurrentDate());
+        u.setUpdated(TimeUtil.getCurrentDate());
         return userJpaRepository.save(u);
     }
 

@@ -33,6 +33,16 @@ public class DeviceAccessValidationServiceImpl implements DeviceAccessValidation
     }
 
     @Override
+    public void checkPaginationInfoReadAccess(Long project, String whoRequestedUsername) throws NotAccessForOperationException {
+        throwExceptionIfUserNotOwnerProject(whoRequestedUsername, project);
+    }
+
+    @Override
+    public void checkPageReadAccess(Long projectId, String whoRequestedUsername) throws NotAccessForOperationException {
+        throwExceptionIfUserNotOwnerProject(whoRequestedUsername, projectId);
+    }
+
+    @Override
     public void checkReadAccess(String username, Long deviceId) throws NotAccessForOperationException {
         throwExceptionIfUserNotOwnerDevice(username, deviceId);
     }

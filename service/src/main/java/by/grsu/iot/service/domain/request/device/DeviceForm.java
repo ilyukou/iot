@@ -1,7 +1,8 @@
 package by.grsu.iot.service.domain.request.device;
 
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.service.annotation.Validation;
+import by.grsu.iot.service.annotation.CollectionValidation;
+import by.grsu.iot.service.annotation.StringValidation;
 import by.grsu.iot.service.domain.DataTransferObject;
 
 import java.util.List;
@@ -10,13 +11,14 @@ public class DeviceForm implements DataTransferObject {
 
     private Long project;
 
-    @Validation(min = 2, max = 16)
+    @StringValidation(min = 2, max = 16)
     private String state;
 
-    @Validation(min = 2, max = 16, spaceAllowed = true)
+    @StringValidation(min = 2, max = 16, spaceAllowed = true)
     private String name;
 
-    @Validation(min = 2, max = 16)
+    @CollectionValidation(minSize = 2, maxSize = 10)
+    @StringValidation(min = 2, max = 16)
     private List<String> states;
 
     public DeviceForm(Long project, String state, String name, List<String> states) {

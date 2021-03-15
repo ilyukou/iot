@@ -8,6 +8,7 @@ import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
 import by.grsu.iot.service.util.CollectionUtil;
+import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,33 +23,31 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     private final ProjectRepository projectRepository;
     private final DeviceRepository deviceRepository;
+    private final DeviceAccessValidationService deviceAccessValidationService;
 
     public ThingPaginationServiceImpl(
             ProjectRepository projectRepository,
-            DeviceRepository deviceRepository
+            DeviceRepository deviceRepository,
+            DeviceAccessValidationService deviceAccessValidationService
     ) {
         this.projectRepository = projectRepository;
         this.deviceRepository = deviceRepository;
+        this.deviceAccessValidationService = deviceAccessValidationService;
     }
 
     // in current version Device is a only IotThing
     @Override
     public List<? extends IotThing> getThingsFromProjectPage(Long projectId, Integer page, String username) {
+        deviceAccessValidationService.checkPageReadAccess(projectId, username);
+
         if(!projectRepository.isExist(projectId)){
             throw new EntityNotFoundException("Project does not exist with given id={" + projectId + "}");
         }
 
-        List<Long> deviceIds;
-
-        String ownerUsername = projectRepository.getProjectOwnerUsername(projectId);
-
-        if (!ownerUsername.equals(username)){
-            deviceIds = deviceRepository.getProjectPublicDeviceIds(projectId);
-        } else {
-            deviceIds = deviceRepository.getProjectAllDeviceIds(projectId);
-        }
-
-        deviceIds = deviceIds.stream().sorted().collect(Collectors.toList());
+        List<Long> deviceIds = deviceRepository.getProjectDeviceIds(projectId)
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
 
         List<Long> requiredPageWithDeviceIds =
                 CollectionUtil.getArrayFromTo((page - 1) * THING_PER_PAGE, page * THING_PER_PAGE, deviceIds);
@@ -62,6 +61,8 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     @Override
     public PaginationInfo getPaginationInfo(Long projectId, String username) {
+        deviceAccessValidationService.checkPaginationInfoReadAccess(projectId, username);
+
         if (!projectRepository.isExist(projectId)){
             throw new EntityNotFoundException("Not found project with such id={" + projectId + "}");
         }

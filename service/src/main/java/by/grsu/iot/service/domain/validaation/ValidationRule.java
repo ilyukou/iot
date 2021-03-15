@@ -1,6 +1,6 @@
 package by.grsu.iot.service.domain.validaation;
 
-import by.grsu.iot.service.annotation.Validation;
+import by.grsu.iot.service.annotation.StringValidation;
 
 public class ValidationRule {
     private int min;
@@ -8,7 +8,7 @@ public class ValidationRule {
     private boolean required;
     private boolean spaceAllowed;
 
-    public ValidationRule(Validation annotation) {
+    public ValidationRule(StringValidation annotation) {
         this.min = annotation.min();
         this.max = annotation.max();
         this.required = annotation.required();

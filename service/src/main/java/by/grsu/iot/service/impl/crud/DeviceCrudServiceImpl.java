@@ -8,12 +8,15 @@ import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
+import by.grsu.iot.service.util.CollectionUtil;
 import by.grsu.iot.service.util.ObjectUtil;
 import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -39,9 +42,7 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
     public Device create(DeviceForm deviceForm, String username) {
         deviceAccessValidationService.checkCreateAccess(username, deviceForm.getProject());
 
-        if (!deviceForm.getStates().contains(deviceForm.getState())){
-            throw new BadRequestException("states", "States not contains state");
-        }
+        checkBeforeCreateOrUpdate(deviceForm.getState(), deviceForm.getStates());
 
         return deviceRepository.create(projectRepository.getById(deviceForm.getProject()), deviceForm.convert());
     }
@@ -66,8 +67,8 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
         Device device = deviceRepository.getById(id);
 
-        if (!deviceFormUpdate.getStates().contains(device.getState())){
-            throw new BadRequestException("states", "States not contains state");
+        if (deviceFormUpdate.getStates() != null){
+            checkBeforeCreateOrUpdate(device.getState(), deviceFormUpdate.getStates());
         }
 
         device = ObjectUtil.updateField(deviceRepository.getById(id), deviceFormUpdate);
@@ -84,5 +85,15 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
         }
 
         return device;
+    }
+
+    private void checkBeforeCreateOrUpdate(String state, List<String> states){
+        if (!states.contains(state)){
+            throw new BadRequestException("states", "States not contains state");
+        }
+
+        if (CollectionUtil.hasListDuplicates(states)){
+            throw new BadRequestException("states", "States has duplicate");
+        }
     }
 }

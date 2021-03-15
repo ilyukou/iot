@@ -1,4 +1,4 @@
-package by.grsu.iot.repository.factory;
+package by.grsu.iot.repository.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +9,18 @@ import org.springframework.stereotype.Component;
 public class StringUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
+
+    private static String alphabet;
+
     @Value("${iot.string.alphabet}")
-    private String alphabet;
+    private void set(String alphabet){
+        StringUtil.alphabet = alphabet;
+    }
 
     public StringUtil() {
     }
 
-    public String generateString(long length) {
+    public static String generateString(long length) {
         StringBuilder name = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
@@ -27,7 +32,7 @@ public class StringUtil {
         return name.toString();
     }
 
-    public String generateToken(long length) {
+    public static String generateToken(long length) {
         return generateString(length);
     }
 }
