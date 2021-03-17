@@ -40,13 +40,13 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({InvalidJwtAuthenticationException.class})
-    public ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException() {
+    public ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException(final InvalidJwtAuthenticationException exception) {
         return responseFor401();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<ExceptionResponse> authenticationException() {
+    public ResponseEntity<ExceptionResponse> authenticationException(final AuthenticationException exception) {
         return responseFor401();
     }
 

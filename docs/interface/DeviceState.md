@@ -2,7 +2,7 @@
 
 ___
 ### Get device state
-##### Request /deviceState/{token}?state=yourState
+##### Request /deviceStateDto/{token}?state=yourState
 Method | Header | Parameter | Description | Body | Description
 ------------ | ------------- | -------------  | ------------- | ------------- | -------------
 GET | - | state, token | String state - device state, default "off"; String token - device token | - | - | -
@@ -27,7 +27,7 @@ Code | Body | Description
 
 ___
 ### Set device state
-##### Request /deviceState/{token}?state=off
+##### Request /deviceStateDto/{token}?state=off
 Method | Header | Parameter | Description | Body | Description
 ------------ | ------------- | -------------  | ------------- | ------------- | -------------
 POST | - | state, token | String state - device state, default "off"; String token - device token | - | - | -

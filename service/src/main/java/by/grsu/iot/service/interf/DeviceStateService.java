@@ -1,7 +1,8 @@
 package by.grsu.iot.service.interf;
 
+import by.grsu.iot.model.domain.DeviceState;
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.service.domain.response.DeviceState;
+import by.grsu.iot.service.domain.response.DeviceStateDto;
 
 /**
  * Service for change a {@link Device} state
@@ -26,7 +27,7 @@ public interface DeviceStateService {
      *
      * @param newState new state
      * @param token {@link Device#getToken()}
-     * @return {@link DeviceState}
+     * @return {@link DeviceStateDto}
      */
     DeviceState setState(String newState, String token);
 }

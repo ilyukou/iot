@@ -1,10 +1,10 @@
 package by.grsu.iot.service.impl;
 
-import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
+import by.grsu.iot.model.domain.DeviceState;
+import by.grsu.iot.model.domain.DeviceStateResult;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.repository.interf.DeviceRepository;
-import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
-import by.grsu.iot.service.domain.response.DeviceState;
+import by.grsu.iot.repository.interf.DeviceStateRepository;
 import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
@@ -29,17 +29,17 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     @Value("${device.state.check.repeat.time}")
     private Long DEVICE_WAITING_TIME;
 
+    private final DeviceStateRepository deviceStateRepository;
     private final DeviceRepository deviceRepository;
-    private final DeviceStateQueueRepository deviceStateQueueRepository;
     private final DeviceCrudService deviceCrudService;
 
 
     public DeviceStateServiceImpl(
-            DeviceStateQueueRepository deviceStateQueueRepository,
+            DeviceStateRepository deviceStateRepository,
             DeviceCrudService deviceCrudService,
             DeviceRepository deviceRepository
     ) {
-        this.deviceStateQueueRepository = deviceStateQueueRepository;
+        this.deviceStateRepository = deviceStateRepository;
         this.deviceCrudService = deviceCrudService;
         this.deviceRepository = deviceRepository;
     }
@@ -49,8 +49,8 @@ public class DeviceStateServiceImpl implements DeviceStateService {
         Device device = deviceCrudService.getByToken(token);
 
         // In Queue exist request for changing state
-        if (deviceStateQueueRepository.isExist(token)){
-            DeviceStateElasticsearch elasticsearch = deviceStateQueueRepository.getAndDelete(token);
+        if (deviceStateRepository.isExist(token)){
+            DeviceState elasticsearch = deviceStateRepository.getAndDelete(token);
             device.setState(elasticsearch.getState());
 
             return new DeviceState(deviceRepository.update(device));
@@ -63,8 +63,8 @@ public class DeviceStateServiceImpl implements DeviceStateService {
         Date date = new Date();
         while (new Date().getTime() < date.getTime() + DEVICE_GET_TIME){
 
-            if (deviceStateQueueRepository.isExist(token)){
-                DeviceStateElasticsearch elasticsearch = deviceStateQueueRepository.getAndDelete(token);
+            if (deviceStateRepository.isExist(token)){
+                DeviceState elasticsearch = deviceStateRepository.getAndDelete(token);
                 device.setState(elasticsearch.getState());
 
                 return new DeviceState(deviceRepository.update(device));
@@ -84,20 +84,20 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     public DeviceState setState(String newState, String token) {
         Device device = deviceCrudService.getByToken(token);
 
-        if (deviceStateQueueRepository.isExist(token)){
+        if (deviceStateRepository.isExist(token)){
             throw new BadRequestException("Another request in the queue");
         }
 
         if(newState.equals(device.getState())){
             throw new BadRequestException("state", "This state is already set");
         }
-        
-        deviceStateQueueRepository.put(new DeviceStateElasticsearch(token, newState, new Date().getTime()));
+
+        deviceStateRepository.put(new DeviceState(token, newState, new Date().getTime(), DeviceStateResult.WAIT));
 
         Date date = new Date();
         while (new Date().getTime() < date.getTime() + DEVICE_SET_TIME){
 
-            if (!deviceStateQueueRepository.isExist(token)){
+            if (!deviceStateRepository.isExist(token)){
                 return new DeviceState(newState);
             }
 
@@ -108,7 +108,7 @@ public class DeviceStateServiceImpl implements DeviceStateService {
             }
         }
 
-        deviceStateQueueRepository.delete(token);
+        deviceStateRepository.delete(token);
         Device check = deviceCrudService.getByToken(token);
 
         if (check.getState().equals(device.getState())){

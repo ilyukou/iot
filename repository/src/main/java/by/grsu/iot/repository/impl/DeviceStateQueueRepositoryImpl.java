@@ -2,7 +2,7 @@ package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import by.grsu.iot.repository.interf.DeviceStateQueueRepository;
-import by.grsu.iot.repository.elasticsearchRepository.DeviceStateElasticsearchRepository;
+import by.grsu.iot.repository.elasticsearch.DeviceStateElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

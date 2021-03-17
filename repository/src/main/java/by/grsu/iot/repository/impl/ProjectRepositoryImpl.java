@@ -95,7 +95,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
 
         deviceRepository.getProjectDeviceIds(id).forEach(deviceId -> deviceRepository.delete(deviceId));
-        
+
         projectJpaRepository.deleteById(project.getId());
 
         return !isExist(id);

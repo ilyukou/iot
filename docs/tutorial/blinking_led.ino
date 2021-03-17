@@ -45,7 +45,7 @@ void execute(){
     } else if(STATE == "on"){
         digitalWrite(D7, HIGH);
     } else {
-        Serial.println("Not found such state for execute ")
+        Serial.println("Not found such state for execute ");
         Serial.print(STATE);
     }
 }
@@ -54,7 +54,7 @@ void request(){
     if(WiFi.status()== WL_CONNECTED){
       HTTPClient http;
 
-      String serverPath = SERVER_IP + "/deviceState/" + TOKEN + "?state=" + STATE;
+      String serverPath = SERVER_IP + "/deviceStateDto/" + TOKEN + "?state=" + STATE;
 
       // Your Domain name with URL path or IP address with path
       http.begin(serverPath.c_str());

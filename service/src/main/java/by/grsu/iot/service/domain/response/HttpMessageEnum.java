@@ -1,4 +1,4 @@
-package by.grsu.iot.model.dto;
+package by.grsu.iot.service.domain.response;
 
 public enum HttpMessageEnum {
     ok("ok"),

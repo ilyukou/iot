@@ -1,4 +1,4 @@
-package by.grsu.iot.model.dto;
+package by.grsu.iot.service.domain.response;
 
 import by.grsu.iot.model.sql.BaseEntity;
 import by.grsu.iot.model.sql.User;

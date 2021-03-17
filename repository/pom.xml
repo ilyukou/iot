@@ -12,6 +12,15 @@
     <artifactId>repository</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <project.type>multi</project.type>
+        <dist.id>spring-data-mongodb</dist.id>
+        <springdata.commons>2.3.1.RELEASE</springdata.commons>
+        <mongo>4.0.4</mongo>
+        <mongo.reactivestreams>${mongo}</mongo.reactivestreams>
+        <jmh.version>1.19</jmh.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>by.grsu</groupId>

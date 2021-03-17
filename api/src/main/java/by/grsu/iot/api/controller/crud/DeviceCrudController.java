@@ -1,6 +1,6 @@
 package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.model.dto.DeviceDto;
+import by.grsu.iot.service.domain.response.DeviceDto;
 import by.grsu.iot.service.domain.request.device.DeviceForm;
 import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;

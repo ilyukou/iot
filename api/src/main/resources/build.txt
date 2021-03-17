@@ -1,0 +1,2 @@
+docker build -t  ilyukou/api:0.1 .
+docker push ilyukou/api:0.1

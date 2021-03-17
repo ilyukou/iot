@@ -1,4 +1,4 @@
-package by.grsu.iot.repository.elasticsearchRepository;
+package by.grsu.iot.repository.elasticsearch;
 
 import by.grsu.iot.model.elastic.DeviceStateElasticsearch;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

@@ -1,4 +1,4 @@
-package by.grsu.iot.model.dto;
+package by.grsu.iot.service.domain.response;
 
 /**
  * Used by the wrapper for the returned object in order to supplement the response with some text message and status

@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.model.dto.HttpMessageEnum;
-import by.grsu.iot.model.dto.HttpMessageWrapper;
-import by.grsu.iot.service.domain.response.DeviceState;
+import by.grsu.iot.service.domain.response.HttpMessageEnum;
+import by.grsu.iot.service.domain.response.HttpMessageWrapper;
+import by.grsu.iot.service.domain.response.DeviceStateDto;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,28 +26,28 @@ public class DeviceStateController {
     }
 
     @GetMapping("{token}")
-    public ResponseEntity<HttpMessageWrapper<DeviceState>> getState(
+    public ResponseEntity<HttpMessageWrapper<DeviceStateDto>> getState(
             @PathVariable String token,
             @RequestParam String state
     ) {
-        return getResponseEntity(deviceStateService.getState(state, token));
+        return getResponseEntity(new DeviceStateDto(deviceStateService.getState(state, token)));
     }
 
     @PostMapping("{token}")
-    public ResponseEntity<HttpMessageWrapper<DeviceState>> setState(
+    public ResponseEntity<HttpMessageWrapper<DeviceStateDto>> setState(
             @PathVariable String token,
             @RequestParam String state
     ) {
-        return getResponseEntity(deviceStateService.setState(state, token));
+        return getResponseEntity(new DeviceStateDto(deviceStateService.setState(state, token)));
     }
 
-    private ResponseEntity<HttpMessageWrapper<DeviceState>> getResponseEntity(DeviceState deviceState){
-        if (deviceState != null){
+    private ResponseEntity<HttpMessageWrapper<DeviceStateDto>> getResponseEntity(DeviceStateDto deviceStateDto){
+        if (deviceStateDto != null){
             return new ResponseEntity<>(
                     new HttpMessageWrapper(
                             HttpMessageEnum.info,
                             "OK",
-                            deviceState),
+                            deviceStateDto),
                     HttpStatus.OK);
         } else {
             return new ResponseEntity<>(
