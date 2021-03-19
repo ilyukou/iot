@@ -110,4 +110,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     public List<Long> getProjectDeviceIds(Long projectId) {
         return deviceJpaRepository.findDeviceIdsByProjectId(projectId);
     }
+
+    @Override
+    public void changeState(String state, String token) {
+        deviceJpaRepository.changeState(state, token);
+    }
 }

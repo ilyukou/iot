@@ -30,4 +30,8 @@ public interface DeviceStateService {
      * @return {@link DeviceStateDto}
      */
     DeviceState setState(String newState, String token);
+
+    void removeDevice(String token);
+
+    void removeRequest(String token);
 }

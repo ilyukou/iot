@@ -84,4 +84,6 @@ public interface DeviceRepository {
      * @return {@link List} of {@link Device#getId()}
      */
     List<Long> getProjectDeviceIds(Long projectId);
+
+    void changeState(String state, String token);
 }

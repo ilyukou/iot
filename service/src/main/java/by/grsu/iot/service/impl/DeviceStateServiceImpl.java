@@ -1,124 +1,87 @@
 package by.grsu.iot.service.impl;
 
 import by.grsu.iot.model.domain.DeviceState;
-import by.grsu.iot.model.domain.DeviceStateResult;
-import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.repository.interf.DeviceRepository;
-import by.grsu.iot.repository.interf.DeviceStateRepository;
-import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.impl.concurrent.DeviceStateConcurrentRepository;
+import by.grsu.iot.service.impl.folder.StateConsumer;
+import by.grsu.iot.service.impl.model.DeviceStateDevice;
+import by.grsu.iot.service.impl.model.DeviceStateRequest;
 import by.grsu.iot.service.interf.DeviceStateService;
-import by.grsu.iot.service.interf.crud.DeviceCrudService;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @PropertySource("classpath:application-service.properties")
 @Service
+@Scope(value="singleton")
 public class DeviceStateServiceImpl implements DeviceStateService {
 
-    @Value("${device.state.set.long-polling.time}")
-    private Long DEVICE_SET_TIME;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceStateServiceImpl.class);
 
-    @Value("${device.state.get.long-polling.time}")
-    private Long DEVICE_GET_TIME;
-
-    @Value("${device.state.check.repeat.time}")
-    private Long DEVICE_WAITING_TIME;
-
-    private final DeviceStateRepository deviceStateRepository;
-    private final DeviceRepository deviceRepository;
-    private final DeviceCrudService deviceCrudService;
+    private final DeviceStateConcurrentRepository repository;
+    private final StateConsumer stateConsumer;
 
 
     public DeviceStateServiceImpl(
-            DeviceStateRepository deviceStateRepository,
-            DeviceCrudService deviceCrudService,
-            DeviceRepository deviceRepository
+            DeviceStateConcurrentRepository deviceStateConcurrentRepository,
+            StateConsumer stateConsumer
     ) {
-        this.deviceStateRepository = deviceStateRepository;
-        this.deviceCrudService = deviceCrudService;
-        this.deviceRepository = deviceRepository;
+        this.stateConsumer = stateConsumer;
+
+        ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        service.execute(stateConsumer);
+
+        this.repository = deviceStateConcurrentRepository;
     }
 
     @Override
     public DeviceState getState(String remoteState, String token) {
-        Device device = deviceCrudService.getByToken(token);
+        repository.putWaitDevice(new DeviceStateDevice(token, remoteState));
 
-        // In Queue exist request for changing state
-        if (deviceStateRepository.isExist(token)){
-            DeviceState elasticsearch = deviceStateRepository.getAndDelete(token);
-            device.setState(elasticsearch.getState());
+//        synchronized (stateConsumer){
+//            stateConsumer.notify();
+//        }
 
-            return new DeviceState(deviceRepository.update(device));
-        }
+        LOGGER.info("[GET] stateConsumer notify " + token);
 
-        if (!device.getState().equals(remoteState)){
-            return new DeviceState(device);
-        }
+        DeviceStateDevice device = repository.getProcessedDevice(token);
 
-        Date date = new Date();
-        while (new Date().getTime() < date.getTime() + DEVICE_GET_TIME){
+        LOGGER.info("[GET] Processed device " + device);
 
-            if (deviceStateRepository.isExist(token)){
-                DeviceState elasticsearch = deviceStateRepository.getAndDelete(token);
-                device.setState(elasticsearch.getState());
+        return new DeviceState(device.getToken(), device.getState());
 
-                return new DeviceState(deviceRepository.update(device));
-            }
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(DEVICE_WAITING_TIME);
-            } catch (InterruptedException e) {
-                // ignore
-            }
-        }
-
-        return null;
     }
 
     @Override
-    public DeviceState setState(String newState, String token) {
-        Device device = deviceCrudService.getByToken(token);
+    public DeviceState setState(String newState, String token)  {
+        repository.putWaitRequest(new DeviceStateRequest(token, newState));
 
-        if (deviceStateRepository.isExist(token)){
-            throw new BadRequestException("Another request in the queue");
-        }
+//        synchronized (stateConsumer){
+//            stateConsumer.notify();
+//        }
 
-        if(newState.equals(device.getState())){
-            throw new BadRequestException("state", "This state is already set");
-        }
+        LOGGER.info("[SET] stateConsumer notify " + token);
 
-        deviceStateRepository.put(new DeviceState(token, newState, new Date().getTime(), DeviceStateResult.WAIT));
+        DeviceStateRequest request = repository.getProcessedRequest(token);
 
-        Date date = new Date();
-        while (new Date().getTime() < date.getTime() + DEVICE_SET_TIME){
+        LOGGER.info("[SET] Processed request " + request);
 
-            if (!deviceStateRepository.isExist(token)){
-                return new DeviceState(newState);
-            }
+        return new DeviceState(request.getToken(), request.getState());
+    }
 
-            try {
-                TimeUnit.MILLISECONDS.sleep(DEVICE_WAITING_TIME);
-            } catch (InterruptedException e) {
-                // ignore
-            }
-        }
+    @Override
+    public void removeDevice(String token) {
+        repository.removeWaitDevice(token);
+        repository.removeProcessedDevice(token);
+    }
 
-        deviceStateRepository.delete(token);
-        Device check = deviceCrudService.getByToken(token);
-
-        if (check.getState().equals(device.getState())){
-            return null;
-        }
-
-        if (check.getState().equals(newState)){
-            return new DeviceState(newState);
-        }
-
-        throw new ConcurrentModificationException();
+    @Override
+    public void removeRequest(String token) {
+        repository.removeWaitRequest(token);
+        repository.removeProcessedRequest(token);
     }
 }

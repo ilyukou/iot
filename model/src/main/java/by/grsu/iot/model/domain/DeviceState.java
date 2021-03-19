@@ -30,6 +30,11 @@ public class DeviceState {
         this.result = result;
     }
 
+    public DeviceState(String token, String state) {
+        this.token = token;
+        this.state = state;
+    }
+
     public DeviceState(Device device) {
         this.state = device.getState();
     }
