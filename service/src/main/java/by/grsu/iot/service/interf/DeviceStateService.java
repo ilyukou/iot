@@ -18,7 +18,7 @@ public interface DeviceStateService {
      * @param token {@link Device#getToken()}
      * @return {@link DeviceState}
      */
-    DeviceState getState(String remoteState, String token);
+    DeviceState getState(String token);
 
     /**
      * Set state
@@ -34,4 +34,9 @@ public interface DeviceStateService {
     void removeDevice(String token);
 
     void removeRequest(String token);
+
+    Long getDeviceWaitTime();
+
+    Long getRequestWaitTime();
+
 }

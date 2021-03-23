@@ -1,19 +1,17 @@
-package by.grsu.iot.service.impl.model;
+package by.grsu.iot.service.domain.state;
 
-public class DeviceStateHttpRequest {
+public class StateRequest {
 
     private String token;
 
     private String state;
 
-    private boolean isProcessed = false;
-
-    public DeviceStateHttpRequest(String token, String state) {
+    public StateRequest(String token, String state) {
         this.token = token;
         this.state = state;
     }
 
-    public DeviceStateHttpRequest() {
+    public StateRequest() {
     }
 
     public String getToken() {
@@ -32,20 +30,11 @@ public class DeviceStateHttpRequest {
         this.state = state;
     }
 
-    public boolean isProcessed() {
-        return isProcessed;
-    }
-
-    public void setProcessed(boolean processed) {
-        isProcessed = processed;
-    }
-
     @Override
     public String toString() {
-        return "DeviceStateHttpRequest{" +
+        return "StateRequest{" +
                 "token='" + token + '\'' +
                 ", state='" + state + '\'' +
-                ", isProcessed=" + isProcessed +
                 '}';
     }
 }

@@ -87,6 +87,11 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
         return device;
     }
 
+    @Override
+    public String getDeviceState(String token) {
+        return deviceRepository.getDeviceStateByToken(token);
+    }
+
     private void checkBeforeCreateOrUpdate(String state, List<String> states){
         if (!states.contains(state)){
             throw new BadRequestException("states", "States not contains state");

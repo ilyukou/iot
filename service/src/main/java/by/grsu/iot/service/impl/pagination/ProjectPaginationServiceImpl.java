@@ -4,6 +4,7 @@ import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.service.domain.response.PaginationInfo;
+import by.grsu.iot.service.exception.BadRequestException;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
 import by.grsu.iot.service.util.CollectionUtil;
@@ -42,6 +43,12 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
         if(!userRepository.isExistByUsername(whoBeingAskedUsername)){
             throw new EntityNotFoundException("User does not exist with given username={" + whoBeingAskedUsername + "}");
+        }
+
+        PaginationInfo info = getPaginationInfo(whoBeingAskedUsername, whoRequestedUsername);
+
+        if (page > info.getPages()){
+            throw new BadRequestException("page", "You are requesting a non-existent page");
         }
 
         List<Long> projectsId = projectRepository.getAllUserProjectsIds(whoBeingAskedUsername)

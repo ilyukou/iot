@@ -1,8 +1,8 @@
 package by.grsu.iot.service.impl.concurrent;
 
 import by.grsu.iot.repository.interf.DeviceRepository;
-import by.grsu.iot.service.impl.model.DeviceStateDevice;
-import by.grsu.iot.service.impl.model.DeviceStateRequest;
+import by.grsu.iot.service.domain.state.GetStateRequest;
+import by.grsu.iot.service.domain.state.SetDeviceRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -11,27 +11,25 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-// Tunnel
 @Service
 @Scope(value="singleton")
-public class DeviceStateConcurrentRepository extends Thread  {
+public class StateRequestConcurrentRepository extends Thread  {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DeviceStateConcurrentRepository.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(StateRequestConcurrentRepository.class);
 
     private final DeviceRepository deviceRepository;
 
-    private Map<String, DeviceStateDevice> devices = new ConcurrentHashMap<>();
-    private Map<String, DeviceStateRequest> requests = new ConcurrentHashMap<>();
+    private Map<String, GetStateRequest> devices = new ConcurrentHashMap<>();
+    private Map<String, SetDeviceRequest> requests = new ConcurrentHashMap<>();
 
-    private Map<String, DeviceStateRequest> requestsProcessed = new ConcurrentHashMap<>();
-    private Map<String, DeviceStateDevice> devicesProcessed = new ConcurrentHashMap<>();
+    private Map<String, SetDeviceRequest> requestsProcessed = new ConcurrentHashMap<>();
+    private Map<String, GetStateRequest> devicesProcessed = new ConcurrentHashMap<>();
 
-    public DeviceStateConcurrentRepository(DeviceRepository deviceRepository) {
+    public StateRequestConcurrentRepository(DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
     }
 
-
-    public synchronized DeviceStateDevice getWaitDevice(String token){
+    public synchronized GetStateRequest getWaitDevice(String token){
         return devices.get(token);
     }
 
@@ -39,53 +37,29 @@ public class DeviceStateConcurrentRepository extends Thread  {
         devices.remove(token);
     }
 
-    public synchronized boolean isExistWaitDevice(String token){
-        return devices.containsKey(token);
-    }
-
-    public synchronized boolean isExistWaitDevice(){
-        return devices.size() > 0;
-    }
-
-    public synchronized Set<String> getWaitDeviceKeys(){
-        return devices.keySet();
-    }
-
-    public synchronized void putWaitDevice(DeviceStateDevice device){
+    public synchronized void putWaitDevice(GetStateRequest device){
         devices.put(device.getToken(), device);
+        LOGGER.info("[GET] New device " + device);
+        LOGGER.info("requests=" + requests.size() + "; devices=" + devices.size());
         notifyAll();
-        LOGGER.info("[GET] notifyAll");
     }
 
-//    -------------
-    public synchronized DeviceStateRequest getWaitRequest(String token){
+    public synchronized SetDeviceRequest getWaitRequest(String token){
         return requests.get(token);
-    }
-
-    public synchronized Set<String> getWaitRequestKeys(){
-        return requests.keySet();
     }
 
     public synchronized void removeWaitRequest(String token){
         requests.remove(token);
     }
 
-    public synchronized boolean isExistWaitRequest(String token){
-        return requests.containsKey(token);
-    }
-
-    public synchronized boolean isExistWaitRequest(){
-        return requests.size() > 0;
-    }
-
-    public synchronized void putWaitRequest(DeviceStateRequest request){
+    public synchronized void putWaitRequest(SetDeviceRequest request){
         requests.put(request.getToken(), request);
+        LOGGER.info("[SET] New request " + request);
+        LOGGER.info("requests=" + requests.size() + "; devices=" + devices.size());
         notifyAll();
-        LOGGER.info("[SET] notifyAll");
     }
 
-//    -------------
-    public synchronized DeviceStateRequest getProcessedRequest(String token){
+    public synchronized SetDeviceRequest getProcessedRequest(String token){
         while (!isExistProcessedRequest(token)){
             try {
                 wait();
@@ -95,11 +69,12 @@ public class DeviceStateConcurrentRepository extends Thread  {
             }
         }
 
-        DeviceStateRequest request = requestsProcessed.get(token);
+        SetDeviceRequest request = requestsProcessed.get(token);
         requestsProcessed.remove(token);
+        requests.remove(token);
 
         deviceRepository.changeState(request.getState(), request.getToken());
-
+        notifyAll();
         return request;
     }
 
@@ -111,14 +86,14 @@ public class DeviceStateConcurrentRepository extends Thread  {
         return requestsProcessed.containsKey(token);
     }
 
-    public synchronized void putProcessedRequest(DeviceStateRequest request){
+    public synchronized void putProcessedRequest(SetDeviceRequest request){
         requestsProcessed.put(request.getToken(), request);
         notifyAll();
     }
 
     //    -------------
 
-    public synchronized DeviceStateDevice getProcessedDevice(String token){
+    public synchronized GetStateRequest getProcessedDevice(String token){
         while (!isExistProcessedDevice(token)){
             try {
                 wait();
@@ -127,11 +102,11 @@ public class DeviceStateConcurrentRepository extends Thread  {
                 e.printStackTrace();
             }
         }
-        DeviceStateDevice device = devicesProcessed.get(token);
+        GetStateRequest device = devicesProcessed.get(token);
         devicesProcessed.remove(token);
+        devices.remove(token);
 
-        deviceRepository.changeState(device.getState(), device.getToken());
-
+        notifyAll();
         return device;
     }
 
@@ -143,9 +118,9 @@ public class DeviceStateConcurrentRepository extends Thread  {
         return devicesProcessed.containsKey(token);
     }
 
-    public synchronized void putProcessedDevice(DeviceStateDevice device){
+    public synchronized void putProcessedDevice(GetStateRequest device){
         devicesProcessed.put(device.getToken(), device);
-        notify();
+        notifyAll();
     }
 
     public synchronized Set<String> getWaitDeviceAndWaitRequestWithEqualsToken(){

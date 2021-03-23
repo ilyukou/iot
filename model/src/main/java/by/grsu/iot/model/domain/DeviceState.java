@@ -1,6 +1,5 @@
 package by.grsu.iot.model.domain;
 
-import by.grsu.iot.model.mongo.DeviceStateMongoDocument;
 import by.grsu.iot.model.sql.Device;
 
 public class DeviceState {
@@ -41,14 +40,6 @@ public class DeviceState {
 
     public DeviceState(String state) {
         this.state = state;
-    }
-
-    public DeviceState(DeviceStateMongoDocument deviceStateMongoDocument) {
-        this.id = deviceStateMongoDocument.getId();
-        this.token = deviceStateMongoDocument.getToken();
-        this.state = deviceStateMongoDocument.getState();
-        this.time = deviceStateMongoDocument.getTime();
-        this.result = deviceStateMongoDocument.getResult();
     }
 
     public DeviceState() {

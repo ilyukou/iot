@@ -2,12 +2,12 @@
 
 ___
 ### Get device state
-##### Request /deviceStateDto/{token}?state=yourState
+##### Request /deviceStateDto/{token}
 Method | Header | Parameter | Description | Body | Description
 ------------ | ------------- | -------------  | ------------- | ------------- | -------------
-GET | - | state, token | String state - device state, default "off"; String token - device token | - | - | -
+GET | - | token | String token - device token | - | - | -
 
-If state not equals state in server - return state from server, else wait 30 second (each second take fresh data from the server and compare it again). After 30 second return TimeOutMessage.
+Long-polling method
 
 ##### Response when state not equals state in server
 Code | Body | Description
@@ -31,6 +31,8 @@ ___
 Method | Header | Parameter | Description | Body | Description
 ------------ | ------------- | -------------  | ------------- | ------------- | -------------
 POST | - | state, token | String state - device state, default "off"; String token - device token | - | - | -
+
+Long-polling method
 
 ##### Response
 Code | Body | Description

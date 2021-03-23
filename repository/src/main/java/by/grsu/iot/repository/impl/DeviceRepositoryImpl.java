@@ -6,6 +6,7 @@ import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.jpa.DeviceJpaRepository;
+import by.grsu.iot.repository.util.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -113,6 +114,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
     @Override
     public void changeState(String state, String token) {
-        deviceJpaRepository.changeState(state, token);
+        deviceJpaRepository.changeState(state, TimeUtil.getCurrentDate(), token);
+    }
+
+    @Override
+    public String getDeviceStateByToken(String token) {
+        return deviceJpaRepository.getDeviceStateByToken(token);
     }
 }

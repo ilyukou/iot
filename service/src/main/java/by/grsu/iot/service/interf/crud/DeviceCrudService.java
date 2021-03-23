@@ -54,4 +54,6 @@ public interface DeviceCrudService {
      * @return {@link Device}
      */
     Device getByToken(String token);
+
+    String getDeviceState(String token);
 }

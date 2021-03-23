@@ -3,16 +3,19 @@ package by.grsu.iot.repository.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+
 @Component
+@PropertySource("classpath:application-repository.properties")
 public class StringUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
 
     private static String alphabet;
 
-    @Value("${iot.string.alphabet}")
+    @Value("${by.grsu.iot.repository.string.alphabet}")
     private void set(String alphabet){
         StringUtil.alphabet = alphabet;
     }

@@ -1,7 +1,5 @@
 package by.grsu.iot.service.util;
 
-import by.grsu.iot.service.exception.BadRequestException;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,8 +50,12 @@ public class CollectionUtil {
     }
 
     public static <T> List<T> getArrayFromTo(Long from, Long to, List<T> array){
+        if (from < to){
+            throw new IllegalArgumentException("From less than to");
+        }
+
         if(from > array.size()){
-            throw new BadRequestException("count", "Not exist such page");
+            throw new IllegalArgumentException("From more than List size");
         }
 
         if(to > array.size()){

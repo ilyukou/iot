@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,5 +32,8 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
 
     @Modifying
     @Query(value = "update device d set d.state = ?1 where d.token = ?2", nativeQuery = true)
-    void changeState(String state, String token);
+    void changeState(String state, Date date, String token);
+
+    @Query(value = "select d.state from device d where d.token = ?1", nativeQuery = true)
+    String getDeviceStateByToken(String token);
 }

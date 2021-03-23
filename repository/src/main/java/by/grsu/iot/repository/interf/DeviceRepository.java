@@ -80,10 +80,13 @@ public interface DeviceRepository {
 
     /**
      * Get {@link List} of {@link Device#getId()} by {@link Project}
+     *
      * @param projectId {@link Project#getId()}
      * @return {@link List} of {@link Device#getId()}
      */
     List<Long> getProjectDeviceIds(Long projectId);
 
     void changeState(String state, String token);
+
+    String getDeviceStateByToken(String token);
 }

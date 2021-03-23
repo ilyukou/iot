@@ -10,6 +10,8 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Transactional
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -33,6 +35,10 @@ public class UserRepositoryImpl implements UserRepository {
         Email email = emailRepository.create(u.getEmail());
 
         u.setEmail(email);
+
+        Date date = TimeUtil.getCurrentDate();
+        u.setUpdated(date);
+        u.setCreated(date);
 
         // Save User with Email and Roles
         u = userJpaRepository.save(u);

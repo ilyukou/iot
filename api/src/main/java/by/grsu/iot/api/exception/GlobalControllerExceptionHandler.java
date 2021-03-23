@@ -1,8 +1,8 @@
 package by.grsu.iot.api.exception;
 
+import by.grsu.iot.service.domain.BadRequestExceptionResponse;
 import by.grsu.iot.service.domain.ExceptionResponse;
 import by.grsu.iot.service.exception.BadRequestException;
-import by.grsu.iot.service.domain.BadRequestExceptionResponse;
 import by.grsu.iot.service.exception.EntityNotFoundException;
 import by.grsu.iot.service.exception.NotAccessForOperationException;
 import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
@@ -52,7 +52,7 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
     @ExceptionHandler({NotAccessForOperationException.class})
-    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final BadRequestException exception) {
+    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final NotAccessForOperationException exception) {
         return new ResponseEntity<>(
                 new BadRequestExceptionResponse(new Date(), exception.getMessage(), exception.getField())
                 , HttpStatus.FORBIDDEN);
@@ -84,10 +84,12 @@ public class GlobalControllerExceptionHandler {
         return responseFor500(exception, request);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
+    @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ExceptionResponse> validationErrorException(final IOException exception,
+    public ResponseEntity<ExceptionResponse> validationErrorException(final IllegalArgumentException exception,
                                                                       final HttpServletRequest request) {
-        return responseFor500(exception, request);
+        return new ResponseEntity<>(
+                new ExceptionResponse(new Date(), exception.getMessage())
+                , HttpStatus.BAD_REQUEST);
     }
 }

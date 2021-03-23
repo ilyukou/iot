@@ -123,7 +123,7 @@ public class DeviceRepositoryImplTest {
         Assert.assertNotNull(device.getId());
 
         Project project = projectRepository.getById(createdProject.getId());
-        Assert.assertEquals(1, project.getDevices().size());
+        Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
     }
 
     @Test
@@ -133,10 +133,12 @@ public class DeviceRepositoryImplTest {
         when(entityFactory.createDevice()).thenReturn(device);
 
         Device createdDevice = deviceRepository.create(createdProject, device);
-        Assert.assertEquals(1, projectRepository.getById(createdProject.getId()).getDevices().size());
+
+
+        Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
 
         Device createdDevice2 = deviceRepository.create(createdProject, device);
-        Assert.assertEquals(1, projectRepository.getById(createdProject.getId()).getDevices().size());
+        Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
     }
 
     @Test
