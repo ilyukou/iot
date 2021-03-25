@@ -4,7 +4,7 @@ import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.service.domain.pagination.PaginationInfo;
+import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
 import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
 import org.springframework.beans.factory.annotation.Value;

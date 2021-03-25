@@ -2,7 +2,7 @@ package by.grsu.iot.service.interf.pagination;
 
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.service.domain.pagination.PaginationInfo;
+import by.grsu.iot.model.dto.pagination.PaginationInfo;
 
 import java.util.List;
 

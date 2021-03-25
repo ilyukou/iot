@@ -1,8 +1,8 @@
 package by.grsu.iot.service.interf.crud;
 
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.service.domain.project.ProjectForm;
-import by.grsu.iot.service.domain.project.ProjectFormUpdate;
+import by.grsu.iot.model.dto.project.ProjectForm;
+import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 
 /**
  * Service layer for CRUD operation with {@link Project}

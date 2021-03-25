@@ -1,8 +1,8 @@
 package by.grsu.iot.repository.interf;
 
-import by.grsu.iot.model.state.GetStateRequest;
-import by.grsu.iot.model.state.SetDeviceRequest;
-import by.grsu.iot.model.state.StateRequest;
+import by.grsu.iot.model.dto.state.GetStateRequest;
+import by.grsu.iot.model.dto.state.SetDeviceRequest;
+import by.grsu.iot.model.dto.state.StateRequest;
 
 import java.util.Set;
 

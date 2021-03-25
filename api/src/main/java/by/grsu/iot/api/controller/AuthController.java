@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.service.domain.user.AuthenticationRequest;
-import by.grsu.iot.service.domain.user.AuthenticationUser;
-import by.grsu.iot.service.domain.user.RegistrationRequest;
+import by.grsu.iot.model.dto.user.AuthenticationRequest;
+import by.grsu.iot.model.dto.user.AuthenticationUser;
+import by.grsu.iot.model.dto.user.RegistrationRequest;
 import by.grsu.iot.service.interf.crud.UserCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

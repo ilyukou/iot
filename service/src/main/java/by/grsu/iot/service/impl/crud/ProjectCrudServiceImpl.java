@@ -2,8 +2,8 @@ package by.grsu.iot.service.impl.crud;
 
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.service.domain.project.ProjectForm;
-import by.grsu.iot.service.domain.project.ProjectFormUpdate;
+import by.grsu.iot.model.dto.project.ProjectForm;
+import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 import by.grsu.iot.service.interf.crud.ProjectCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
 import by.grsu.iot.service.validation.access.interf.ProjectAccessValidationService;

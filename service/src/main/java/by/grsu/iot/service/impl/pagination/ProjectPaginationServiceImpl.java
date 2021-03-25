@@ -4,7 +4,7 @@ import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.domain.pagination.PaginationInfo;
+import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.service.exception.BadRequestApplicationException;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
 import by.grsu.iot.service.validation.access.interf.ProjectAccessValidationService;

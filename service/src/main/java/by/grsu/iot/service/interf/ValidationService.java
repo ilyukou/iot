@@ -1,6 +1,6 @@
 package by.grsu.iot.service.interf;
 
-import by.grsu.iot.service.domain.validaation.ObjectValidation;
+import by.grsu.iot.model.dto.validaation.ObjectValidation;
 
 import java.util.Map;
 

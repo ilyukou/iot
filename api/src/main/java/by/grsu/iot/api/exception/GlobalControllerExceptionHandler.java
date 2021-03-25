@@ -1,8 +1,8 @@
 package by.grsu.iot.api.exception;
 
-import by.grsu.iot.api.exception.exception.ApplicationExceptionDto;
-import by.grsu.iot.api.exception.exception.BadRequestApplicationExceptionDto;
-import by.grsu.iot.api.exception.exception.NotAccessForOperationApplicationExceptionDto;
+import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
+import by.grsu.iot.model.dto.exception.BadRequestApplicationExceptionDto;
+import by.grsu.iot.model.dto.exception.NotAccessForOperationApplicationExceptionDto;
 import by.grsu.iot.service.exception.BadRequestApplicationException;
 import by.grsu.iot.service.exception.EntityNotFoundApplicationException;
 import by.grsu.iot.service.exception.NotAccessForOperationApplicationException;

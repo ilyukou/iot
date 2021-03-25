@@ -1,10 +1,10 @@
 package by.grsu.iot.service.impl;
 
-import by.grsu.iot.model.state.GetStateRequest;
-import by.grsu.iot.model.state.SetDeviceRequest;
+import by.grsu.iot.model.dto.state.GetStateRequest;
+import by.grsu.iot.model.dto.state.SetDeviceRequest;
 import by.grsu.iot.repository.exception.ConflictException;
 import by.grsu.iot.repository.interf.DeviceStateRepository;
-import by.grsu.iot.service.domain.device.DeviceState;
+import by.grsu.iot.model.dto.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

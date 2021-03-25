@@ -1,11 +1,11 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.api.dto.HttpMessageEnum;
-import by.grsu.iot.api.dto.HttpMessageWrapper;
-import by.grsu.iot.api.dto.thing.device.DeviceStateDto;
-import by.grsu.iot.api.exception.exception.ApplicationExceptionDto;
+import by.grsu.iot.model.dto.HttpMessageEnum;
+import by.grsu.iot.model.dto.HttpMessageWrapper;
+import by.grsu.iot.model.dto.thing.device.DeviceStateDto;
+import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
 import by.grsu.iot.repository.exception.ConflictException;
-import by.grsu.iot.service.domain.device.DeviceState;
+import by.grsu.iot.model.dto.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.slf4j.Logger;
