@@ -45,7 +45,9 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     @Override
     public DeviceState getState(String token) {
         if (repository.containsDevice(token)) {
-            throw new ConflictException("Device with such token exist");
+            String ms = "Device with such token exist";
+            LOGGER.trace(ms);
+            throw new ConflictException(ms);
         }
 
         repository.putWaitDevice(new GetStateRequest(token));
@@ -59,7 +61,9 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     @Override
     public DeviceState setState(String newState, String token) {
         if (repository.containsRequest(token)) {
-            throw new ConflictException("Request with such token exist");
+            String ms = "Request with such token exist";
+            LOGGER.trace(ms);
+            throw new ConflictException(ms);
         }
 
         repository.putWaitRequest(new SetDeviceRequest(token, newState));

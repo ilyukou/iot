@@ -2,10 +2,10 @@ package by.grsu.iot.api.controller;
 
 import by.grsu.iot.model.dto.HttpMessageEnum;
 import by.grsu.iot.model.dto.HttpMessageWrapper;
-import by.grsu.iot.model.dto.thing.device.DeviceStateDto;
-import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
-import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.model.dto.device.DeviceState;
+import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
+import by.grsu.iot.model.dto.thing.device.DeviceStateDto;
+import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Date;
-import java.util.concurrent.ForkJoinPool;
 
 @CrossOrigin
 @RestController
@@ -54,17 +53,22 @@ public class DeviceStateController {
                     new DeviceStateDto(deviceCrudService.getDeviceState(token)), TIME_OUT_MESSAGE, HttpStatus.OK));
         });
 
-        ForkJoinPool.commonPool().submit(() -> {
-            try {
-                LOGGER.trace("[GET] " + token);
+        new Thread(){
+            public void run(){
+                try {
+                    LOGGER.trace("[GET] " + token);
 
-                DeviceState deviceState = deviceStateService.getState(token);
+                    DeviceState deviceState = deviceStateService.getState(token);
 
-                deferredResult.setResult(getDeferredResult(new DeviceStateDto(deviceState), OK_MESSAGE, HttpStatus.OK));
-            } catch (Exception e) {
-                deferredResult.setErrorResult(getExceptionResponse(e));
+                    deferredResult.setResult(getDeferredResult(new DeviceStateDto(deviceState), OK_MESSAGE, HttpStatus.OK));
+                } catch (Exception e) {
+                    if (!(e instanceof ConflictException)){
+                        deviceStateService.removeDevice(token);
+                    }
+                    deferredResult.setErrorResult(getExceptionResponse(e));
+                }
             }
-        });
+        }.start();
 
         return deferredResult;
     }
@@ -85,18 +89,20 @@ public class DeviceStateController {
                     getDeferredResult(null, TIME_OUT_MESSAGE, HttpStatus.NO_CONTENT));
         });
 
-        ForkJoinPool.commonPool().submit(() -> {
-            try {
-                LOGGER.trace("[SET] " + token + " " + state);
+        new Thread(){
+            public void run(){
+                try {
+                    LOGGER.trace("[SET] " + token + " " + state);
 
-                DeviceState deviceState = deviceStateService.setState(state, token);
+                    DeviceState deviceState = deviceStateService.setState(state, token);
 
-                deferredResult.setResult(getDeferredResult(
-                        new DeviceStateDto(deviceState.getState()), OK_MESSAGE, HttpStatus.OK));
-            } catch (Exception e) {
-                deferredResult.setErrorResult(getExceptionResponse(e));
+                    deferredResult.setResult(getDeferredResult(new DeviceStateDto(deviceState), OK_MESSAGE, HttpStatus.OK));
+                } catch (Exception e) {
+                    deviceStateService.removeRequest(token);
+                    deferredResult.setErrorResult(getExceptionResponse(e));
+                }
             }
-        });
+        }.start();
 
         return deferredResult;
     }
