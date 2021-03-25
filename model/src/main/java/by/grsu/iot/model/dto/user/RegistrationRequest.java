@@ -1,6 +1,6 @@
 package by.grsu.iot.model.dto.user;
 
-import by.grsu.iot.service.annotation.StringValidation;
+import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 
 import javax.validation.constraints.Email;

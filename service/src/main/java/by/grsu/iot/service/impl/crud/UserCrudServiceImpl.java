@@ -7,7 +7,7 @@ import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.model.dto.user.AuthenticationRequest;
 import by.grsu.iot.model.dto.user.AuthenticationUser;
 import by.grsu.iot.model.dto.user.RegistrationRequest;
-import by.grsu.iot.service.exception.BadRequestApplicationException;
+import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.service.interf.crud.UserCrudService;
 import by.grsu.iot.service.security.jwt.JwtProperties;
 import by.grsu.iot.service.security.jwt.JwtTokenProvider;

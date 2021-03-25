@@ -1,6 +1,6 @@
 package by.grsu.iot.model.dto.validaation;
 
-import by.grsu.iot.service.annotation.StringValidation;
+import by.grsu.iot.model.annotation.StringValidation;
 
 /**
  * Information about validation requirements for field.

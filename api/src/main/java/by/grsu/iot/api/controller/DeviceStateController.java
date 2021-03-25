@@ -4,7 +4,7 @@ import by.grsu.iot.model.dto.HttpMessageEnum;
 import by.grsu.iot.model.dto.HttpMessageWrapper;
 import by.grsu.iot.model.dto.thing.device.DeviceStateDto;
 import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
-import by.grsu.iot.repository.exception.ConflictException;
+import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.model.dto.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;

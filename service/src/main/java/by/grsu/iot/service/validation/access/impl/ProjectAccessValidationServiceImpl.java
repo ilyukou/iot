@@ -2,8 +2,8 @@ package by.grsu.iot.service.validation.access.impl;
 
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.exception.EntityNotFoundApplicationException;
-import by.grsu.iot.service.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
+import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
 import by.grsu.iot.service.validation.access.interf.ProjectAccessValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

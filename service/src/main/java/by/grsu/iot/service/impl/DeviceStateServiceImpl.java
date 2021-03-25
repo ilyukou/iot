@@ -2,7 +2,7 @@ package by.grsu.iot.service.impl;
 
 import by.grsu.iot.model.dto.state.GetStateRequest;
 import by.grsu.iot.model.dto.state.SetDeviceRequest;
-import by.grsu.iot.repository.exception.ConflictException;
+import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.repository.interf.DeviceStateRepository;
 import by.grsu.iot.model.dto.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;

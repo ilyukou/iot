@@ -1,8 +1,8 @@
 package by.grsu.iot.service.util;
 
-import by.grsu.iot.service.annotation.CollectionValidation;
-import by.grsu.iot.service.annotation.StringValidation;
-import by.grsu.iot.service.exception.BadRequestApplicationException;
+import by.grsu.iot.model.annotation.CollectionValidation;
+import by.grsu.iot.model.annotation.StringValidation;
+import by.grsu.iot.model.exception.BadRequestApplicationException;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

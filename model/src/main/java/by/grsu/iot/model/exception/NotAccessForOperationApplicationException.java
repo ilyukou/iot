@@ -1,4 +1,4 @@
-package by.grsu.iot.service.exception;
+package by.grsu.iot.model.exception;
 
 /**
  * User not access for operation, like create/read/update/delete, with entity or resource

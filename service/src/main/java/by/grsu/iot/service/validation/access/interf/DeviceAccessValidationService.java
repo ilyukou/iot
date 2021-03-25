@@ -1,7 +1,7 @@
 package by.grsu.iot.service.validation.access.interf;
 
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.service.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
 
 /**
  * Service to validate access for operation with {@link Device}

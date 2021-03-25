@@ -1,6 +1,6 @@
 package by.grsu.iot.service.impl;
 
-import by.grsu.iot.service.annotation.StringValidation;
+import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.dto.validaation.FieldStringValidation;
 import by.grsu.iot.model.dto.validaation.ObjectValidation;

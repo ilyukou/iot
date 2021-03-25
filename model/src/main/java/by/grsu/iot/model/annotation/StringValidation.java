@@ -1,4 +1,4 @@
-package by.grsu.iot.service.annotation;
+package by.grsu.iot.model.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

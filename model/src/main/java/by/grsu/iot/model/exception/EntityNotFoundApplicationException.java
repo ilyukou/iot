@@ -1,4 +1,4 @@
-package by.grsu.iot.service.exception;
+package by.grsu.iot.model.exception;
 
 /**
  * Not found required entity

@@ -1,7 +1,7 @@
 package by.grsu.iot.service.validation;
 
-import by.grsu.iot.service.annotation.CollectionValidation;
-import by.grsu.iot.service.annotation.StringValidation;
+import by.grsu.iot.model.annotation.CollectionValidation;
+import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.service.util.EntityFieldValidationUtil;
 import by.grsu.iot.service.util.ObjectUtil;
 import org.springframework.core.MethodParameter;

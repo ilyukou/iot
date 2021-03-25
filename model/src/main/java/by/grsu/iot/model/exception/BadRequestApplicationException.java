@@ -1,4 +1,4 @@
-package by.grsu.iot.service.exception;
+package by.grsu.iot.model.exception;
 
 /**
  * Bad request exception indicate that user send not valid data

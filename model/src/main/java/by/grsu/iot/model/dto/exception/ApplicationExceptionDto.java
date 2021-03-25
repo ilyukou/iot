@@ -1,7 +1,7 @@
 package by.grsu.iot.model.dto.exception;
 
 import by.grsu.iot.model.dto.DataTransferObject;
-import by.grsu.iot.service.exception.ApplicationException;
+import by.grsu.iot.model.exception.ApplicationException;
 
 import java.util.Date;
 
