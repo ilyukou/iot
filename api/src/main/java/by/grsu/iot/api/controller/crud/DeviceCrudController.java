@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller.crud;
 
 import by.grsu.iot.model.dto.thing.device.DeviceDto;
-import by.grsu.iot.model.dto.device.DeviceForm;
-import by.grsu.iot.model.dto.device.DeviceFormUpdate;
+import by.grsu.iot.model.dto.thing.device.DeviceForm;
+import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

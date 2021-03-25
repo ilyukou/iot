@@ -1,4 +1,4 @@
-package by.grsu.iot.model.dto.state;
+package by.grsu.iot.model.dto.thing.device.state;
 
 /**
  * State Request superclass for basic logic with state

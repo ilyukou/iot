@@ -1,7 +1,7 @@
 package by.grsu.iot.service.interf;
 
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.model.dto.device.DeviceState;
+import by.grsu.iot.model.dto.thing.device.DeviceState;
 
 /**
  * Service for change a {@link Device} state

@@ -3,8 +3,8 @@ package by.grsu.iot.service.interf.crud;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.model.dto.device.DeviceForm;
-import by.grsu.iot.model.dto.device.DeviceFormUpdate;
+import by.grsu.iot.model.dto.thing.device.DeviceForm;
+import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 
 /**
  * Service layer for CRUD operation with {@link Device}

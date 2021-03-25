@@ -1,7 +1,7 @@
 package by.grsu.iot.repository.impl;
 
-import by.grsu.iot.model.dto.state.GetStateRequest;
-import by.grsu.iot.model.dto.state.SetDeviceRequest;
+import by.grsu.iot.model.dto.thing.device.state.GetStateRequest;
+import by.grsu.iot.model.dto.thing.device.state.SetDeviceRequest;
 import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.repository.interf.DeviceRepository;

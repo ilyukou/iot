@@ -1,4 +1,4 @@
-package by.grsu.iot.model.dto.device;
+package by.grsu.iot.model.dto.thing.device;
 
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.annotation.CollectionValidation;

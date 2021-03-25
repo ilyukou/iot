@@ -2,9 +2,8 @@ package by.grsu.iot.api.controller;
 
 import by.grsu.iot.model.dto.HttpMessageEnum;
 import by.grsu.iot.model.dto.HttpMessageWrapper;
-import by.grsu.iot.model.dto.device.DeviceState;
+import by.grsu.iot.model.dto.thing.device.DeviceState;
 import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
-import by.grsu.iot.model.dto.thing.device.DeviceStateDto;
 import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
@@ -39,10 +38,10 @@ public class DeviceStateController {
     }
 
     @GetMapping("{token}")
-    public DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceStateDto>>> getState(
+    public DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>> getState(
             @PathVariable String token
     ) {
-        DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceStateDto>>>
+        DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>>
                 deferredResult = new DeferredResult<>(deviceStateService.getDeviceWaitTime(),
                 getDeferredResult(null, TIME_OUT_MESSAGE, HttpStatus.NO_CONTENT));
 
@@ -50,7 +49,7 @@ public class DeviceStateController {
             deviceStateService.removeDevice(token);
 
             deferredResult.setResult(getDeferredResult(
-                    new DeviceStateDto(deviceCrudService.getDeviceState(token)), TIME_OUT_MESSAGE, HttpStatus.OK));
+                    new DeviceState(deviceCrudService.getDeviceState(token)), TIME_OUT_MESSAGE, HttpStatus.OK));
         });
 
         new Thread(){
@@ -60,7 +59,7 @@ public class DeviceStateController {
 
                     DeviceState deviceState = deviceStateService.getState(token);
 
-                    deferredResult.setResult(getDeferredResult(new DeviceStateDto(deviceState), OK_MESSAGE, HttpStatus.OK));
+                    deferredResult.setResult(getDeferredResult(deviceState, OK_MESSAGE, HttpStatus.OK));
                 } catch (Exception e) {
                     if (!(e instanceof ConflictException)){
                         deviceStateService.removeDevice(token);
@@ -74,11 +73,11 @@ public class DeviceStateController {
     }
 
     @PostMapping("{token}")
-    public DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceStateDto>>> setState(
+    public DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>> setState(
             @PathVariable String token,
             @RequestParam String state
     ) {
-        DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceStateDto>>>
+        DeferredResult<ResponseEntity<HttpMessageWrapper<DeviceState>>>
                 deferredResult = new DeferredResult<>(deviceStateService.getRequestWaitTime(),
                 getDeferredResult(null, TIME_OUT_MESSAGE, HttpStatus.OK));
 
@@ -96,7 +95,7 @@ public class DeviceStateController {
 
                     DeviceState deviceState = deviceStateService.setState(state, token);
 
-                    deferredResult.setResult(getDeferredResult(new DeviceStateDto(deviceState), OK_MESSAGE, HttpStatus.OK));
+                    deferredResult.setResult(getDeferredResult(deviceState, OK_MESSAGE, HttpStatus.OK));
                 } catch (Exception e) {
                     deviceStateService.removeRequest(token);
                     deferredResult.setErrorResult(getExceptionResponse(e));
@@ -107,14 +106,14 @@ public class DeviceStateController {
         return deferredResult;
     }
 
-    private ResponseEntity<HttpMessageWrapper<DeviceStateDto>> getDeferredResult(
-            DeviceStateDto deviceStateDto, String message, HttpStatus httpStatus
+    private ResponseEntity<HttpMessageWrapper<DeviceState>> getDeferredResult(
+            DeviceState deviceState, String message, HttpStatus httpStatus
     ) {
         return new ResponseEntity<>(
                 new HttpMessageWrapper(
                         HttpMessageEnum.info,
                         message,
-                        deviceStateDto),
+                        deviceState),
                 httpStatus);
     }
 

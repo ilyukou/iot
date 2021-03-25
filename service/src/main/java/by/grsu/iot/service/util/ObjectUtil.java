@@ -2,7 +2,7 @@ package by.grsu.iot.service.util;
 
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.model.dto.device.DeviceFormUpdate;
+import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
