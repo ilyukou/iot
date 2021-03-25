@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation is used to mark fields that require validation.
- *
+ * <p>
  * If annotation present on {@link java.util.Collection} that validate a collection element
  *
  * @author Ilyukou Ilya

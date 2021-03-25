@@ -4,10 +4,10 @@ import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.domain.request.user.AuthenticationRequest;
-import by.grsu.iot.service.domain.request.user.RegistrationRequest;
-import by.grsu.iot.service.domain.response.AuthenticationUser;
-import by.grsu.iot.service.exception.BadRequestException;
+import by.grsu.iot.service.domain.user.AuthenticationRequest;
+import by.grsu.iot.service.domain.user.AuthenticationUser;
+import by.grsu.iot.service.domain.user.RegistrationRequest;
+import by.grsu.iot.service.exception.BadRequestApplicationException;
 import by.grsu.iot.service.interf.crud.UserCrudService;
 import by.grsu.iot.service.security.jwt.JwtProperties;
 import by.grsu.iot.service.security.jwt.JwtTokenProvider;
@@ -52,11 +52,11 @@ public class UserCrudServiceImpl implements UserCrudService {
     public User create(final RegistrationRequest registrationRequest) {
 
         if (emailRepository.isExist(registrationRequest.getEmail())) {
-            throw new BadRequestException("email", "User with such email exist");
+            throw new BadRequestApplicationException("email", "User with such email exist");
         }
 
         if (userRepository.isExistByUsername(registrationRequest.getUsername())) {
-            throw new BadRequestException("username", "User with such username exist");
+            throw new BadRequestApplicationException("username", "User with such username exist");
         }
 
         User u = entityFactory.createUser(registrationRequest.getEmail());
@@ -88,7 +88,7 @@ public class UserCrudServiceImpl implements UserCrudService {
     public User getByUsername(final String username) {
         User user = userRepository.getByUsername(username);
 
-        if(user == null){
+        if (user == null) {
             throw new EntityNotFoundException("User does not found with such username={" + username + "}");
         }
 

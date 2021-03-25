@@ -1,18 +1,15 @@
 package by.grsu.iot.service.impl.crud;
 
 import by.grsu.iot.model.sql.Device;
+import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.service.domain.request.device.DeviceForm;
-import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
-import by.grsu.iot.service.exception.BadRequestException;
-import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.domain.device.DeviceForm;
+import by.grsu.iot.service.domain.device.DeviceFormUpdate;
+import by.grsu.iot.service.exception.BadRequestApplicationException;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
-import by.grsu.iot.service.util.CollectionUtil;
 import by.grsu.iot.service.util.ObjectUtil;
 import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +18,6 @@ import java.util.List;
 @Transactional
 @Service
 public class DeviceCrudServiceImpl implements DeviceCrudService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceCrudServiceImpl.class);
 
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
@@ -42,7 +37,7 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
     public Device create(DeviceForm deviceForm, String username) {
         deviceAccessValidationService.checkCreateAccess(username, deviceForm.getProject());
 
-        checkBeforeCreateOrUpdate(deviceForm.getState(), deviceForm.getStates());
+        checkStates(deviceForm.getState(), deviceForm.getStates());
 
         return deviceRepository.create(projectRepository.getById(deviceForm.getProject()), deviceForm.convert());
     }
@@ -67,8 +62,8 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
         Device device = deviceRepository.getById(id);
 
-        if (deviceFormUpdate.getStates() != null){
-            checkBeforeCreateOrUpdate(device.getState(), deviceFormUpdate.getStates());
+        if (deviceFormUpdate.getStates() != null) {
+            checkStates(device.getState(), deviceFormUpdate.getStates());
         }
 
         device = ObjectUtil.updateField(deviceRepository.getById(id), deviceFormUpdate);
@@ -77,28 +72,17 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
     }
 
     @Override
-    public Device getByToken(String token) {
-        Device device =  deviceRepository.getByToken(token);
-
-        if (device == null){
-            throw new EntityNotFoundException("Not found Device with such token");
-        }
-
-        return device;
-    }
-
-    @Override
     public String getDeviceState(String token) {
         return deviceRepository.getDeviceStateByToken(token);
     }
 
-    private void checkBeforeCreateOrUpdate(String state, List<String> states){
-        if (!states.contains(state)){
-            throw new BadRequestException("states", "States not contains state");
+    private void checkStates(String state, List<String> states) {
+        if (!states.contains(state)) {
+            throw new BadRequestApplicationException("states", "States not contains state");
         }
 
-        if (CollectionUtil.hasListDuplicates(states)){
-            throw new BadRequestException("states", "States has duplicate");
+        if (CollectionUtil.hasListDuplicates(states)) {
+            throw new BadRequestApplicationException("states", "States has duplicate");
         }
     }
 }

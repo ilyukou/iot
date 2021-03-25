@@ -12,6 +12,11 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 
 import java.lang.reflect.Type;
 
+/**
+ * Controller advice that a validate all dto body after body read
+ *
+ * @author Ilyukou Ilya
+ */
 @ControllerAdvice
 public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
 
@@ -28,10 +33,9 @@ public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter
             EntityFieldValidationUtil.validateString(body);
         }
 
-        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), CollectionValidation.class)){
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), CollectionValidation.class)) {
             EntityFieldValidationUtil.validateCollection(body);
         }
-
 
         return body;
     }

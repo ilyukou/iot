@@ -1,10 +1,10 @@
 package by.grsu.iot.service.impl;
 
-import by.grsu.iot.model.domain.DeviceState;
-import by.grsu.iot.service.impl.concurrent.StateRequestConcurrentRepository;
-import by.grsu.iot.service.impl.concurrent.StateRequestConsumer;
-import by.grsu.iot.service.domain.state.GetStateRequest;
-import by.grsu.iot.service.domain.state.SetDeviceRequest;
+import by.grsu.iot.model.state.GetStateRequest;
+import by.grsu.iot.model.state.SetDeviceRequest;
+import by.grsu.iot.repository.exception.ConflictException;
+import by.grsu.iot.repository.interf.DeviceStateRepository;
+import by.grsu.iot.service.domain.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +17,11 @@ import java.util.concurrent.Executors;
 
 @PropertySource("classpath:application-service.properties")
 @Service
-//@Scope(value="singleton")
 public class DeviceStateServiceImpl implements DeviceStateService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceStateServiceImpl.class);
 
-    private final StateRequestConcurrentRepository repository;
+    private final DeviceStateRepository repository;
     private final StateRequestConsumer stateRequestConsumer;
 
     @Value("${device.state.get.long-polling.time}")
@@ -32,7 +31,7 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     private Long requestWaitTime;
 
     public DeviceStateServiceImpl(
-            StateRequestConcurrentRepository stateRequestConcurrentRepository,
+            DeviceStateRepository repository,
             StateRequestConsumer stateRequestConsumer
     ) {
         this.stateRequestConsumer = stateRequestConsumer;
@@ -40,11 +39,15 @@ public class DeviceStateServiceImpl implements DeviceStateService {
         ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         service.execute(stateRequestConsumer);
 
-        this.repository = stateRequestConcurrentRepository;
+        this.repository = repository;
     }
 
     @Override
     public DeviceState getState(String token) {
+        if (repository.containsDevice(token)) {
+            throw new ConflictException("Device with such token exist");
+        }
+
         repository.putWaitDevice(new GetStateRequest(token));
 
         GetStateRequest device = repository.getProcessedDevice(token);
@@ -54,7 +57,11 @@ public class DeviceStateServiceImpl implements DeviceStateService {
     }
 
     @Override
-    public DeviceState setState(String newState, String token)  {
+    public DeviceState setState(String newState, String token) {
+        if (repository.containsRequest(token)) {
+            throw new ConflictException("Request with such token exist");
+        }
+
         repository.putWaitRequest(new SetDeviceRequest(token, newState));
 
         SetDeviceRequest request = repository.getProcessedRequest(token);

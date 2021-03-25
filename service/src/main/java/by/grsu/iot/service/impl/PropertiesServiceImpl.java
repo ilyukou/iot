@@ -2,13 +2,13 @@ package by.grsu.iot.service.impl;
 
 import by.grsu.iot.service.interf.PropertiesService;
 import by.grsu.iot.service.util.ObjectUtil;
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,9 +28,8 @@ public class PropertiesServiceImpl implements PropertiesService {
         return new ClassPathResource(fileName);
     }
 
-    @SneakyThrows
     @Override
-    public Map<String, Object> getProperties() {
+    public Map<String, Object> getProperties() throws IOException {
         Map<String, Object> map = new HashMap<>();
         Resource resource = getResource();
         Properties props;

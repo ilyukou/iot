@@ -1,6 +1,5 @@
 package by.grsu.iot.repository.jpa;
 
-import by.grsu.iot.model.sql.AccessType;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * JPA Repository for {@link Device}
+ *
+ * @author Ilyukou Ilya
+ */
 @Repository
 public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
 
@@ -26,9 +30,6 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
 
     @Query(value = "select d.id from device d where d.project_id = ?1", nativeQuery = true)
     List<Long> findDeviceIdsByProjectId(Long projectId);
-
-    @Query(value = "select d.id from device d where d.project_id = ?1 AND d.access_type = ?2", nativeQuery = true)
-    List<Long> findDeviceByProjectIdAndAccessType(Long projectId, AccessType accessType);
 
     @Modifying
     @Query(value = "update device d set d.state = ?1 where d.token = ?2", nativeQuery = true)

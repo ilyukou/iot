@@ -1,4 +1,5 @@
 #### AuthenticationUser
+
 Filed name | Type | Note
 ------------ | ------------- | -------------
 tokenValidity | long | Token validity time in millisecond

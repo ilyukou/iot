@@ -1,12 +1,14 @@
 package by.grsu.iot.service.interf.crud;
 
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.service.domain.request.user.AuthenticationRequest;
-import by.grsu.iot.service.domain.request.user.RegistrationRequest;
-import by.grsu.iot.service.domain.response.AuthenticationUser;
+import by.grsu.iot.service.domain.user.AuthenticationRequest;
+import by.grsu.iot.service.domain.user.AuthenticationUser;
+import by.grsu.iot.service.domain.user.RegistrationRequest;
 
 /**
  * Service layer for CRUD operation with {@link User}
+ *
+ * @author Ilyukou Ilya
  */
 public interface UserCrudService {
 

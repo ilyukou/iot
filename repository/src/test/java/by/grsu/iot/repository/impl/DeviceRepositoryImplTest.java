@@ -31,43 +31,34 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeviceRepositoryImplTest {
 
+    private final String username = "username";
+    private final String password = "password";
+    private final String address = "address";
+    private final String name = "projectName";
+    private final String title = "Title";
+    private final String second_name = "secondProjectName";
+    private final String second_title = "secondTitle";
+    private final String device_state = "off";
+    private final String second_device_state = "on";
+    private final String device_token = "token";
+    private final List<String> device_states = Arrays.asList(device_state, "on");
     @MockBean
     private EntityFactory entityFactory;
-
     @MockBean
     private EmailRepository emailRepository;
-
     @Autowired
     private ProjectRepository projectRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private DeviceRepository deviceRepository;
-
     private User user;
     private Project project;
     private Device device;
     private Email email;
 
-    private final String username = "username";
-    private final String password = "password";
-    private final String address = "address";
-
-    private final String name = "projectName";
-    private final String title = "Title";
-
-    private final String second_name = "secondProjectName";
-    private final String second_title = "secondTitle";
-
-    private final String device_state = "off";
-    private final String second_device_state = "on";
-    private final String device_token = "token";
-    private final List<String> device_states = Arrays.asList(device_state, "on");
-
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
@@ -88,13 +79,13 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(projectRepository);
         Assert.assertNotNull(userRepository);
         Assert.assertNotNull(deviceRepository);
     }
 
-    private User createUser(User u){
+    private User createUser(User u) {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -102,14 +93,14 @@ public class DeviceRepositoryImplTest {
         return userRepository.create(user);
     }
 
-    private Project createProject(String name, String username, String title){
+    private Project createProject(String name, String username, String title) {
         when(entityFactory.createProject()).thenReturn(new Project());
 
         return projectRepository.create(name, username, title);
     }
 
     @Test
-    public void createWhenProjectEmpty(){
+    public void createWhenProjectEmpty() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -127,7 +118,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void createWhenProjectNotEmpty(){
+    public void createWhenProjectNotEmpty() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -142,7 +133,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void  getById(){
+    public void getById() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -155,7 +146,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void getDevicesByProject(){
+    public void getDevicesByProject() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -175,25 +166,25 @@ public class DeviceRepositoryImplTest {
 
         int count = 0;
 
-        for (Device d: devices){
-            if(d.getId().equals(d1.getId())){
+        for (Device d : devices) {
+            if (d.getId().equals(d1.getId())) {
                 Assert.assertEquals(d1, d);
                 count++;
             }
 
-            if(d.getId().equals(d2.getId())){
+            if (d.getId().equals(d2.getId())) {
                 Assert.assertEquals(d2, d);
                 count++;
             }
         }
 
-        if(count != 2){
+        if (count != 2) {
             Assert.fail();
         }
     }
 
     @Test
-    public void update(){
+    public void update() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -208,7 +199,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void getByToken(){
+    public void getByToken() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -218,7 +209,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void delete(){
+    public void delete() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);
@@ -231,7 +222,7 @@ public class DeviceRepositoryImplTest {
     }
 
     @Test
-    public void isExist(){
+    public void isExist() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
         when(entityFactory.createDevice()).thenReturn(device);

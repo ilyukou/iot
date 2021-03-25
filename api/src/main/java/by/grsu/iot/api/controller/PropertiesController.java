@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.Map;
 
 @CrossOrigin
@@ -22,7 +23,7 @@ public class PropertiesController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> get() {
+    public ResponseEntity<Map<String, Object>> get() throws IOException {
         return new ResponseEntity<>(
                 propertiesService.getProperties(),
                 HttpStatus.OK);

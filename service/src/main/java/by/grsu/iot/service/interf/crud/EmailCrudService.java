@@ -3,11 +3,26 @@ package by.grsu.iot.service.interf.crud;
 
 import by.grsu.iot.model.sql.Email;
 
+/**
+ * Service layer for CRUD operation with {@link Email}
+ *
+ * @author Ilyukou Ilya
+ */
 public interface EmailCrudService {
 
-    Email findByAddress(String address);
+    /**
+     * Get {@link Email} by {@link Email#getId()}
+     *
+     * @param address {@link Email#getAddress()}
+     * @return {@link Email}
+     */
+    Email getByAddress(String address);
 
+    /**
+     * Create {@link Email}
+     *
+     * @param email {@link Email}
+     * @return created {@link Email}
+     */
     Email create(Email email);
-
-    boolean isExist(String address);
 }

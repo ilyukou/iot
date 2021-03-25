@@ -1,10 +1,11 @@
 package by.grsu.iot.api.exception;
 
-import by.grsu.iot.service.domain.BadRequestExceptionResponse;
-import by.grsu.iot.service.domain.ExceptionResponse;
-import by.grsu.iot.service.exception.BadRequestException;
-import by.grsu.iot.service.exception.EntityNotFoundException;
-import by.grsu.iot.service.exception.NotAccessForOperationException;
+import by.grsu.iot.api.exception.exception.ApplicationExceptionDto;
+import by.grsu.iot.api.exception.exception.BadRequestApplicationExceptionDto;
+import by.grsu.iot.api.exception.exception.NotAccessForOperationApplicationExceptionDto;
+import by.grsu.iot.service.exception.BadRequestApplicationException;
+import by.grsu.iot.service.exception.EntityNotFoundApplicationException;
+import by.grsu.iot.service.exception.NotAccessForOperationApplicationException;
 import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,77 +20,82 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * Controller advice for exception handing
+ *
+ * @author Ilyukou Ilya
+ */
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<BadRequestExceptionResponse> badRequestException(final BadRequestException exception) {
+    @ExceptionHandler({BadRequestApplicationException.class})
+    public ResponseEntity<BadRequestApplicationExceptionDto> badRequestException(final BadRequestApplicationException exception) {
         return new ResponseEntity<>(
-                new BadRequestExceptionResponse(new Date(), exception.getMessage(), exception.getField())
+                new BadRequestApplicationExceptionDto(new Date(), exception.getMessage(), exception.getField())
                 , HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<ExceptionResponse> responseFor401(){
+    private ResponseEntity<ApplicationExceptionDto> responseFor401() {
         return new ResponseEntity<>(
-                new BadRequestExceptionResponse(new Date(), "Authentication exception", null)
+                new ApplicationExceptionDto(new Date(), "Authentication exception")
                 , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({InvalidJwtAuthenticationException.class})
-    public ResponseEntity<ExceptionResponse> invalidJwtAuthenticationException(final InvalidJwtAuthenticationException exception) {
+    public ResponseEntity<ApplicationExceptionDto> invalidJwtAuthenticationException(final InvalidJwtAuthenticationException exception) {
         return responseFor401();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<ExceptionResponse> authenticationException(final AuthenticationException exception) {
+    public ResponseEntity<ApplicationExceptionDto> authenticationException(final AuthenticationException exception) {
         return responseFor401();
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
-    @ExceptionHandler({NotAccessForOperationException.class})
-    public ResponseEntity<ExceptionResponse> notAccessForOperationException(final NotAccessForOperationException exception) {
+    @ExceptionHandler({NotAccessForOperationApplicationException.class})
+    public ResponseEntity<ApplicationExceptionDto> notAccessForOperationException(final NotAccessForOperationApplicationException exception) {
         return new ResponseEntity<>(
-                new BadRequestExceptionResponse(new Date(), exception.getMessage(), exception.getField())
+                new NotAccessForOperationApplicationExceptionDto(new Date(), exception.getMessage())
                 , HttpStatus.FORBIDDEN);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
-    @ExceptionHandler({EntityNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundApplicationException.class})
     public void notFoundError() {
         // ignore
     }
 
-    private ResponseEntity<ExceptionResponse> responseFor500(Exception e, final HttpServletRequest request){
+    private ResponseEntity<ApplicationExceptionDto> responseFor500(Exception e, final HttpServletRequest request) {
         LOGGER.error("Error while processing Http request; HttpServletRequest={" + request.toString() + "}", e);
         return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), "Server error")
+                new ApplicationExceptionDto(new Date(), "Server error")
                 , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
     @ExceptionHandler({IOException.class})
-    public ResponseEntity<ExceptionResponse> serverErrors(final IOException exception, final HttpServletRequest request) {
+    public ResponseEntity<ApplicationExceptionDto> serverErrors(final IOException exception, final HttpServletRequest request) {
         return responseFor500(exception, request);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
     @ExceptionHandler({NullPointerException.class})
-    public ResponseEntity<ExceptionResponse> serverErrors(final NullPointerException exception,
-                                                          final HttpServletRequest request) {
+    public ResponseEntity<ApplicationExceptionDto> serverErrors(final NullPointerException exception,
+                                                                final HttpServletRequest request) {
         return responseFor500(exception, request);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ExceptionResponse> validationErrorException(final IllegalArgumentException exception,
-                                                                      final HttpServletRequest request) {
+    public ResponseEntity<ApplicationExceptionDto> validationErrorException(final IllegalArgumentException exception,
+                                                                            final HttpServletRequest request) {
         return new ResponseEntity<>(
-                new ExceptionResponse(new Date(), exception.getMessage())
+                new ApplicationExceptionDto(new Date(), exception.getMessage())
                 , HttpStatus.BAD_REQUEST);
     }
 }

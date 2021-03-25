@@ -20,11 +20,11 @@ public class UserServiceImplTest {
     private UserCrudService userCrudService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
     }
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(userCrudService);
     }
 }

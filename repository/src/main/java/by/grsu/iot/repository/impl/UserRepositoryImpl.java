@@ -75,11 +75,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public String findUsername(Long userId) {
-        return userJpaRepository.findUsername(userId);
+        return userJpaRepository.findUsername(userId).orElse(null);
     }
 
     @Override
     public Long getUserId(String username) {
-        return userJpaRepository.findUserId(username);
+        return userJpaRepository.findUserId(username).orElse(null);
     }
 }

@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * JPA Repository for {@link Email}
+ *
+ * @author Ilyukou Ilya
+ */
 @Repository
 public interface EmailJpaRepository extends JpaRepository<Email, Long> {
     Optional<Email> findEmailByAddress(String address);

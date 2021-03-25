@@ -11,16 +11,13 @@ import by.grsu.iot.repository.interf.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.mockito.Mockito.when;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -28,28 +25,23 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserRepositoryImplTest {
 
-    @MockBean
-    private EntityFactory entityFactory;
-
-    @MockBean
-    private EmailRepository emailRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    private User user;
-    private Email email;
-    private Role role;
-
     private final String username = "username";
     private final String username_second = "username_second";
     private final String password = "password";
     private final String address = "email@email.com";
-
     private final RoleType roleType = RoleType.User;
+    @MockBean
+    private EntityFactory entityFactory;
+    @MockBean
+    private EmailRepository emailRepository;
+    @Autowired
+    private UserRepository userRepository;
+    private User user;
+    private Email email;
+    private Role role;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
@@ -64,12 +56,12 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(userRepository);
     }
 
     @Test
-    public void create(){
+    public void create() {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -83,7 +75,7 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    public void getById(){
+    public void getById() {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -98,7 +90,7 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -113,13 +105,13 @@ public class UserRepositoryImplTest {
         Assert.assertEquals(before.getEmail().getAddress(), after.getEmail().getAddress());
         Assert.assertEquals(username_second, after.getUsername());
 
-        if(after.getUpdated().getTime() < before.getUpdated().getTime()){
+        if (after.getUpdated().getTime() < before.getUpdated().getTime()) {
             Assert.fail();
         }
     }
 
     @Test
-    public void getByUsername(){
+    public void getByUsername() {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -135,7 +127,7 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    public void isExistByUsername(){
+    public void isExistByUsername() {
         when(entityFactory.createEmail(address)).thenReturn(email);
         Assert.assertFalse(userRepository.isExistByUsername(username));
 

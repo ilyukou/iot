@@ -28,7 +28,7 @@ public class CloneTest {
     private final String USER_SECOND = "userSecond";
 
     @Test
-    public void constructorClone(){
+    public void constructorClone() {
         Device device = new Device();
         device.setName(DEVICE);
 
@@ -55,7 +55,7 @@ public class CloneTest {
         Assert.assertEquals(DEVICE_SECOND, another.getProjects().iterator().next().getDevices().iterator().next().getName());
     }
 
-    private User changeParams(final User u){
+    private User changeParams(final User u) {
         User clone = new User(u);
         clone.setUsername(USER_SECOND);
 

@@ -1,14 +1,19 @@
 ## Properties Controller
+
 ### Request mapping <em>/properties</em>
 
 ___
+
 ### Get const field for application
+
 ##### Request /properties
+
 Method | Parameter | Description | Body | Description
 ------------ | ------------- | ------------- | ------------- | ------------- | 
 GET | - | - | - | -
 
 ##### Response
+
 Code | Body | Description
 ------------ | ------------- | -------------
 200 | Map<String, String> | OK

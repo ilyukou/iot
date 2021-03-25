@@ -3,8 +3,10 @@ package by.grsu.iot.model.sql;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {
@@ -34,7 +36,7 @@ public class Role extends BaseEntity {
         super();
     }
 
-    public Role(Role role){
+    public Role(Role role) {
         this(role.getId(), role.getCreated(), role.getUpdated(), role.getStatus(),
                 role.getRoleType(), role.getUsers());
     }

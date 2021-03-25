@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * JPA Repository for {@link User}
+ *
+ * @author Ilyukou Ilya
+ */
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
@@ -14,8 +19,8 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     @Query(value = "select u.username from user u where u.id = ?1", nativeQuery = true)
-    String findUsername(Long userId);
+    Optional<String> findUsername(Long userId);
 
     @Query(value = "select u.id from user u where u.username = ?1", nativeQuery = true)
-    Long findUserId(String username);
+    Optional<Long> findUserId(String username);
 }

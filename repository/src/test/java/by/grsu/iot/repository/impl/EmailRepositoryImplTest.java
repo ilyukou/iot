@@ -19,27 +19,25 @@ import java.util.concurrent.TimeUnit;
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmailRepositoryImplTest {
 
-    @Autowired
-    private EmailRepository emailRepository;
-
-    private Email email;
-
     private final String address = "email@email.com";
     private final String second_address = "email2@email.com";
+    @Autowired
+    private EmailRepository emailRepository;
+    private Email email;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         email = new Email();
         email.setAddress(address);
     }
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(emailRepository);
     }
 
     @Test
-    public void create(){
+    public void create() {
         Email created = emailRepository.create(email);
 
         Assert.assertEquals(email.getAddress(), created.getAddress());
@@ -55,7 +53,7 @@ public class EmailRepositoryImplTest {
     }
 
     @Test
-    public void findByAddress(){
+    public void findByAddress() {
         Assert.assertNull(emailRepository.findByAddress(address));
         Email created = emailRepository.create(email);
 
@@ -68,7 +66,7 @@ public class EmailRepositoryImplTest {
     }
 
     @Test
-    public void getById(){
+    public void getById() {
         Long id = 1L;
         Assert.assertNull(emailRepository.getById(id));
         Email created = emailRepository.create(email);
@@ -82,12 +80,12 @@ public class EmailRepositoryImplTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         Email created = emailRepository.create(email);
 
         created.setAddress(second_address);
 
-        if(created.getUpdated().getTime() != created.getCreated().getTime()){
+        if (created.getUpdated().getTime() != created.getCreated().getTime()) {
             Assert.fail();
         }
 
@@ -102,13 +100,13 @@ public class EmailRepositoryImplTest {
         Assert.assertEquals(created.getId(), updated.getId());
         Assert.assertEquals(second_address, updated.getAddress());
 
-        if(updated.getUpdated().getTime() <= updated.getCreated().getTime()){
+        if (updated.getUpdated().getTime() <= updated.getCreated().getTime()) {
             Assert.fail();
         }
     }
 
     @Test
-    public void isExist(){
+    public void isExist() {
         Assert.assertFalse(emailRepository.isExist(address));
         Email created = emailRepository.create(email);
         Assert.assertTrue(emailRepository.isExist(address));

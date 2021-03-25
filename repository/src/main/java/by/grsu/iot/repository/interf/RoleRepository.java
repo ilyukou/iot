@@ -2,15 +2,17 @@ package by.grsu.iot.repository.interf;
 
 import by.grsu.iot.model.sql.Role;
 import by.grsu.iot.model.sql.RoleType;
-import org.springframework.stereotype.Repository;
 
 /**
  * Repository for CRUD operation with {@link Role}
+ *
+ * @author Ilyukou Ilya
  */
 public interface RoleRepository {
 
     /**
      * Get {@link Role} by {@link RoleType}
+     *
      * @param roleType {@link Role#getRoleType()}
      * @return {@link Role}
      */
@@ -18,6 +20,7 @@ public interface RoleRepository {
 
     /**
      * Get {@link Role} or {@link RoleRepository#create(RoleType)} a new
+     *
      * @param roleType {@link Role#getRoleType()}
      * @return {@link Role} from repository or created {@link Role}
      */
@@ -25,6 +28,7 @@ public interface RoleRepository {
 
     /**
      * Create {@link Role}
+     *
      * @param roleType {@link Role#getRoleType()}
      * @return created {@link Role}
      */

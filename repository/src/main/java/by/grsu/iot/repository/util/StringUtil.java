@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * String Util
+ *
+ * @author Ilyukou Ilya
+ */
 @Component
 @PropertySource("classpath:application-repository.properties")
 public class StringUtil {
@@ -14,11 +18,6 @@ public class StringUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
 
     private static String alphabet;
-
-    @Value("${by.grsu.iot.repository.string.alphabet}")
-    private void set(String alphabet){
-        StringUtil.alphabet = alphabet;
-    }
 
     public StringUtil() {
     }
@@ -37,5 +36,10 @@ public class StringUtil {
 
     public static String generateToken(long length) {
         return generateString(length);
+    }
+
+    @Value("${by.grsu.iot.repository.string.alphabet}")
+    private void set(String alphabet) {
+        StringUtil.alphabet = alphabet;
     }
 }

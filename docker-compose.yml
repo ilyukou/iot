@@ -3,11 +3,11 @@ services:
 
   frontend:
     container_name: frontend
-    image:  ilyukou/frontend:0.1
+    image: ilyukou/frontend:0.1
     ports:
       - '3000:3000'
       - '3001:3001'
-#
+  #
   mongo:
     image: mongo:latest
     container_name: "mongo"
@@ -53,8 +53,8 @@ services:
     image: elasticsearch:7.9.2
     container_name: elasticsearch
     ports:
-        - "9200:9200"
-        - "9300:9300"
+      - "9200:9200"
+      - "9300:9300"
     restart: always
     environment:
       discovery.type: single-node

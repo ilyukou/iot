@@ -1,42 +1,55 @@
 package by.grsu.iot.service.interf;
 
-import by.grsu.iot.model.domain.DeviceState;
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.service.domain.response.DeviceStateDto;
+import by.grsu.iot.service.domain.device.DeviceState;
 
 /**
  * Service for change a {@link Device} state
+ *
+ * @author Ilyukou Ilya
  */
 public interface DeviceStateService {
 
     /**
-     * Get state
+     * Get state update for device
      *
-     * If a remoteState equals a current {@link Device#getState()}, than return {@code null}
-     *
-     * @param remoteState device known state
      * @param token {@link Device#getToken()}
-     * @return {@link DeviceState}
+     * @return changed device state, is state changed
      */
     DeviceState getState(String token);
 
     /**
-     * Set state
+     * Set new state to device
      *
-     * if the device does not pick up the new state, it will return {@code null}
-     *
-     * @param newState new state
-     * @param token {@link Device#getToken()}
-     * @return {@link DeviceStateDto}
+     * @param newState {@link Device#getState()}
+     * @param token    {@link Device#getToken()}
+     * @return {@link DeviceState} after success device change state
      */
     DeviceState setState(String newState, String token);
 
+    /**
+     * Remove device that wait new state value.
+     * Typical used, after time out exception to clean up the repository.
+     *
+     * @param token {@link Device#getToken()}
+     */
     void removeDevice(String token);
 
+    /**
+     * Remove request to change device state.
+     * Typical used, after time out exception to clean up the repository.
+     *
+     * @param token {@link Device#getToken()}
+     */
     void removeRequest(String token);
 
+    /**
+     * @return time that a device wait before timeout.
+     */
     Long getDeviceWaitTime();
 
+    /**
+     * @return time that a request wait before timeout.
+     */
     Long getRequestWaitTime();
-
 }

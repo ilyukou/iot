@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.service.domain.response.ProjectDto;
-import by.grsu.iot.service.domain.request.project.ProjectForm;
-import by.grsu.iot.service.domain.request.project.ProjectFormUpdate;
+import by.grsu.iot.api.dto.project.ProjectDto;
+import by.grsu.iot.service.domain.project.ProjectForm;
+import by.grsu.iot.service.domain.project.ProjectFormUpdate;
 import by.grsu.iot.service.interf.crud.ProjectCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

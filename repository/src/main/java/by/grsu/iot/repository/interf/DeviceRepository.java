@@ -9,19 +9,23 @@ import java.util.Set;
 
 /**
  * Repository for CRUD operation with {@link Device}
+ *
+ * @author Ilyukou Ilya
  */
 public interface DeviceRepository {
 
     /**
      * Create {@link Device}
+     *
      * @param project which project to add
-     * @param device to create
+     * @param device  to create
      * @return created {@link Device}
      */
     Device create(final Project project, final Device device);
 
     /**
      * Get {@link Device} by {@link Device#getId()}
+     *
      * @param id {@link Device#getId()}
      * @return {@link Device} or {@code null}
      */
@@ -30,6 +34,7 @@ public interface DeviceRepository {
     /**
      * Not recommended use {@link Project#getDevices()} because {@link Project#getDevices()}
      * has {@code FetchType.LAZY}
+     *
      * @param project {@link Project}
      * @return {@link Set<Device>} or empty {@link Set}
      */
@@ -37,6 +42,7 @@ public interface DeviceRepository {
 
     /**
      * Update {@link Device}
+     *
      * @param device to update
      * @return updated {@link Device}
      */
@@ -44,6 +50,7 @@ public interface DeviceRepository {
 
     /**
      * Get {@link Device} by {@link Device#getToken()}
+     *
      * @param token {@link Device#getToken()}
      * @return {@link Device} or {@code null}
      */
@@ -51,6 +58,7 @@ public interface DeviceRepository {
 
     /**
      * Delete {@link Device} by {@link Device#getId()}
+     *
      * @param id {@link Device#getId()}
      * @return {@code true} if deleted or {@code false}
      */
@@ -66,6 +74,7 @@ public interface DeviceRepository {
 
     /**
      * Get {@link Device} owner
+     *
      * @param device {@link Device#getId()}
      * @return {@link User#getUsername()}
      */
@@ -73,6 +82,7 @@ public interface DeviceRepository {
 
     /**
      * Get {@link List} of {@link Device} by {@link Device#getId()}
+     *
      * @param ids {@link List} of {@link Device#getId()}
      * @return {@link List} of {@link Device}
      */
@@ -86,7 +96,19 @@ public interface DeviceRepository {
      */
     List<Long> getProjectDeviceIds(Long projectId);
 
+    /**
+     * Change {@link Device#getState()}
+     *
+     * @param state new {@link Device#getState()}
+     * @param token {@link Device#getToken()}
+     */
     void changeState(String state, String token);
 
+    /**
+     * Get {@link Device#getState()} by {@link Device#getToken()}
+     *
+     * @param token {@link Device#getToken()}
+     * @return {@link Device#getState()}
+     */
     String getDeviceStateByToken(String token);
 }

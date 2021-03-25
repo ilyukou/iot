@@ -1,6 +1,7 @@
 ### Educational software and hardware complex 'Internet of Things'
 
 ##### <em> Docs version v0.1 </em>
+
 Docs version is equal project version
 ___
 

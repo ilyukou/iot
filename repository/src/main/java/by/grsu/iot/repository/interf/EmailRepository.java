@@ -5,11 +5,14 @@ import by.grsu.iot.model.sql.Email;
 
 /**
  * Repository for CRUD operation with {@link Email}
+ *
+ * @author Ilyukou Ilya
  */
 public interface EmailRepository {
 
     /**
      * Find {@link Email} by {@link Email#getAddress()}
+     *
      * @param address {@link Email#getAddress()}
      * @return {@link Email} from repository.
      */
@@ -17,6 +20,7 @@ public interface EmailRepository {
 
     /**
      * Create {@link Email}
+     *
      * @param email to create
      * @return created {@link Email}
      */
@@ -24,6 +28,7 @@ public interface EmailRepository {
 
     /**
      * Get {@link Email} by {@link Email#getId()}
+     *
      * @param id {@link Email#getId()}
      * @return {@link Email} from repository.
      */
@@ -31,13 +36,15 @@ public interface EmailRepository {
 
     /**
      * Update {@link Email}
+     *
      * @param email to update
      * @return updated {@link Email}
      */
     Email update(final Email email);
 
     /**
-     *  Is exist {@link Email} by {@link Email#getAddress()}
+     * Is exist {@link Email} by {@link Email#getAddress()}
+     *
      * @param address {@link Email#getAddress()}
      * @return {@code true} if exist or {@code false} if not exist
      */

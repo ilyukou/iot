@@ -1,4 +1,5 @@
 #### RegistrationRequest
+
 Filed name | Type | Note
 ------------ | ------------- | -------------
 username | String | User#username

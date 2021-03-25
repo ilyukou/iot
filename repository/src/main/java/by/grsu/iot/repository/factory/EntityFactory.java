@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Basic setting of the object.
+ *
+ * @author Ilyukou Ilya
  */
 @Component
 public class EntityFactory {
@@ -27,7 +29,6 @@ public class EntityFactory {
     private final RoleType DEFAULT_ROLE_TYPE = RoleType.User;
 
     // Project default fields
-    private final AccessType PROJECT_ACCESS_TYPE = AccessType.PRIVATE;
     private final Status PROJECT_STATUS = Status.ACTIVE;
 
     private final String DEFAULT_STATE = "off";

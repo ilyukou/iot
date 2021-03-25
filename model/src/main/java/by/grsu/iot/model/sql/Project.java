@@ -7,6 +7,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "project")
 public class Project extends BaseEntity {
@@ -90,7 +93,7 @@ public class Project extends BaseEntity {
         return
 //                Objects.equals(user, project.user)
 //                && Objects.equals(devices, project.devices) &&
-                        Objects.equals(name, project.name)
-                && Objects.equals(title, project.title);
+                Objects.equals(name, project.name)
+                        && Objects.equals(title, project.title);
     }
 }

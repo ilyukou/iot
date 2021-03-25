@@ -25,13 +25,13 @@ public class RoleRepositoryImplTest {
     private RoleRepository roleRepository;
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(roleRepository);
     }
 
 
     @Test
-    public void getRoleByRoleType(){
+    public void getRoleByRoleType() {
         Assert.assertNull(roleRepository.getRoleByRoleType(USER_ROLE_TYPE));
         Assert.assertNull(roleRepository.getRoleByRoleType(ADMIN_ROLE_TYPE));
 
@@ -45,7 +45,7 @@ public class RoleRepositoryImplTest {
     }
 
     @Test
-    public void getRoleOrCreate(){
+    public void getRoleOrCreate() {
         Role created = roleRepository.create(ADMIN_ROLE_TYPE);
         Role fromRepository = roleRepository.getRoleOrCreate(created.getRoleType());
 
@@ -56,7 +56,7 @@ public class RoleRepositoryImplTest {
     }
 
     @Test
-    public void create(){
+    public void create() {
         Assert.assertNull(roleRepository.getRoleByRoleType(USER_ROLE_TYPE));
         Assert.assertNull(roleRepository.getRoleByRoleType(ADMIN_ROLE_TYPE));
 

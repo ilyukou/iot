@@ -1,13 +1,12 @@
 package by.grsu.iot.service.impl.pagination;
 
 import by.grsu.iot.model.sql.Project;
+import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.UserRepository;
-import by.grsu.iot.service.domain.response.PaginationInfo;
-import by.grsu.iot.service.exception.BadRequestException;
-import by.grsu.iot.service.exception.EntityNotFoundException;
+import by.grsu.iot.service.domain.pagination.PaginationInfo;
+import by.grsu.iot.service.exception.BadRequestApplicationException;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
-import by.grsu.iot.service.util.CollectionUtil;
 import by.grsu.iot.service.validation.access.interf.ProjectAccessValidationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -20,12 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
-    @Value("${project.per-page}")
-    private Long PROJECT_PER_PAGE;
-
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ProjectAccessValidationService projectAccessValidationService;
+    @Value("${project.per-page}")
+    private Long PROJECT_PER_PAGE;
 
     public ProjectPaginationServiceImpl(
             UserRepository userRepository,
@@ -41,17 +39,13 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
     public List<Project> getProjectsFromPage(Integer page, String whoBeingAskedUsername, String whoRequestedUsername) {
         projectAccessValidationService.checkPageReadAccess(whoBeingAskedUsername, whoRequestedUsername);
 
-        if(!userRepository.isExistByUsername(whoBeingAskedUsername)){
-            throw new EntityNotFoundException("User does not exist with given username={" + whoBeingAskedUsername + "}");
-        }
-
         PaginationInfo info = getPaginationInfo(whoBeingAskedUsername, whoRequestedUsername);
 
-        if (page > info.getPages()){
-            throw new BadRequestException("page", "You are requesting a non-existent page");
+        if (page > info.getPages()) {
+            throw new BadRequestApplicationException("page", "You are requesting a non-existent page");
         }
 
-        List<Long> projectsId = projectRepository.getAllUserProjectsIds(whoBeingAskedUsername)
+        List<Long> projectsId = projectRepository.getUserProjectsIds(whoBeingAskedUsername)
                 .stream()
                 .sorted()
                 .collect(Collectors.toList());
@@ -70,7 +64,7 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
         projectAccessValidationService.checkPaginationInfoReadAccess(whoBeingAskedUsername, whoRequestedUsername);
 
-        Integer projectsSize = projectRepository.getAllUserProjectsSize(whoBeingAskedUsername);
+        Integer projectsSize = projectRepository.getUserProjectsSize(whoBeingAskedUsername);
 
         return new PaginationInfo(
                 CollectionUtil.getCountOfArrayPortion(projectsSize, PROJECT_PER_PAGE),

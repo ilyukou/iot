@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.pagination;
 
-import by.grsu.iot.service.domain.response.PaginationInfo;
-import by.grsu.iot.service.domain.response.ProjectDto;
+import by.grsu.iot.api.dto.project.ProjectDto;
+import by.grsu.iot.service.domain.pagination.PaginationInfo;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ public class ProjectPaginationController {
             return badRequest().build();
         }
 
-        if (username == null){
+        if (username == null) {
             username = userDetails.getUsername();
         }
 

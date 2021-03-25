@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.pagination;
 
-import by.grsu.iot.service.domain.response.PaginationInfo;
-import by.grsu.iot.service.domain.response.ThingWrapper;
+import by.grsu.iot.api.dto.thing.ThingWrapper;
+import by.grsu.iot.service.domain.pagination.PaginationInfo;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class ThingPaginationController {
     public ResponseEntity<PaginationInfo> getPaginationInfo(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long project
-    ){
+    ) {
         return new ResponseEntity<>(
                 thingPaginationService.getPaginationInfo(project, userDetails.getUsername())
                 , HttpStatus.OK);
@@ -38,7 +38,7 @@ public class ThingPaginationController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long project,
             @PathVariable Integer page
-    ){
+    ) {
         return new ResponseEntity<>(
                 thingPaginationService.getThingsFromProjectPage(project, page, userDetails.getUsername()).stream()
                         .map(ThingWrapper::new)

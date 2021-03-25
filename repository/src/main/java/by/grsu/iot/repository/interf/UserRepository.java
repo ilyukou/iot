@@ -4,11 +4,14 @@ import by.grsu.iot.model.sql.User;
 
 /**
  * Repository for CRUD operation with {@link User}
+ *
+ * @author Ilyukou Ilya
  */
 public interface UserRepository {
 
     /**
      * Create {@link User}
+     *
      * @param user to create.
      * @return created user with id.
      */
@@ -16,6 +19,7 @@ public interface UserRepository {
 
     /**
      * Get {@link User} from repository. If user not exist - return {@code null}
+     *
      * @param id {@link User#getId()}
      * @return {@link User} with such id.
      */
@@ -23,6 +27,7 @@ public interface UserRepository {
 
     /**
      * Update {@link User}.
+     *
      * @param user to update
      * @return updated {@link User}
      */
@@ -30,6 +35,7 @@ public interface UserRepository {
 
     /**
      * Get {@link User} from repository. If user not exist - return {@code null}
+     *
      * @param username {@link User#getUsername()}
      * @return {@link User} with such username.
      */
@@ -43,8 +49,20 @@ public interface UserRepository {
      */
     boolean isExistByUsername(final String username);
 
+    /**
+     * Find {@link User}
+     *
+     * @param userId {@link User#getId()}
+     * @return {@link User} or {@code null}
+     */
     String findUsername(Long userId);
 
+    /**
+     * Get {@link User#getId()}
+     *
+     * @param username {@link User#getUsername()}
+     * @return {@link User#getId()} or {@code null}
+     */
     Long getUserId(String username);
 }
 

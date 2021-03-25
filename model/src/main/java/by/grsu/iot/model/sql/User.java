@@ -6,6 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "user")
 public class User extends BaseEntity implements UserDetails {
@@ -113,7 +116,7 @@ public class User extends BaseEntity implements UserDetails {
         this.projects = projects;
     }
 
-    public void addProject(Project project){
+    public void addProject(Project project) {
         this.projects.add(project);
     }
 

@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.service.domain.validaation.Validation;
-import by.grsu.iot.service.domain.validaation.ValidationRule;
+import by.grsu.iot.service.domain.validaation.ObjectValidation;
+import by.grsu.iot.service.interf.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,14 +16,14 @@ import java.util.Map;
 @RequestMapping("/validation")
 public class ValidationController {
 
-    private final Validation validation;
+    private final ValidationService validationService;
 
-    public ValidationController(Validation validation) {
-        this.validation = validation;
+    public ValidationController(ValidationService validationService) {
+        this.validationService = validationService;
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Map<String, ValidationRule>>> getAll() {
-        return new ResponseEntity<>(validation.getValidationRules(), HttpStatus.OK);
+    public ResponseEntity<Map<String, ObjectValidation>> getAll() {
+        return new ResponseEntity<>(validationService.getValidationRuleForAllRequestEntity(), HttpStatus.OK);
     }
 }

@@ -31,41 +31,32 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProjectRepositoryImplTest {
 
+    private final String username = "username";
+    private final String password = "password";
+    private final String address = "address";
+    private final String name = "projectName";
+    private final String title = "Title";
+    private final String second_name = "secondProjectName";
+    private final String second_title = "secondTitle";
+    private final String device_state = "off";
+    private final List<String> device_states = Arrays.asList(device_state, "on");
     @MockBean
     private EntityFactory entityFactory;
-
     @MockBean
     private EmailRepository emailRepository;
-
     @Autowired
     private ProjectRepository projectRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private DeviceRepository deviceRepository;
-
     private User user;
     private Project project;
     private Device device;
     private Email email;
 
-    private final String username = "username";
-    private final String password = "password";
-    private final String address = "address";
-
-    private final String name = "projectName";
-    private final String title = "Title";
-
-    private final String second_name = "secondProjectName";
-    private final String second_title = "secondTitle";
-
-    private final String device_state = "off";
-    private final List<String> device_states = Arrays.asList(device_state, "on");
-
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
@@ -85,13 +76,13 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void injectedComponentsAreNotNull(){
+    public void injectedComponentsAreNotNull() {
         Assert.assertNotNull(projectRepository);
         Assert.assertNotNull(userRepository);
         Assert.assertNotNull(deviceRepository);
     }
 
-    private User createUser(User u){
+    private User createUser(User u) {
         when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
@@ -100,7 +91,7 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void createWhenProjectsSizeIsZero(){
+    public void createWhenProjectsSizeIsZero() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
@@ -117,7 +108,7 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void createWhenProjectsSizeIsOne(){
+    public void createWhenProjectsSizeIsOne() {
         User createdUser = createUser(user);
         Assert.assertEquals(0, projectRepository.getUserProjectsByUser(createdUser).size());
 
@@ -131,7 +122,7 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
@@ -148,7 +139,7 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void getById(){
+    public void getById() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
@@ -162,7 +153,7 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void getUserProjectsByUser(){
+    public void getUserProjectsByUser() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
@@ -177,34 +168,34 @@ public class ProjectRepositoryImplTest {
     }
 
     @Test
-    public void isExist(){
+    public void isExist() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
-        Assert.assertFalse( projectRepository.isExist(1L));
+        Assert.assertFalse(projectRepository.isExist(1L));
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
 
-        Assert.assertTrue( projectRepository.isExist(1L));
-        Assert.assertTrue( projectRepository.isExist(createdProject.getId()));
+        Assert.assertTrue(projectRepository.isExist(1L));
+        Assert.assertTrue(projectRepository.isExist(createdProject.getId()));
     }
 
     @Test
-    public void deleteWhenProjectEmpty(){
+    public void deleteWhenProjectEmpty() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
 
-        Assert.assertTrue( projectRepository.isExist(createdProject.getId()));
+        Assert.assertTrue(projectRepository.isExist(createdProject.getId()));
 
         projectRepository.delete(createdProject.getId());
 
-        Assert.assertFalse( projectRepository.isExist(createdProject.getId()));
+        Assert.assertFalse(projectRepository.isExist(createdProject.getId()));
     }
 
     @Test
-    public void deleteWhenProjectNotEmpty(){
+    public void deleteWhenProjectNotEmpty() {
         User createdUser = createUser(user);
         when(entityFactory.createProject()).thenReturn(new Project());
         when(entityFactory.createDevice()).thenReturn(new Device());

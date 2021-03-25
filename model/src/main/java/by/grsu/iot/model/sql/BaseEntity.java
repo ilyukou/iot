@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Superclass which contains base filed (id, created time, updated time and status) for any object
+ * Superclass which contains base filed (id, created time, updated time and status) for any object.
+ *
+ * @author Ilyukou Ilya
  */
 @MappedSuperclass
 public class BaseEntity implements Serializable, Comparable<BaseEntity> {

@@ -6,6 +6,9 @@ import javax.persistence.Table;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "email")
 public class Email extends BaseEntity {

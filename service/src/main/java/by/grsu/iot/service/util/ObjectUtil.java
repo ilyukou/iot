@@ -2,13 +2,21 @@ package by.grsu.iot.service.util;
 
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.service.domain.request.device.DeviceFormUpdate;
-import by.grsu.iot.service.domain.request.project.ProjectFormUpdate;
+import by.grsu.iot.service.domain.device.DeviceFormUpdate;
+import by.grsu.iot.service.domain.project.ProjectFormUpdate;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Object util
+ *
+ * @author Ilyukou Ilya
+ */
 public class ObjectUtil {
     public static <T> boolean areAllFieldNotNull(T t) throws IllegalAccessException {
         for (Field f : t.getClass().getDeclaredFields()) {
@@ -28,6 +36,14 @@ public class ObjectUtil {
         }
 
         return false;
+    }
+
+    public static List<Field> getAnnotationFields(Object object, Class<? extends Annotation> annotation) {
+        return FieldUtils.getAllFieldsList(object.getClass())
+                .stream()
+                .peek(field -> field.setAccessible(true))
+                .filter(field -> field.isAnnotationPresent(annotation))
+                .collect(Collectors.toList());
     }
 
     public static Project updateField(Project project, ProjectFormUpdate projectFormUpdate) {

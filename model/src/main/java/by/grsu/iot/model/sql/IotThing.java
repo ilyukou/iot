@@ -1,11 +1,15 @@
 package by.grsu.iot.model.sql;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Superclass for iot thing.
+ * In currently version is a only {@link Device}
+ *
+ * @author Ilyukou Ilya
+ */
 @MappedSuperclass
 public class IotThing extends BaseEntity {
 
@@ -21,7 +25,7 @@ public class IotThing extends BaseEntity {
 
     public IotThing(IotThing iotThing) {
         this(iotThing.getId(), iotThing.getCreated(), iotThing.getUpdated(), iotThing.getStatus(),
-                 iotThing.getName(), iotThing.getToken());
+                iotThing.getName(), iotThing.getToken());
     }
 
 

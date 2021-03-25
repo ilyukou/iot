@@ -1,6 +1,5 @@
 package by.grsu.iot.repository.impl;
 
-import by.grsu.iot.model.sql.AccessType;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
@@ -90,7 +89,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public boolean delete(Long id) {
         Project project = getById(id);
 
-        if(project == null){
+        if (project == null) {
             return false;
         }
 
@@ -109,25 +108,18 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Long> getUserPublicProjectIds(String username) {
-        Long userId = userRepository.getUserId(username);
-
-        return projectJpaRepository.findProjectByUserIdAndAccessType(userId, AccessType.PUBLIC);
-    }
-
-    @Override
     public List<Project> getByIds(List<Long> projectsId) {
         return projectJpaRepository.findAllById(projectsId);
     }
 
     @Override
-    public List<Long> getAllUserProjectsIds(String username) {
+    public List<Long> getUserProjectsIds(String username) {
         return projectJpaRepository.findProjectsIdByUserId(userRepository.getUserId(username));
     }
 
     @Override
-    public Integer getAllUserProjectsSize(String username) {
-        return getAllUserProjectsIds(username).size();
+    public Integer getUserProjectsSize(String username) {
+        return getUserProjectsIds(username).size();
     }
 
     @Override

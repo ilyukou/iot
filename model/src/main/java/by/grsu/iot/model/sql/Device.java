@@ -1,6 +1,6 @@
 package by.grsu.iot.model.sql;
 
-import by.grsu.iot.model.util.ModelUtil;
+import by.grsu.iot.model.util.CollectionUtil;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -84,10 +84,10 @@ public class Device extends IotThing {
         if (!super.equals(o)) return false;
         Device device = (Device) o;
 
-        if(!Objects.equals(state, device.state)) return false;
+        if (!Objects.equals(state, device.state)) return false;
 
-        if(states.size() == 0  && device.states.size() == 0) return true;
+        if (states.size() == 0 && device.states.size() == 0) return true;
 
-        return ModelUtil.listEqualsIgnoreOrder(states, device.states);
+        return CollectionUtil.listEqualsIgnoreOrder(states, device.states);
     }
 }
