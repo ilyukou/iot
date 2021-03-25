@@ -1,6 +1,6 @@
 package by.grsu.iot.model.dto.exception;
 
-import by.grsu.iot.service.exception.BadRequestApplicationException;
+import by.grsu.iot.model.exception.BadRequestApplicationException;
 
 import java.util.Date;
 

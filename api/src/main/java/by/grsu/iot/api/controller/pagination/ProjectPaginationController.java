@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.pagination;
 
-import by.grsu.iot.api.dto.project.ProjectDto;
 import by.grsu.iot.model.dto.pagination.PaginationInfo;
+import by.grsu.iot.model.dto.project.ProjectDto;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

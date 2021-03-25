@@ -1,6 +1,6 @@
 package by.grsu.iot.model.dto.exception;
 
-import by.grsu.iot.service.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
 
 import java.util.Date;
 

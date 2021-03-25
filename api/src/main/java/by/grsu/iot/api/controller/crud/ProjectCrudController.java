@@ -1,6 +1,6 @@
 package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.api.dto.project.ProjectDto;
+import by.grsu.iot.model.dto.project.ProjectDto;
 import by.grsu.iot.model.dto.project.ProjectForm;
 import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 import by.grsu.iot.service.interf.crud.ProjectCrudService;
