@@ -32,7 +32,7 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
     List<Long> findDeviceIdsByProjectId(Long projectId);
 
     @Modifying
-    @Query(value = "update device d set d.state = ?1 where d.token = ?2", nativeQuery = true)
+    @Query(value = "update device d set d.state = ?1, d.active = ?2 where d.token = ?3", nativeQuery = true)
     void changeState(String state, Date date, String token);
 
     @Query(value = "select d.state from device d where d.token = ?1", nativeQuery = true)

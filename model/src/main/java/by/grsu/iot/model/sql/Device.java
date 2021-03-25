@@ -4,7 +4,6 @@ import by.grsu.iot.model.util.CollectionUtil;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,24 +25,6 @@ public class Device extends IotThing {
 
     public Device(BaseEntity baseEntity) {
         super(baseEntity);
-    }
-
-    public Device(Long id, Date created, Date updated, Status status,
-                  String name, String token,
-                  Project project, String state, List<String> states) {
-        super(id, created, updated, status, name, token);
-        this.project = project;
-        this.state = state;
-        this.states = states;
-    }
-
-    public Device(Device device) {
-        this(device.getId(), device.getCreated(), device.getUpdated(), device.getStatus(),
-                device.getName(), device.getToken(),
-//                FIXME java.lang.StackOverflowError
-//                device.getProject() != null ? new Project(device.getProject()) : null,
-                null,
-                device.getState(), device.getStates());
     }
 
     public Device() {

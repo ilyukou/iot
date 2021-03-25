@@ -17,7 +17,9 @@ public class IotThing extends BaseEntity {
 
     private String token;
 
-    public IotThing(Long id, Date created, Date updated, Status status, String name, String token) {
+    private Date active;
+
+    public IotThing(Long id, Date created, Date updated, Status status, String name, String token, Date active) {
         super(id, created, updated, status);
         this.name = name;
         this.token = token;
@@ -25,7 +27,7 @@ public class IotThing extends BaseEntity {
 
     public IotThing(IotThing iotThing) {
         this(iotThing.getId(), iotThing.getCreated(), iotThing.getUpdated(), iotThing.getStatus(),
-                iotThing.getName(), iotThing.getToken());
+                iotThing.getName(), iotThing.getToken(), iotThing.getActive());
     }
 
 
@@ -61,6 +63,14 @@ public class IotThing extends BaseEntity {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Date getActive() {
+        return active;
+    }
+
+    public void setActive(Date active) {
+        this.active = active;
     }
 
     @Override

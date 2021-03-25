@@ -19,9 +19,7 @@ public class DeviceDto extends IotThingDto {
     }
 
     public DeviceDto(Device device) {
-        super(device.getId(), device.getName(), device.getToken(),
-                device.getUpdated(), // FIXME
-                device.getUpdated(), device.getCreated());
+        super(device);
         this.states = device.getStates();
         this.state = device.getState();
     }

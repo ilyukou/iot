@@ -24,7 +24,6 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Project> projects = new HashSet<>();
 
-    // FIXME - LAZY INTITIAL
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -66,7 +65,6 @@ public class User extends BaseEntity implements UserDetails {
         this.username = username;
     }
 
-    // FIXME - add implementation
     @Override
     public boolean isAccountNonExpired() {
         return true;

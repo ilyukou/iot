@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Ilyukou Ilya
@@ -33,17 +32,6 @@ public class Project extends BaseEntity {
         this.name = name;
         this.title = title;
     }
-
-    public Project(Project project) {
-        this(project.getId(), project.getCreated(), project.getUpdated(), project.getStatus(),
-//                FIXME java.lang.StackOverflowError
-//                project.getUser() != null ? new User(project.getUser()) : null,
-                null,
-                project.getDevices().stream().map(Device::new).collect(Collectors.toSet()),
-                project.getName(),
-                project.getTitle());
-    }
-
 
     public Project(BaseEntity baseEntity) {
         super(baseEntity);
