@@ -23,7 +23,7 @@ public class ValidationServiceImpl implements ValidationService {
     @Override
     @Cacheable("validation")
     public Map<String, ObjectValidation> getValidationRuleForAllRequestEntity() {
-        Reflections reflections = new Reflections("by.grsu.iot.service.domain");
+        Reflections reflections = new Reflections("by.grsu.iot.model.dto");
 
         Set<Class<?>> classes = reflections.getSubTypesOf(DataTransferObject.class).stream()
                 .peek(aClass -> Arrays.stream(aClass.getFields()).forEach(field -> field.setAccessible(true)))
