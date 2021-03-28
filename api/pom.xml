@@ -23,6 +23,11 @@
             <artifactId>service</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>by.grsu</groupId>
+            <artifactId>article</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
