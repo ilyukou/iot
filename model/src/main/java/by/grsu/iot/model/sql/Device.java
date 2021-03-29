@@ -11,10 +11,6 @@ import java.util.Objects;
 @Table(name = "device")
 public class Device extends IotThing {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId")
-    private Project project;
-
     private String state;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -28,14 +24,6 @@ public class Device extends IotThing {
     }
 
     public Device() {
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     public String getState() {

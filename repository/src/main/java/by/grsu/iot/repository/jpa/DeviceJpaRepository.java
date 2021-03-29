@@ -37,4 +37,7 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
 
     @Query(value = "select d.state from device d where d.token = ?1", nativeQuery = true)
     String getDeviceStateByToken(String token);
+
+    @Query(value = "select count(*) from device d where d.project_id = ?1", nativeQuery = true)
+    Integer getDevicesSize(Long projectId);
 }

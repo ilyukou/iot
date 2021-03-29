@@ -38,7 +38,7 @@ public class EntityFactory {
     private Integer EMAIL_TOKEN_LENGTH;
 
     @Value("${by.grsu.iot.repository.device.token.length}")
-    private Long DEVICE_TOKEN_LENGTH;
+    private Long THING_TOKEN_LENGTH;
 
     public EntityFactory(
             RoleRepository roleRepository
@@ -74,7 +74,7 @@ public class EntityFactory {
     public Device createDevice() {
         Device device = new Device(createBaseEntity());
 
-        device.setToken(StringUtil.generateToken(DEVICE_TOKEN_LENGTH));
+        device.setToken(StringUtil.generateToken(THING_TOKEN_LENGTH));
 
         device.setStates(DEFAULT_STATES);
 
@@ -98,5 +98,13 @@ public class EntityFactory {
         email.setCode(StringUtil.generateString(EMAIL_TOKEN_LENGTH));
 
         return email;
+    }
+
+    public Sensor createSensor() {
+        Sensor sensor = new Sensor(createBaseEntity());
+
+        sensor.setToken(StringUtil.generateToken(THING_TOKEN_LENGTH));
+
+        return sensor;
     }
 }

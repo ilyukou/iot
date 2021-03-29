@@ -121,4 +121,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     public String getDeviceStateByToken(String token) {
         return deviceJpaRepository.getDeviceStateByToken(token);
     }
+
+    @Override
+    public Integer getDevicesSize(Long projectId) {
+        return deviceJpaRepository.getDevicesSize(projectId);
+    }
 }

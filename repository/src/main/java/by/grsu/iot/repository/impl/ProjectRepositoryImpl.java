@@ -5,6 +5,7 @@ import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
+import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.ProjectJpaRepository;
 import by.grsu.iot.repository.util.TimeUtil;
@@ -28,17 +29,20 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final UserRepository userRepository;
     private final DeviceRepository deviceRepository;
     private final EntityFactory entityFactory;
+    private final SensorRepository sensorRepository;
 
     public ProjectRepositoryImpl(
             ProjectJpaRepository projectJpaRepository,
             UserRepository userRepository,
             DeviceRepository deviceRepository,
-            EntityFactory entityFactory
+            EntityFactory entityFactory,
+            SensorRepository sensorRepository
     ) {
         this.projectJpaRepository = projectJpaRepository;
         this.userRepository = userRepository;
         this.deviceRepository = deviceRepository;
         this.entityFactory = entityFactory;
+        this.sensorRepository = sensorRepository;
     }
 
     @Override
@@ -124,6 +128,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Integer getProjectIotThingSize(Long projectId) {
-        return deviceRepository.getProjectDeviceIds(projectId).size();
+        return deviceRepository.getDevicesSize(projectId)
+                + sensorRepository.getSensorsSize(projectId);
     }
 }

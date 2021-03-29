@@ -1,9 +1,6 @@
 package by.grsu.iot.model.util;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Collection Util
@@ -11,6 +8,30 @@ import java.util.Set;
  * @author Ilyukou Ilya
  */
 public class CollectionUtil {
+
+    public static <T> List<T> samplingList(List<T> list, Double size){
+        if (list.size() <= size){
+            return list;
+        }
+
+        Double listSize =  (double) list.size();
+
+        Double chance = size / listSize;
+
+        List<T> result = new ArrayList<>();
+
+        for (T t: list) {
+            if (getRandomBoolean(chance)){
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    private static boolean getRandomBoolean(Double chance){
+        return Math.random() < chance;
+    }
 
     public static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
         return new HashSet<>(list1).equals(new HashSet<>(list2));

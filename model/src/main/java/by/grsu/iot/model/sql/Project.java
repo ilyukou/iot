@@ -1,7 +1,6 @@
 package by.grsu.iot.model.sql;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,18 +19,12 @@ public class Project extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private Set<Device> devices = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+    private Set<Sensor> sensors = new HashSet<>();
+
     private String name;
 
     private String title;
-
-    public Project(Long id, Date created, Date updated, Status status,
-                   User user, Set<Device> devices, String name, String title) {
-        super(id, created, updated, status);
-        this.user = user;
-        this.devices = devices;
-        this.name = name;
-        this.title = title;
-    }
 
     public Project(BaseEntity baseEntity) {
         super(baseEntity);
@@ -70,6 +63,14 @@ public class Project extends BaseEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public void setSensors(Set<Sensor> sensors) {
+        this.sensors = sensors;
     }
 
     @Override

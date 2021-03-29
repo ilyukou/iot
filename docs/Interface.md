@@ -5,6 +5,7 @@ ____
 - Interface for CRUD operation with entity
     * [ProjectCrud](interface/crud/ProjectCrud.md) - interface for CRUD operation with project
     * [DeviceCrud](interface/crud/DeviceCrud.md) - interface for CRUD operation with device
+    * [SensorCrud](interface/crud/SensorCrud.md) - interface for CRUD operation with sensor
 
 
 - Pagination
@@ -15,3 +16,4 @@ ____
 * [DeviceState](interface/DeviceState.md) - interface for changing device state
 * [Validation](interface/Validation.md) - requirements for transferred entities
 * [Properties](interface/Properties.md) - application properties
+* [SensorValue](interface/SensorValue.md) - application properties

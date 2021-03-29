@@ -1,6 +1,6 @@
 package by.grsu.iot.model.dto.thing;
 
-import by.grsu.iot.model.sql.Device;
+import by.grsu.iot.model.sql.IotThing;
 
 public class IotThingDto {
 
@@ -11,21 +11,21 @@ public class IotThingDto {
     private Long update;
     private Long create;
 
-    public IotThingDto(Device device) {
-        this.id = device.getId();
-        this.name = device.getName();
-        this.token = device.getToken();
+    public IotThingDto(IotThing iotThing) {
+        this.id = iotThing.getId();
+        this.name = iotThing.getName();
+        this.token = iotThing.getToken();
 
-        if (device.getActive() != null){
-            this.activity = device.getActive().getTime();
+        if (iotThing.getActive() != null){
+            this.activity = iotThing.getActive().getTime();
         }
 
-        if (device.getUpdated() != null){
-            this.update = device.getUpdated().getTime();
+        if (iotThing.getUpdated() != null){
+            this.update = iotThing.getUpdated().getTime();
         }
 
-        if (device.getCreated() != null){
-            this.create = device.getCreated().getTime();
+        if (iotThing.getCreated() != null){
+            this.create = iotThing.getCreated().getTime();
         }
     }
 

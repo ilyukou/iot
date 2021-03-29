@@ -61,11 +61,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/crud/device").hasRole("USER")
                 .antMatchers("/crud/device/**").hasRole("USER")
 
+                .antMatchers("/crud/sensor").hasRole("USER")
+                .antMatchers("/crud/sensor/**").hasRole("USER")
+
                 .antMatchers("/pagination/**").hasRole("USER")
                 .antMatchers("/pagination").hasRole("USER")
 
                 .antMatchers("/deviceState/**").permitAll()
                 .antMatchers("/deviceState").permitAll()
+
+                .antMatchers("/sensor/value/**").permitAll()
+                .antMatchers("/sensor/value").permitAll()
 
                 .antMatchers("/validation").permitAll()
                 .antMatchers("/validation/**").permitAll()

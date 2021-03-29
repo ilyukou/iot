@@ -1,7 +1,8 @@
 package by.grsu.iot.model.dto.thing;
 
 public enum ThingEnum {
-    device("device");
+    device("device"),
+    sensor("sensor");
 
     private final String value;
 
