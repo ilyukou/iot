@@ -1,5 +1,10 @@
 package by.grsu.iot.model.dto.thing;
 
+/**
+ * Enum of thing type
+ *
+ * @author Ilykou Ilya
+ */
 public enum ThingEnum {
     device("device"),
     sensor("sensor");

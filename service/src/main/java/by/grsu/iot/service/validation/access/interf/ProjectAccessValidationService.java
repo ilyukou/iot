@@ -1,7 +1,7 @@
 package by.grsu.iot.service.validation.access.interf;
 
-import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.model.sql.Project;
 
 /**
  * Service to check access for operation with {@link Project}

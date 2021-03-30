@@ -1,10 +1,10 @@
 package by.grsu.iot.service.impl;
 
+import by.grsu.iot.model.dto.thing.device.DeviceState;
 import by.grsu.iot.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.model.dto.thing.device.state.SetDeviceRequest;
 import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.repository.interf.DeviceStateRepository;
-import by.grsu.iot.model.dto.thing.device.DeviceState;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +44,15 @@ public class DeviceStateServiceImpl implements DeviceStateService {
 
     @Override
     public DeviceState getState(String token) {
-        if (repository.containsDevice(token)) {
+        if (repository.isExistWaitGetStateRequest(token)) {
             String ms = "Device with such token exist";
             LOGGER.trace(ms);
             throw new ConflictException(ms);
         }
 
-        repository.putWaitDevice(new GetStateRequest(token));
+        repository.putWaitGetStateRequest(new GetStateRequest(token));
 
-        GetStateRequest device = repository.getProcessedDevice(token);
+        GetStateRequest device = repository.getProcessedGetStateRequest(token);
 
         return new DeviceState(device.getToken(), device.getState());
 
@@ -60,29 +60,29 @@ public class DeviceStateServiceImpl implements DeviceStateService {
 
     @Override
     public DeviceState setState(String newState, String token) {
-        if (repository.containsRequest(token)) {
+        if (repository.isExistWaitSetDeviceRequest(token)) {
             String ms = "Request with such token exist";
             LOGGER.trace(ms);
             throw new ConflictException(ms);
         }
 
-        repository.putWaitRequest(new SetDeviceRequest(token, newState));
+        repository.putWaitSetDeviceRequest(new SetDeviceRequest(token, newState));
 
-        SetDeviceRequest request = repository.getProcessedRequest(token);
+        SetDeviceRequest request = repository.getProcessedSetDeviceRequest(token);
 
         return new DeviceState(request.getToken(), request.getState());
     }
 
     @Override
     public void removeDevice(String token) {
-        repository.removeWaitDevice(token);
-        repository.removeProcessedDevice(token);
+        repository.removeWaitGetStateRequest(token);
+        repository.removeProcessedGetStateRequest(token);
     }
 
     @Override
     public void removeRequest(String token) {
-        repository.removeWaitRequest(token);
-        repository.removeProcessedRequest(token);
+        repository.removeWaitSetDeviceRequest(token);
+        repository.removeProcessedSetDeviceRequest(token);
     }
 
     @Override

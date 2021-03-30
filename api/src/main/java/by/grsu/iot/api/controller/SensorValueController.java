@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.badRequest;
@@ -28,11 +29,11 @@ public class SensorValueController {
             @PathVariable String token,
             @RequestBody SensorValue sensorValue
     ) {
-        if (sensorValue.getTime() == null){
+        if (sensorValue.getTime() == null) {
             sensorValue.setTime(TimeUtil.getCurrentDate().getTime());
         }
 
-        if (sensorValue.getValue() == null){
+        if (sensorValue.getValue() == null) {
             return badRequest().build();
         }
 
@@ -43,7 +44,7 @@ public class SensorValueController {
     @GetMapping("one/{token}")
     public ResponseEntity<SensorValue> getOneValue(
             @PathVariable String token
-    ) {
+    ) throws IOException {
         return new ResponseEntity<>(sensorValueService.getOneValue(token), HttpStatus.OK);
     }
 
@@ -52,13 +53,13 @@ public class SensorValueController {
             @PathVariable String token,
             @RequestParam(required = false) Long from,
             @RequestParam(required = false) Long to
-    ) {
+    ) throws IOException {
 
-        if (to == null){
+        if (to == null) {
             to = TimeUtil.getCurrentDate().getTime();
         }
 
-        if (from == null){
+        if (from == null) {
             from = 0L;
         }
 
@@ -74,7 +75,7 @@ public class SensorValueController {
     ) throws InterruptedException {
         Long to = from + step * count;
 
-        for (long i = from; i < to; i+=step) {
+        for (long i = from; i < to; i += step) {
             SensorValue sensorValue = new SensorValue();
             sensorValue.setValue((double) i);
             sensorValue.setTime(TimeUtil.getCurrentDate().getTime());

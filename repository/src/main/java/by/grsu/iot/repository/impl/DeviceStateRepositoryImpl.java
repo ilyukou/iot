@@ -2,8 +2,8 @@ package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.model.dto.thing.device.state.SetDeviceRequest;
-import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.model.exception.ConflictException;
+import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.DeviceStateRepository;
 import org.slf4j.Logger;
@@ -33,17 +33,17 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     }
 
     @Override
-    public synchronized GetStateRequest getWaitDevice(String token) {
+    public synchronized GetStateRequest getWaitGetStateRequest(String token) {
         return devices.get(token);
     }
 
     @Override
-    public synchronized void removeWaitDevice(String token) {
+    public synchronized void removeWaitGetStateRequest(String token) {
         devices.remove(token);
     }
 
     @Override
-    public synchronized void putWaitDevice(GetStateRequest device) {
+    public synchronized void putWaitGetStateRequest(GetStateRequest device) {
         if (devices.containsKey(device.getToken())) {
             throw new ConflictException("Request with such token exist");
         }
@@ -55,22 +55,22 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     }
 
     @Override
-    public synchronized boolean containsDevice(String token) {
+    public synchronized boolean isExistWaitGetStateRequest(String token) {
         return devices.containsKey(token);
     }
 
     @Override
-    public synchronized SetDeviceRequest getWaitRequest(String token) {
+    public synchronized SetDeviceRequest getWaitSetDeviceRequest(String token) {
         return requests.get(token);
     }
 
     @Override
-    public synchronized void removeWaitRequest(String token) {
+    public synchronized void removeWaitSetDeviceRequest(String token) {
         requests.remove(token);
     }
 
     @Override
-    public synchronized void putWaitRequest(SetDeviceRequest request) {
+    public synchronized void putWaitSetDeviceRequest(SetDeviceRequest request) {
         if (requests.containsKey(request.getToken())) {
             throw new ConflictException("Request with such token exist");
         }
@@ -82,13 +82,13 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     }
 
     @Override
-    public synchronized boolean containsRequest(String token) {
+    public synchronized boolean isExistWaitSetDeviceRequest(String token) {
         return requests.containsKey(token);
     }
 
     @Override
-    public synchronized SetDeviceRequest getProcessedRequest(String token) {
-        while (!isExistProcessedRequest(token)) {
+    public synchronized SetDeviceRequest getProcessedSetDeviceRequest(String token) {
+        while (!isExistProcessedSetDeviceRequest(token)) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -106,24 +106,24 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     }
 
     @Override
-    public synchronized void removeProcessedRequest(String token) {
+    public synchronized void removeProcessedSetDeviceRequest(String token) {
         requestsProcessed.remove(token);
     }
 
     @Override
-    public synchronized boolean isExistProcessedRequest(String token) {
+    public synchronized boolean isExistProcessedSetDeviceRequest(String token) {
         return requestsProcessed.containsKey(token);
     }
 
     @Override
-    public synchronized void putProcessedRequest(SetDeviceRequest request) {
+    public synchronized void putSetDeviceRequest(SetDeviceRequest request) {
         requestsProcessed.put(request.getToken(), request);
         notifyAll();
     }
 
     @Override
-    public synchronized GetStateRequest getProcessedDevice(String token) {
-        while (!isExistProcessedDevice(token)) {
+    public synchronized GetStateRequest getProcessedGetStateRequest(String token) {
+        while (!isExistProcessedGetStateRequest(token)) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -139,23 +139,23 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     }
 
     @Override
-    public synchronized void removeProcessedDevice(String token) {
+    public synchronized void removeProcessedGetStateRequest(String token) {
         devicesProcessed.remove(token);
     }
 
     @Override
-    public synchronized boolean isExistProcessedDevice(String token) {
+    public synchronized boolean isExistProcessedGetStateRequest(String token) {
         return devicesProcessed.containsKey(token);
     }
 
     @Override
-    public synchronized void putProcessedDevice(GetStateRequest device) {
+    public synchronized void putProcessedGetStateRequest(GetStateRequest device) {
         devicesProcessed.put(device.getToken(), device);
         notifyAll();
     }
 
     @Override
-    public synchronized Set<String> getWaitDeviceAndWaitRequestWithEqualsToken() {
+    public synchronized Set<String> getWaitGetStateRequestAndWaitSetDeviceRequestWithEqualsToken() {
         if (devices.size() == 0 || requests.size() == 0) {
             try {
                 wait();

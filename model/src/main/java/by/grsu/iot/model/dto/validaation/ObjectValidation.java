@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class ObjectValidation {
 
-    Map<String, FieldStringValidation> fields;
+    private Map<String, FieldStringValidation> fields;
 
     public ObjectValidation(Map<String, FieldStringValidation> fields) {
         this.fields = fields;

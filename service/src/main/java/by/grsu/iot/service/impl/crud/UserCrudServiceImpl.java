@@ -1,13 +1,13 @@
 package by.grsu.iot.service.impl.crud;
 
-import by.grsu.iot.model.sql.User;
-import by.grsu.iot.repository.factory.EntityFactory;
-import by.grsu.iot.repository.interf.EmailRepository;
-import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.model.dto.user.AuthenticationRequest;
 import by.grsu.iot.model.dto.user.AuthenticationUser;
 import by.grsu.iot.model.dto.user.RegistrationRequest;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
+import by.grsu.iot.model.sql.User;
+import by.grsu.iot.repository.factory.EntityFactory;
+import by.grsu.iot.repository.interf.EmailRepository;
+import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.service.interf.crud.UserCrudService;
 import by.grsu.iot.service.security.jwt.JwtProperties;
 import by.grsu.iot.service.security.jwt.JwtTokenProvider;
@@ -25,7 +25,6 @@ public class UserCrudServiceImpl implements UserCrudService {
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EntityFactory entityFactory;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
@@ -34,7 +33,6 @@ public class UserCrudServiceImpl implements UserCrudService {
             EmailRepository emailRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            EntityFactory entityFactory,
             AuthenticationManager authenticationManager,
             JwtTokenProvider jwtTokenProvider,
             JwtProperties jwtProperties
@@ -42,7 +40,6 @@ public class UserCrudServiceImpl implements UserCrudService {
         this.emailRepository = emailRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.entityFactory = entityFactory;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtProperties = jwtProperties;
@@ -59,7 +56,7 @@ public class UserCrudServiceImpl implements UserCrudService {
             throw new BadRequestApplicationException("username", "User with such username exist");
         }
 
-        User u = entityFactory.createUser(registrationRequest.getEmail());
+        User u = EntityFactory.createUser(registrationRequest.getEmail());
 
         u.setUsername(registrationRequest.getUsername());
         u.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));

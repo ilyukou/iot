@@ -2,6 +2,9 @@ package by.grsu.iot.model.dto.thing;
 
 import by.grsu.iot.model.sql.IotThing;
 
+/**
+ * @author Ilyukou Ilya
+ */
 public class IotThingDto {
 
     private Long id;
@@ -16,15 +19,15 @@ public class IotThingDto {
         this.name = iotThing.getName();
         this.token = iotThing.getToken();
 
-        if (iotThing.getActive() != null){
+        if (iotThing.getActive() != null) {
             this.activity = iotThing.getActive().getTime();
         }
 
-        if (iotThing.getUpdated() != null){
+        if (iotThing.getUpdated() != null) {
             this.update = iotThing.getUpdated().getTime();
         }
 
-        if (iotThing.getCreated() != null){
+        if (iotThing.getCreated() != null) {
             this.create = iotThing.getCreated().getTime();
         }
     }

@@ -32,18 +32,18 @@ public class StateRequestConsumer implements Runnable {
     public void run() {
         while (true) {
             LOGGER.trace("Thread consumer run " + Thread.currentThread().getName());
-            for (String token : repository.getWaitDeviceAndWaitRequestWithEqualsToken()) {
-                GetStateRequest device = repository.getWaitDevice(token);
-                SetDeviceRequest request = repository.getWaitRequest(token);
+            for (String token : repository.getWaitGetStateRequestAndWaitSetDeviceRequestWithEqualsToken()) {
+                GetStateRequest device = repository.getWaitGetStateRequest(token);
+                SetDeviceRequest request = repository.getWaitSetDeviceRequest(token);
 
                 device.setState(request.getState());
                 LOGGER.trace("Device and request connected " + token);
 
-                repository.removeWaitDevice(token);
-                repository.removeWaitRequest(token);
+                repository.removeWaitGetStateRequest(token);
+                repository.removeWaitSetDeviceRequest(token);
 
-                repository.putProcessedRequest(request);
-                repository.putProcessedDevice(device);
+                repository.putSetDeviceRequest(request);
+                repository.putProcessedGetStateRequest(device);
 
                 synchronized (deviceStateService) {
                     deviceStateService.notifyAll();

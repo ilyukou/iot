@@ -5,14 +5,19 @@ import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.repository.util.ElasticsearchUtil;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,69 +25,77 @@ import java.util.stream.Collectors;
 @Repository
 public class SensorValueRepositoryImpl implements SensorValueRepository {
 
-    private final String SENSOR_VALUE_DOCUMENT_NAME = "sensorvalue";
-
-    private final Integer LIST_SIZE = 100;
+    private final String SENSOR_VALUE_DOCUMENT_NAME;
 
     private final SensorValueElasticsearchRepository repository;
-    private final Client client;
-    private final ElasticsearchUtil elasticsearchUtil;
+    private final RestHighLevelClient restHighLevelClient;
 
     public SensorValueRepositoryImpl(
             SensorValueElasticsearchRepository repository,
-            Client client,
-            ElasticsearchUtil elasticsearchUtil
+            RestHighLevelClient restHighLevelClient
     ) {
         this.repository = repository;
-        this.client = client;
-        this.elasticsearchUtil = elasticsearchUtil;
+        this.restHighLevelClient = restHighLevelClient;
+
+        SENSOR_VALUE_DOCUMENT_NAME = SensorValueElasticsearch.class.getAnnotation(Document.class).indexName();
     }
 
     @Override
-    public void add(String token, Long time, Double value) {
-        repository.save(new SensorValueElasticsearch(time, value, token));
+    public SensorValueElasticsearch add(String token, Long time, Double value) {
+        return repository.save(new SensorValueElasticsearch(time, value, token));
     }
 
     @Override
-    public List<SensorValueElasticsearch> get(String token, Long from, Long to) {
+    public List<SensorValueElasticsearch> get(String token, Long from, Long to, Integer size) throws IOException {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchBoolPrefixQuery("token", token))
                 .must(QueryBuilders.rangeQuery("time")
                         .gte(from)
                         .lte(to));
 
-        SearchResponse response = client.prepareSearch(SENSOR_VALUE_DOCUMENT_NAME)
-                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                .setQuery(queryBuilder)
-                .setSize(getDocumentSize(token).intValue())
-                .get();
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(queryBuilder);
+        searchSourceBuilder.size(getSensorValueElasticsearchCount(token).intValue());
 
-        return CollectionUtil.samplingList(elasticsearchUtil.convertToList(response), LIST_SIZE.doubleValue())
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH);
+        searchRequest.source(searchSourceBuilder);
+        searchRequest.indices(SENSOR_VALUE_DOCUMENT_NAME);
+
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        return CollectionUtil.samplingList(ElasticsearchUtil.convertToList(response), size.doubleValue())
                 .stream()
                 .sorted()
                 .collect(Collectors.toList());
     }
 
     @Override
-    public SensorValueElasticsearch get(String token) {
-        return elasticsearchUtil.convert(findOne(token));
+    public SensorValueElasticsearch get(String token) throws IOException {
+        return ElasticsearchUtil.convert(findOne(token));
     }
 
     @Override
-    public Long getDocumentSize(String token) {
+    public Long getSensorValueElasticsearchCount(String token) throws IOException {
         SearchResponse response = findOne(token);
 
-        return  response.getInternalResponse().hits().getTotalHits().value;
+        return response.getInternalResponse().hits().getTotalHits().value;
     }
 
-    private SearchResponse findOne(String token){
+    private SearchResponse findOne(String token) throws IOException {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchBoolPrefixQuery("token", token));
 
-        return  client.prepareSearch(SENSOR_VALUE_DOCUMENT_NAME)
-                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                .setQuery(queryBuilder)
-                .setSize(1)
-                .get();
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(queryBuilder);
+        searchSourceBuilder.size(1);
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH);
+        searchRequest.indices(SENSOR_VALUE_DOCUMENT_NAME);
+        searchRequest.source(searchSourceBuilder);
+
+        return restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
     }
+
 }

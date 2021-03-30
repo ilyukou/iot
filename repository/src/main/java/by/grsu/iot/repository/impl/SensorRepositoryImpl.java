@@ -20,17 +20,14 @@ public class SensorRepositoryImpl implements SensorRepository {
 
     private final SensorJpaRepository sensorJpaRepository;
     private final ProjectRepository projectRepository;
-    private final EntityFactory entityFactory;
 
     @Lazy
     public SensorRepositoryImpl(
             SensorJpaRepository sensorJpaRepository,
-            ProjectRepository projectRepository,
-            EntityFactory entityFactory
+            ProjectRepository projectRepository
     ) {
         this.sensorJpaRepository = sensorJpaRepository;
         this.projectRepository = projectRepository;
-        this.entityFactory = entityFactory;
     }
 
     @Override
@@ -44,7 +41,7 @@ public class SensorRepositoryImpl implements SensorRepository {
     public Sensor create(Long project, String name) {
         Project p = projectRepository.getById(project);
 
-        Sensor sensor = entityFactory.createSensor();
+        Sensor sensor = EntityFactory.createSensor();
         sensor.setName(name);
         sensor.setProject(p);
 

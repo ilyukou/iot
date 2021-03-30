@@ -5,6 +5,8 @@ import by.grsu.iot.model.sql.Project;
 
 /**
  * DTO for {@link Project}
+ *
+ * @author Ilyukou Ilya
  */
 public class ProjectDto {
 

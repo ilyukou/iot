@@ -5,6 +5,8 @@ import by.grsu.iot.model.sql.Sensor;
 
 /**
  * DTO for {@link Sensor}
+ *
+ * @author Ilyukou Ilya
  */
 public class SensorDto extends IotThingDto {
 

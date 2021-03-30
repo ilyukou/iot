@@ -1,9 +1,9 @@
 package by.grsu.iot.service.interf.crud;
 
-import by.grsu.iot.model.sql.User;
 import by.grsu.iot.model.dto.user.AuthenticationRequest;
 import by.grsu.iot.model.dto.user.AuthenticationUser;
 import by.grsu.iot.model.dto.user.RegistrationRequest;
+import by.grsu.iot.model.sql.User;
 
 /**
  * Service layer for CRUD operation with {@link User}

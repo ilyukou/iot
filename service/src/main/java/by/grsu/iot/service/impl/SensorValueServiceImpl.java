@@ -7,18 +7,24 @@ import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.service.interf.SensorValueService;
 import by.grsu.iot.service.interf.crud.SensorCrudService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@PropertySource("classpath:application-service.properties")
 @Transactional
 @Service
 public class SensorValueServiceImpl implements SensorValueService {
 
     private final SensorValueRepository sensorValueRepository;
     private final SensorCrudService sensorCrudService;
+    @Value("${sensor.value.list.size.response}")
+    private Integer sensorValueList;
 
     public SensorValueServiceImpl(
             SensorValueRepository sensorValueRepository,
@@ -34,22 +40,21 @@ public class SensorValueServiceImpl implements SensorValueService {
     }
 
     @Override
-    public List<SensorValue> get(String token, Long from, Long to) {
-        if (!sensorCrudService.isExist(token)){
+    public List<SensorValue> get(String token, Long from, Long to) throws IOException {
+        if (!sensorCrudService.isExist(token)) {
             throw new BadRequestApplicationException("token", "Not found sensor with such token");
         }
 
-
-        return sensorValueRepository.get(token, from, to).stream()
+        return sensorValueRepository.get(token, from, to, sensorValueList).stream()
                 .map(SensorValue::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public SensorValue getOneValue(String token) {
+    public SensorValue getOneValue(String token) throws IOException {
         SensorValueElasticsearch sensorValue = sensorValueRepository.get(token);
 
-        if (sensorValue == null){
+        if (sensorValue == null) {
             throw new EntityNotFoundApplicationException("Not found SensorValue for such sensor");
         }
 

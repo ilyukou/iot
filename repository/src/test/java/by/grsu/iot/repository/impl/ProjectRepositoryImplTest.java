@@ -5,7 +5,6 @@ import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.RepositoryApplication;
-import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
@@ -40,16 +39,19 @@ public class ProjectRepositoryImplTest {
     private final String second_title = "secondTitle";
     private final String device_state = "off";
     private final List<String> device_states = Arrays.asList(device_state, "on");
-    @MockBean
-    private EntityFactory entityFactory;
+
     @MockBean
     private EmailRepository emailRepository;
+
     @Autowired
     private ProjectRepository projectRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private DeviceRepository deviceRepository;
+
     private User user;
     private Project project;
     private Device device;
@@ -83,7 +85,6 @@ public class ProjectRepositoryImplTest {
     }
 
     private User createUser(User u) {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -93,7 +94,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void createWhenProjectsSizeIsZero() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Assert.assertEquals(0, projectRepository.getUserProjectsByUser(createdUser).size());
 
@@ -112,11 +112,9 @@ public class ProjectRepositoryImplTest {
         User createdUser = createUser(user);
         Assert.assertEquals(0, projectRepository.getUserProjectsByUser(createdUser).size());
 
-        when(entityFactory.createProject()).thenReturn(new Project());
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
         Assert.assertEquals(1, projectRepository.getUserProjectsByUser(createdUser).size());
 
-        when(entityFactory.createProject()).thenReturn(new Project());
         Project secondProject = projectRepository.create(second_name, createdUser.getUsername(), second_title);
         Assert.assertEquals(2, projectRepository.getUserProjectsByUser(createdUser).size());
     }
@@ -124,7 +122,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void update() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
 
@@ -141,7 +138,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void getById() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
 
@@ -155,7 +151,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void getUserProjectsByUser() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Assert.assertEquals(0, projectRepository.getUserProjectsByUser(createdUser).size());
 
@@ -170,7 +165,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void isExist() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Assert.assertFalse(projectRepository.isExist(1L));
 
@@ -183,7 +177,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void deleteWhenProjectEmpty() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
 
@@ -197,8 +190,6 @@ public class ProjectRepositoryImplTest {
     @Test
     public void deleteWhenProjectNotEmpty() {
         User createdUser = createUser(user);
-        when(entityFactory.createProject()).thenReturn(new Project());
-        when(entityFactory.createDevice()).thenReturn(new Device());
 
         Project createdProject = projectRepository.create(name, createdUser.getUsername(), title);
         Device createdDevice = deviceRepository.create(createdProject, device);

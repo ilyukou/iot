@@ -9,19 +9,19 @@ import java.util.*;
  */
 public class CollectionUtil {
 
-    public static <T> List<T> samplingList(List<T> list, Double size){
-        if (list.size() <= size){
+    public static <T> List<T> samplingList(List<T> list, Double size) {
+        if (list.size() <= size) {
             return list;
         }
 
-        Double listSize =  (double) list.size();
+        Double listSize = (double) list.size();
 
         Double chance = size / listSize;
 
         List<T> result = new ArrayList<>();
 
-        for (T t: list) {
-            if (getRandomBoolean(chance)){
+        for (T t : list) {
+            if (getRandomBoolean(chance)) {
                 result.add(t);
             }
         }
@@ -29,7 +29,7 @@ public class CollectionUtil {
         return result;
     }
 
-    private static boolean getRandomBoolean(Double chance){
+    private static boolean getRandomBoolean(Double chance) {
         return Math.random() < chance;
     }
 

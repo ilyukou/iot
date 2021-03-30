@@ -14,43 +14,43 @@ import java.util.Set;
 public interface DeviceStateRepository {
 
     // Wait GetStateRequest
-    GetStateRequest getWaitDevice(String token);
+    GetStateRequest getWaitGetStateRequest(String token);
 
-    void removeWaitDevice(String token);
+    void removeWaitGetStateRequest(String token);
 
-    void putWaitDevice(GetStateRequest device);
+    void putWaitGetStateRequest(GetStateRequest device);
 
-    boolean containsDevice(String token);
+    boolean isExistWaitGetStateRequest(String token);
 
 
     // Wait SetDeviceRequest
-    SetDeviceRequest getWaitRequest(String token);
+    SetDeviceRequest getWaitSetDeviceRequest(String token);
 
-    void removeWaitRequest(String token);
+    void removeWaitSetDeviceRequest(String token);
 
-    void putWaitRequest(SetDeviceRequest request);
+    void putWaitSetDeviceRequest(SetDeviceRequest request);
 
-    boolean containsRequest(String token);
-
-
-    // Processed GetStateRequest
-    SetDeviceRequest getProcessedRequest(String token);
-
-    void removeProcessedRequest(String token);
-
-    boolean isExistProcessedRequest(String token);
-
-    void putProcessedRequest(SetDeviceRequest request);
+    boolean isExistWaitSetDeviceRequest(String token);
 
 
     // Processed SetDeviceRequest
-    GetStateRequest getProcessedDevice(String token);
+    SetDeviceRequest getProcessedSetDeviceRequest(String token);
 
-    void removeProcessedDevice(String token);
+    void removeProcessedSetDeviceRequest(String token);
 
-    boolean isExistProcessedDevice(String token);
+    boolean isExistProcessedSetDeviceRequest(String token);
 
-    void putProcessedDevice(GetStateRequest device);
+    void putSetDeviceRequest(SetDeviceRequest request);
 
-    Set<String> getWaitDeviceAndWaitRequestWithEqualsToken();
+
+    // Processed GetStateRequest
+    GetStateRequest getProcessedGetStateRequest(String token);
+
+    void removeProcessedGetStateRequest(String token);
+
+    boolean isExistProcessedGetStateRequest(String token);
+
+    void putProcessedGetStateRequest(GetStateRequest device);
+
+    Set<String> getWaitGetStateRequestAndWaitSetDeviceRequestWithEqualsToken();
 }

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "device")
 public class Device extends IotThing {

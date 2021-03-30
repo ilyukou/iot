@@ -22,12 +22,13 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
     private final DeviceJpaRepository deviceJpaRepository;
     private final ProjectRepository projectRepository;
-    private final EntityFactory entityFactory;
 
-    public DeviceRepositoryImpl(DeviceJpaRepository deviceJpaRepository, @Lazy ProjectRepository projectRepository, EntityFactory entityFactory) {
+    public DeviceRepositoryImpl(
+            DeviceJpaRepository deviceJpaRepository,
+            @Lazy ProjectRepository projectRepository
+    ) {
         this.deviceJpaRepository = deviceJpaRepository;
         this.projectRepository = projectRepository;
-        this.entityFactory = entityFactory;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         Project p = SerializationUtils.clone(project);
         Device d = SerializationUtils.clone(device);
 
-        Device thing = entityFactory.createDevice();
+        Device thing = EntityFactory.createDevice();
         thing.setName(d.getName());
         thing.setStates(d.getStates());
         thing.setState(d.getState());

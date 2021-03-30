@@ -28,20 +28,17 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final ProjectJpaRepository projectJpaRepository;
     private final UserRepository userRepository;
     private final DeviceRepository deviceRepository;
-    private final EntityFactory entityFactory;
     private final SensorRepository sensorRepository;
 
     public ProjectRepositoryImpl(
             ProjectJpaRepository projectJpaRepository,
             UserRepository userRepository,
             DeviceRepository deviceRepository,
-            EntityFactory entityFactory,
             SensorRepository sensorRepository
     ) {
         this.projectJpaRepository = projectJpaRepository;
         this.userRepository = userRepository;
         this.deviceRepository = deviceRepository;
-        this.entityFactory = entityFactory;
         this.sensorRepository = sensorRepository;
     }
 
@@ -50,7 +47,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         User user = userRepository.getByUsername(username);
         Set<Project> projects = getUserProjectsByUser(user);
 
-        Project newProject = entityFactory.createProject();
+        Project newProject = EntityFactory.createProject();
         newProject.setName(name);
         newProject.setTitle(title);
 

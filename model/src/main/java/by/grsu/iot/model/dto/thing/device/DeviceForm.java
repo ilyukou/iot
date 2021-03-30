@@ -1,9 +1,9 @@
 package by.grsu.iot.model.dto.thing.device;
 
-import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.annotation.CollectionValidation;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
+import by.grsu.iot.model.sql.Device;
 
 import java.util.List;
 

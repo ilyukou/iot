@@ -112,5 +112,11 @@ public interface DeviceRepository {
      */
     String getDeviceStateByToken(String token);
 
+    /**
+     * Get {@link Device} size in the {@link Project}
+     *
+     * @param projectId {@link Project#getId()}
+     * @return count of devices
+     */
     Integer getDevicesSize(Long projectId);
 }

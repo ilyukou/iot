@@ -1,7 +1,10 @@
-package by.grsu.iot.model.domain;
+package by.grsu.iot.model.service;
 
 import by.grsu.iot.model.dto.thing.ThingEnum;
 
+/**
+ * @author Ilyukou Ilya
+ */
 public class PaginationIotThing {
 
     private Long id;

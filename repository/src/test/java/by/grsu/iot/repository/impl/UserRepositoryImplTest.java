@@ -5,7 +5,6 @@ import by.grsu.iot.model.sql.Role;
 import by.grsu.iot.model.sql.RoleType;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.RepositoryApplication;
-import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import org.junit.Assert;
@@ -30,12 +29,13 @@ public class UserRepositoryImplTest {
     private final String password = "password";
     private final String address = "email@email.com";
     private final RoleType roleType = RoleType.User;
-    @MockBean
-    private EntityFactory entityFactory;
+
     @MockBean
     private EmailRepository emailRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     private User user;
     private Email email;
     private Role role;
@@ -62,7 +62,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void create() {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -76,7 +75,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void getById() {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -91,7 +89,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void update() {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -112,7 +109,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void getByUsername() {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -128,7 +124,6 @@ public class UserRepositoryImplTest {
 
     @Test
     public void isExistByUsername() {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         Assert.assertFalse(userRepository.isExistByUsername(username));
 
         when(emailRepository.create(email)).thenReturn(email);

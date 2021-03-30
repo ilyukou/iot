@@ -5,7 +5,6 @@ import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.RepositoryApplication;
-import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
@@ -42,16 +41,19 @@ public class DeviceRepositoryImplTest {
     private final String second_device_state = "on";
     private final String device_token = "token";
     private final List<String> device_states = Arrays.asList(device_state, "on");
-    @MockBean
-    private EntityFactory entityFactory;
+
     @MockBean
     private EmailRepository emailRepository;
+
     @Autowired
     private ProjectRepository projectRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private DeviceRepository deviceRepository;
+
     private User user;
     private Project project;
     private Device device;
@@ -86,7 +88,6 @@ public class DeviceRepositoryImplTest {
     }
 
     private User createUser(User u) {
-        when(entityFactory.createEmail(address)).thenReturn(email);
         when(emailRepository.create(email)).thenReturn(email);
         when(emailRepository.update(email)).thenReturn(email);
 
@@ -94,7 +95,6 @@ public class DeviceRepositoryImplTest {
     }
 
     private Project createProject(String name, String username, String title) {
-        when(entityFactory.createProject()).thenReturn(new Project());
 
         return projectRepository.create(name, username, title);
     }
@@ -103,15 +103,14 @@ public class DeviceRepositoryImplTest {
     public void createWhenProjectEmpty() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Assert.assertFalse(deviceRepository.isExist(1l));
 
         Device createdDevice = deviceRepository.create(createdProject, device);
 
-        Assert.assertEquals(device_state, device.getState());
-        Assert.assertEquals(device_states, device.getStates());
-        Assert.assertNotNull(device.getId());
+        Assert.assertEquals(device_state, createdDevice.getState());
+        Assert.assertEquals(device_states, createdDevice.getStates());
+        Assert.assertNotNull(createdDevice.getId());
 
         Project project = projectRepository.getById(createdProject.getId());
         Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
@@ -121,7 +120,6 @@ public class DeviceRepositoryImplTest {
     public void createWhenProjectNotEmpty() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Device createdDevice = deviceRepository.create(createdProject, device);
 
@@ -129,14 +127,13 @@ public class DeviceRepositoryImplTest {
         Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
 
         Device createdDevice2 = deviceRepository.create(createdProject, device);
-        Assert.assertEquals(1, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
+        Assert.assertEquals(2, projectRepository.getProjectIotThingSize(createdProject.getId()).longValue());
     }
 
     @Test
     public void getById() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Assert.assertNull(deviceRepository.getById(1L));
 
@@ -149,14 +146,12 @@ public class DeviceRepositoryImplTest {
     public void getDevicesByProject() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Device d1 = deviceRepository.create(createdProject, device);
 
         device = new Device();
         device.setState(device_state);
         device.setStates(device_states);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Device d2 = deviceRepository.create(createdProject, device);
 
@@ -187,7 +182,6 @@ public class DeviceRepositoryImplTest {
     public void update() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Device createdDevice = deviceRepository.create(createdProject, device);
 
@@ -202,7 +196,6 @@ public class DeviceRepositoryImplTest {
     public void getByToken() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
         Device createdDevice = deviceRepository.create(createdProject, device);
 
         Assert.assertEquals(createdDevice, deviceRepository.getByToken(createdDevice.getToken()));
@@ -212,7 +205,6 @@ public class DeviceRepositoryImplTest {
     public void delete() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Assert.assertFalse(deviceRepository.delete(1L));
 
@@ -225,7 +217,6 @@ public class DeviceRepositoryImplTest {
     public void isExist() {
         User createdUser = createUser(user);
         Project createdProject = createProject(name, createdUser.getUsername(), title);
-        when(entityFactory.createDevice()).thenReturn(device);
 
         Assert.assertFalse(deviceRepository.isExist(1L));
 

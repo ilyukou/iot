@@ -6,7 +6,11 @@ import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Sensor;
 
+/**
+ * @author Ilyukou Ilya
+ */
 public class ThingWrapper {
+
     private ThingEnum type;
     private Object entity;
 
@@ -15,9 +19,12 @@ public class ThingWrapper {
             this.type = ThingEnum.device;
             this.entity = new DeviceDto((Device) iotThing);
 
-        } else if (iotThing.getClass().equals(Sensor.class)){
+        } else if (iotThing.getClass().equals(Sensor.class)) {
             this.type = ThingEnum.sensor;
             this.entity = new SensorDto((Sensor) iotThing);
+
+        } else {
+            throw new IllegalArgumentException("Not supported class: " + iotThing.getClass());
         }
     }
 

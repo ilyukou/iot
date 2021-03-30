@@ -1,12 +1,12 @@
 package by.grsu.iot.service.impl.pagination;
 
-import by.grsu.iot.model.domain.PaginationIotThing;
+import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.model.dto.thing.ThingEnum;
+import by.grsu.iot.model.service.PaginationIotThing;
 import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
-import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
 import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
@@ -66,11 +66,11 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
         List<IotThing> result = new ArrayList<>();
 
-        for (PaginationIotThing thing : requiredPageWithDeviceIds){
-            if (thing.getType().equals(ThingEnum.device)){
+        for (PaginationIotThing thing : requiredPageWithDeviceIds) {
+            if (thing.getType().equals(ThingEnum.device)) {
                 result.add(deviceRepository.getById(thing.getId()));
 
-            } else if(thing.getType().equals(ThingEnum.sensor)){
+            } else if (thing.getType().equals(ThingEnum.sensor)) {
                 result.add(sensorRepository.getById(thing.getId()));
 
             } else {

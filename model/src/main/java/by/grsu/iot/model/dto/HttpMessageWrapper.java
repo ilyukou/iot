@@ -4,6 +4,7 @@ package by.grsu.iot.model.dto;
  * Used by the wrapper for the returned object in order to supplement the response with some text message and status
  *
  * @param <T> any object which need to send from controller
+ * @author Ilyukou Ilya
  */
 public class HttpMessageWrapper<T> {
 

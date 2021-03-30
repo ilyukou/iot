@@ -2,8 +2,8 @@ package by.grsu.iot.api.controller;
 
 import by.grsu.iot.model.dto.HttpMessageEnum;
 import by.grsu.iot.model.dto.HttpMessageWrapper;
-import by.grsu.iot.model.dto.thing.device.DeviceState;
 import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
+import by.grsu.iot.model.dto.thing.device.DeviceState;
 import by.grsu.iot.model.exception.ConflictException;
 import by.grsu.iot.service.interf.DeviceStateService;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
@@ -52,8 +52,8 @@ public class DeviceStateController {
                     new DeviceState(deviceCrudService.getDeviceState(token)), TIME_OUT_MESSAGE, HttpStatus.OK));
         });
 
-        new Thread(){
-            public void run(){
+        new Thread() {
+            public void run() {
                 try {
                     LOGGER.trace("[GET] " + token);
 
@@ -61,7 +61,7 @@ public class DeviceStateController {
 
                     deferredResult.setResult(getDeferredResult(deviceState, OK_MESSAGE, HttpStatus.OK));
                 } catch (Exception e) {
-                    if (!(e instanceof ConflictException)){
+                    if (!(e instanceof ConflictException)) {
                         deviceStateService.removeDevice(token);
                     }
                     deferredResult.setErrorResult(getExceptionResponse(e));
@@ -88,8 +88,8 @@ public class DeviceStateController {
                     getDeferredResult(null, TIME_OUT_MESSAGE, HttpStatus.NO_CONTENT));
         });
 
-        new Thread(){
-            public void run(){
+        new Thread() {
+            public void run() {
                 try {
                     LOGGER.trace("[SET] " + token + " " + state);
 

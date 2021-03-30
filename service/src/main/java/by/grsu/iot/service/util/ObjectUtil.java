@@ -1,10 +1,10 @@
 package by.grsu.iot.service.util;
 
+import by.grsu.iot.model.dto.project.ProjectFormUpdate;
+import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.dto.thing.sensor.SensorFormUpdate;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
-import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 import by.grsu.iot.model.sql.Sensor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -93,7 +93,7 @@ public class ObjectUtil {
     public static Sensor updateField(Sensor sensor, SensorFormUpdate sensorFormUpdate) {
         Sensor s = SerializationUtils.clone(sensor);
 
-        if (sensorFormUpdate.getName() != null){
+        if (sensorFormUpdate.getName() != null) {
             s.setName(sensorFormUpdate.getName());
         }
 

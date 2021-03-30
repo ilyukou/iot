@@ -1,6 +1,10 @@
 package by.grsu.iot.repository.config;
 
+import org.apache.http.HttpHost;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -13,13 +17,17 @@ import org.springframework.core.env.Environment;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * Configuration ElasticSearch Client
+ *
+ * @author Ilyukou Ilya
+ */
 @PropertySource("classpath:application-repository.properties")
 @Configuration
 public class RepositoryElasticSearchConfig {
 
-    private static final String PORT_9200 = "by.grsu.iot.elasticsearch.port";
+    private static final String PORT = "by.grsu.iot.elasticsearch.port";
     private static final String HOST = "by.grsu.iot.elasticsearch.host";
-    private static final Integer PORT_9300 = 9300;
 
     private final Environment env;
 
@@ -27,23 +35,24 @@ public class RepositoryElasticSearchConfig {
         this.env = env;
     }
 
-//    @Bean
-//    public RestHighLevelClient restHighLevelClient() {
-//        Integer port = Integer.parseInt(env.getProperty(PORT_9200));
-//        RestClientBuilder builder = RestClient.builder(
-//                new HttpHost(env.getProperty(HOST), port));
-//        return new RestHighLevelClient(builder);
-//    }
+    @Bean
+    public RestHighLevelClient restHighLevelClient() {
+        RestClientBuilder builder = RestClient.builder(
+                new HttpHost(env.getProperty(HOST), 9200));
+        return new RestHighLevelClient(builder);
+    }
 
-    // FIXME
     @Bean
     public Client client() throws UnknownHostException {
         Settings elasticSearchSettings = Settings.builder()
 //                .put("client.transport.sniff", true)
-                //  .put("Content-type","application/json")
+//                .put("Content-type","application/json")
                 .put("cluster.name", "elasticsearch").build();
         TransportClient client = new PreBuiltTransportClient(elasticSearchSettings);
-        client.addTransportAddress(new TransportAddress(InetAddress.getByName(env.getProperty(HOST)), 9300));
+        client.addTransportAddress(new TransportAddress(InetAddress
+                .getByName(
+                        env.getProperty(HOST)),
+                Integer.valueOf(env.getProperty(PORT))));
 
         return client;
     }
