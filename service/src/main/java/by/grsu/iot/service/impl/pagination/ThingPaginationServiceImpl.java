@@ -9,7 +9,7 @@ import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.service.interf.pagination.ThingPaginationService;
-import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
+import by.grsu.iot.access.interf.pagination.ThingPaginationAccessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     private final ProjectRepository projectRepository;
     private final DeviceRepository deviceRepository;
-    private final DeviceAccessValidationService deviceAccessValidationService;
+    private final ThingPaginationAccessService thingPaginationAccessService;
     private final SensorRepository sensorRepository;
 
     @Value("${project.thing.per-page}")
@@ -35,18 +35,19 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
     public ThingPaginationServiceImpl(
             ProjectRepository projectRepository,
             DeviceRepository deviceRepository,
-            DeviceAccessValidationService deviceAccessValidationService,
-            SensorRepository sensorRepository) {
+            ThingPaginationAccessService thingPaginationAccessService,
+            SensorRepository sensorRepository
+    ) {
         this.projectRepository = projectRepository;
         this.deviceRepository = deviceRepository;
-        this.deviceAccessValidationService = deviceAccessValidationService;
+        this.thingPaginationAccessService = thingPaginationAccessService;
         this.sensorRepository = sensorRepository;
     }
 
     // in current version Device is a only IotThing
     @Override
     public List<? extends IotThing> getThingsFromProjectPage(Long projectId, Integer page, String username) {
-        deviceAccessValidationService.checkPageReadAccess(projectId, username);
+        thingPaginationAccessService.checkPageReadAccess(projectId, username);
 
         List<PaginationIotThing> things = deviceRepository.getProjectDeviceIds(projectId)
                 .stream()
@@ -86,7 +87,7 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     @Override
     public PaginationInfo getPaginationInfo(Long projectId, String username) {
-        deviceAccessValidationService.checkPaginationInfoReadAccess(projectId, username);
+        thingPaginationAccessService.checkPaginationInfoReadAccess(projectId, username);
 
         Integer size = projectRepository.getProjectIotThingSize(projectId);
 

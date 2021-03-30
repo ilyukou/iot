@@ -1,4 +1,4 @@
-package by.grsu.iot.service.validation;
+package by.grsu.iot.api.validation;
 
 import by.grsu.iot.model.annotation.CollectionValidation;
 import by.grsu.iot.model.annotation.StringValidation;

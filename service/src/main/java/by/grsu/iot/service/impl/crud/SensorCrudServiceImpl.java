@@ -6,7 +6,7 @@ import by.grsu.iot.model.sql.Sensor;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.service.interf.crud.SensorCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.service.validation.access.interf.SensorAccessValidationService;
+import by.grsu.iot.access.interf.crud.SensorAccessService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,23 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class SensorCrudServiceImpl implements SensorCrudService {
 
     private final SensorRepository sensorRepository;
-    private final SensorAccessValidationService sensorAccessValidationService;
+    private final SensorAccessService sensorAccessService;
 
-    public SensorCrudServiceImpl(SensorRepository sensorRepository, SensorAccessValidationService sensorAccessValidationService) {
+    public SensorCrudServiceImpl(SensorRepository sensorRepository, SensorAccessService sensorAccessService) {
         this.sensorRepository = sensorRepository;
-        this.sensorAccessValidationService = sensorAccessValidationService;
+        this.sensorAccessService = sensorAccessService;
     }
 
     @Override
     public Sensor create(SensorForm sensorForm, String username) {
-        sensorAccessValidationService.checkCreateAccess(username, sensorForm.getProject());
+        sensorAccessService.checkCreateAccess(username, sensorForm.getProject());
 
         return sensorRepository.create(sensorForm.getProject(), sensorForm.getName());
     }
 
     @Override
     public Sensor update(Long id, SensorFormUpdate sensorFormUpdate, String username) {
-        sensorAccessValidationService.checkUpdateAccess(username, id);
+        sensorAccessService.checkUpdateAccess(username, id);
 
         Sensor sensor = getById(id, username);
 
@@ -42,14 +42,14 @@ public class SensorCrudServiceImpl implements SensorCrudService {
 
     @Override
     public Sensor getById(Long id, String username) {
-        sensorAccessValidationService.checkReadAccess(username, id);
+        sensorAccessService.checkReadAccess(username, id);
 
         return sensorRepository.getById(id);
     }
 
     @Override
     public void delete(Long id, String username) {
-        sensorAccessValidationService.checkDeleteAccess(username, id);
+        sensorAccessService.checkDeleteAccess(username, id);
 
         sensorRepository.delete(id);
     }

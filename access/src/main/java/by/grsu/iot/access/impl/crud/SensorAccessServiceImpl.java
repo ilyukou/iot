@@ -1,18 +1,18 @@
-package by.grsu.iot.service.validation.access.impl;
+package by.grsu.iot.access.impl.crud;
 
 import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.SensorRepository;
-import by.grsu.iot.service.validation.access.interf.SensorAccessValidationService;
+import by.grsu.iot.access.interf.crud.SensorAccessService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SensorAccessValidationServiceImpl implements SensorAccessValidationService {
+public class SensorAccessServiceImpl implements SensorAccessService {
 
     private final SensorRepository sensorRepository;
     private final ProjectRepository projectRepository;
 
-    public SensorAccessValidationServiceImpl(
+    public SensorAccessServiceImpl(
             SensorRepository sensorRepository,
             ProjectRepository projectRepository
     ) {

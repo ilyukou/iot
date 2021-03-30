@@ -9,7 +9,7 @@ import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.service.validation.access.interf.DeviceAccessValidationService;
+import by.grsu.iot.access.interf.crud.DeviceAccessService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,21 +21,21 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
-    private final DeviceAccessValidationService deviceAccessValidationService;
+    private final DeviceAccessService deviceAccessService;
 
     public DeviceCrudServiceImpl(
             DeviceRepository deviceRepository,
             ProjectRepository projectRepository,
-            DeviceAccessValidationService deviceAccessValidationService) {
+            DeviceAccessService deviceAccessService) {
         this.deviceRepository = deviceRepository;
         this.projectRepository = projectRepository;
-        this.deviceAccessValidationService = deviceAccessValidationService;
+        this.deviceAccessService = deviceAccessService;
     }
 
 
     @Override
     public Device create(DeviceForm deviceForm, String username) {
-        deviceAccessValidationService.checkCreateAccess(username, deviceForm.getProject());
+        deviceAccessService.checkCreateAccess(username, deviceForm.getProject());
 
         checkStates(deviceForm.getState(), deviceForm.getStates());
 
@@ -44,21 +44,21 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
     @Override
     public Device getById(Long id, String username) {
-        deviceAccessValidationService.checkReadAccess(username, id);
+        deviceAccessService.checkReadAccess(username, id);
 
         return deviceRepository.getById(id);
     }
 
     @Override
     public void delete(Long id, String username) {
-        deviceAccessValidationService.checkDeleteAccess(username, id);
+        deviceAccessService.checkDeleteAccess(username, id);
 
         deviceRepository.delete(id);
     }
 
     @Override
     public Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username) {
-        deviceAccessValidationService.checkUpdateAccess(username, id);
+        deviceAccessService.checkUpdateAccess(username, id);
 
         Device device = deviceRepository.getById(id);
 
