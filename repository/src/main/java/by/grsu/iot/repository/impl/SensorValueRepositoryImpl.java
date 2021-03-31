@@ -1,13 +1,10 @@
 package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
-import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.repository.util.ElasticsearchUtil;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -18,8 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Repository
@@ -47,27 +44,41 @@ public class SensorValueRepositoryImpl implements SensorValueRepository {
 
     @Override
     public List<SensorValueElasticsearch> get(String token, Long from, Long to, Integer size) throws IOException {
-        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.matchBoolPrefixQuery("token", token))
-                .must(QueryBuilders.rangeQuery("time")
-                        .gte(from)
-                        .lte(to));
+        MultiSearchRequest request = new MultiSearchRequest();
 
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(queryBuilder);
-        searchSourceBuilder.size(getSensorValueElasticsearchCount(token).intValue());
+        double step = ((double) (to - from)) / size;
 
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH);
-        searchRequest.source(searchSourceBuilder);
-        searchRequest.indices(SENSOR_VALUE_DOCUMENT_NAME);
+        for (int i = 0; i < size; i++) {
+            Double f = from + i * step;
+            Double t = from + (i + 1) * step;
+            QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+                    .must(QueryBuilders.matchBoolPrefixQuery("token", token))
+                    .must(QueryBuilders.rangeQuery("time")
+                            .gte(f)
+                            .lt(t));
 
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchSourceBuilder builder = new SearchSourceBuilder();
+            builder.size(1);
+            builder.query(queryBuilder);
 
-        return CollectionUtil.samplingList(ElasticsearchUtil.convertToList(response), size.doubleValue())
-                .stream()
-                .sorted()
-                .collect(Collectors.toList());
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH);
+            searchRequest.indices(SENSOR_VALUE_DOCUMENT_NAME);
+            searchRequest.source(builder);
+
+            request.add(searchRequest);
+        }
+
+        MultiSearchResponse response = restHighLevelClient.multiSearch(request, RequestOptions.DEFAULT);
+
+        List<SensorValueElasticsearch> values = new ArrayList<>();
+
+        for (MultiSearchResponse.Item item : response.getResponses()){
+            if (item.getResponse().getHits().getTotalHits().value > 0){
+                values.addAll(ElasticsearchUtil.convertToList(item.getResponse()));
+            }
+        }
+        return values;
     }
 
     @Override
@@ -97,5 +108,4 @@ public class SensorValueRepositoryImpl implements SensorValueRepository {
 
         return restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
     }
-
 }

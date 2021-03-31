@@ -66,25 +66,26 @@ public class SensorValueController {
         return new ResponseEntity<>(sensorValueService.get(token, from, to), HttpStatus.OK);
     }
 
+    // FIXME - devtools remove in release
     @GetMapping
     public ResponseEntity<Void> random(
-            @RequestParam Long from,
-            @RequestParam Long step,
+            @RequestParam Long fromTime,
+            @RequestParam Long stepTime,
             @RequestParam Long count,
-            @RequestParam String token
-    ) throws InterruptedException {
-        Long to = from + step * count;
+            @RequestParam String token,
+            @RequestParam Double fromValue,
+            @RequestParam Double stepValue
+    ) {
 
-        for (long i = from; i < to; i += step) {
-            SensorValue sensorValue = new SensorValue();
-            sensorValue.setValue((double) i);
-            sensorValue.setTime(TimeUtil.getCurrentDate().getTime());
+        for (long i = 0; i < count; i ++) {
+
+            Double value = fromValue + (i * stepValue);
+            Long time = fromTime + (i * stepTime);
+
+            SensorValue sensorValue = new SensorValue(time, value);
 
             sensorValueService.add(token, sensorValue);
-
-            Thread.sleep(1L);
         }
-
 
         return ok().build();
     }
