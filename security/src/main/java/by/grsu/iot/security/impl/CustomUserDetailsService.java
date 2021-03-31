@@ -1,4 +1,4 @@
-package by.grsu.iot.service.security;
+package by.grsu.iot.security.impl;
 
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.interf.UserRepository;

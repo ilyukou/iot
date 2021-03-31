@@ -1,7 +1,7 @@
-package by.grsu.iot.service.config;
+package by.grsu.iot.security.config;
 
-import by.grsu.iot.service.security.jwt.JwtSecurityConfigurer;
-import by.grsu.iot.service.security.jwt.JwtTokenProvider;
+import by.grsu.iot.security.jwt.JwtSecurityConfigurer;
+import by.grsu.iot.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

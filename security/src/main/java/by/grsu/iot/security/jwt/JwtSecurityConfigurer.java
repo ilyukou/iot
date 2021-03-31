@@ -1,4 +1,4 @@
-package by.grsu.iot.service.security.jwt;
+package by.grsu.iot.security.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

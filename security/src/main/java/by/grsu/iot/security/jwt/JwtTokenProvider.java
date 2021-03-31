@@ -1,4 +1,4 @@
-package by.grsu.iot.service.security.jwt;
+package by.grsu.iot.security.jwt;
 
 import by.grsu.iot.model.sql.Role;
 import io.jsonwebtoken.*;

@@ -6,7 +6,7 @@ import by.grsu.iot.model.dto.exception.NotAccessForOperationApplicationException
 import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
 import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
-import by.grsu.iot.service.security.jwt.InvalidJwtAuthenticationException;
+import by.grsu.iot.security.jwt.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
