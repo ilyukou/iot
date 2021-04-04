@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.thing.sensor;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 
@@ -10,6 +11,7 @@ import by.grsu.iot.model.dto.DataTransferObject;
  */
 public class SensorFormUpdate implements DataTransferObject {
 
+    @RequiredField
     @StringValidation(min = 2, max = 16, spaceAllowed = true)
     private String name;
 

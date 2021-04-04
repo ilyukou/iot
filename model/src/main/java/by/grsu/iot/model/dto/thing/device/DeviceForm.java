@@ -1,6 +1,7 @@
 package by.grsu.iot.model.dto.thing.device;
 
 import by.grsu.iot.model.annotation.CollectionValidation;
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.sql.Device;
@@ -16,12 +17,15 @@ public class DeviceForm implements DataTransferObject {
 
     private Long project;
 
+    @RequiredField
     @StringValidation(min = 2, max = 16)
     private String state;
 
+    @RequiredField
     @StringValidation(min = 2, max = 16, spaceAllowed = true)
     private String name;
 
+    @RequiredField
     @CollectionValidation(minSize = 2, maxSize = 10)
     @StringValidation(min = 2, max = 16)
     private List<String> states;

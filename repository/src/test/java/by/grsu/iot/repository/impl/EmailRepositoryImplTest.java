@@ -3,16 +3,20 @@ package by.grsu.iot.repository.impl;
 import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.repository.RepositoryApplication;
 import by.grsu.iot.repository.interf.EmailRepository;
+import by.grsu.iot.repository.interf.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.TimeUnit;
+
+import static org.mockito.Mockito.when;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
@@ -21,6 +25,12 @@ public class EmailRepositoryImplTest {
 
     private final String address = "email@email.com";
     private final String second_address = "email2@email.com";
+    private final String username = "username";
+    private final Integer code = 123456;
+
+    @MockBean
+    private UserRepository userRepository;
+
     @Autowired
     private EmailRepository emailRepository;
     private Email email;
@@ -29,6 +39,7 @@ public class EmailRepositoryImplTest {
     public void setUp() {
         email = new Email();
         email.setAddress(address);
+        email.setCode(code);
     }
 
     @Test
@@ -110,5 +121,36 @@ public class EmailRepositoryImplTest {
         Assert.assertFalse(emailRepository.isExist(address));
         Email created = emailRepository.create(email);
         Assert.assertTrue(emailRepository.isExist(address));
+    }
+
+    @Test
+    public void changeAddress(){
+        Email created = emailRepository.create(email);
+
+        when(userRepository.getEmailId(username)).thenReturn(created.getId());
+
+        Assert.assertEquals(address, emailRepository.getById(created.getId()).getAddress());
+        emailRepository.changeAddress(username, second_address);
+        Assert.assertEquals(second_address, emailRepository.getById(created.getId()).getAddress());
+    }
+
+    @Test
+    public void getCode(){
+        Email created = emailRepository.create(email);
+        when(userRepository.getEmailId(username)).thenReturn(created.getId());
+
+        Assert.assertEquals(code, emailRepository.getCode(username));
+    }
+
+    @Test
+    public void createCode(){
+        Email created = emailRepository.create(email);
+        when(userRepository.getEmailId(username)).thenReturn(created.getId());
+        Assert.assertEquals(code, emailRepository.getCode(username));
+
+        emailRepository.createCode(created.getAddress());
+
+        Assert.assertNotNull(emailRepository.getCode(username));
+        Assert.assertNotEquals(code, emailRepository.getCode(username));
     }
 }

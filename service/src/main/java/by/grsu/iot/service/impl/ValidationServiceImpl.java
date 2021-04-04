@@ -1,5 +1,6 @@
 package by.grsu.iot.service.impl;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.dto.validaation.FieldStringValidation;
@@ -36,8 +37,21 @@ public class ValidationServiceImpl implements ValidationService {
             Map<String, FieldStringValidation> fieldsMap = new HashMap<>();
 
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(StringValidation.class)) {
-                    fieldsMap.put(field.getName(), new FieldStringValidation(field.getAnnotation(StringValidation.class)));
+                FieldStringValidation fieldStringValidation = new FieldStringValidation();
+                int i = 0;
+
+                if (field.isAnnotationPresent(StringValidation.class)){
+                    fieldStringValidation.updateField(field.getAnnotation(StringValidation.class));
+                    i++;
+                }
+
+                if (field.isAnnotationPresent(RequiredField.class)){
+                    fieldStringValidation.updateField(field.getAnnotation(RequiredField.class));
+                    i++;
+                }
+
+                if (i > 0){
+                    fieldsMap.put(field.getName(), fieldStringValidation);
                 }
             }
 

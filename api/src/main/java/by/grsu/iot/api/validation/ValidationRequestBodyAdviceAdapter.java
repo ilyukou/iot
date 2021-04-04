@@ -1,6 +1,7 @@
 package by.grsu.iot.api.validation;
 
 import by.grsu.iot.model.annotation.CollectionValidation;
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.service.util.EntityFieldValidationUtil;
 import by.grsu.iot.service.util.ObjectUtil;
@@ -28,6 +29,10 @@ public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter,
                                 Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), RequiredField.class)){
+            EntityFieldValidationUtil.checkRequiredField(body);
+        }
 
         if (ObjectUtil.hasClassAnnotatedField(body.getClass(), StringValidation.class)) {
             EntityFieldValidationUtil.validateString(body);

@@ -127,7 +127,7 @@ public class SensorValueRepositoryImplTest {
 
         List<SensorValueElasticsearch> result = new ArrayList<>();
 
-        result = sensorValueRepository.get(token, t1, t3, 3);
+        result = sensorValueRepository.get(token, t1, t3 + 1, 3);
         Assert.assertEquals(3L, result.size());
         Assert.assertEquals(e1, result.get(0));
         Assert.assertEquals(e2, result.get(1));
@@ -138,7 +138,7 @@ public class SensorValueRepositoryImplTest {
         Assert.assertEquals(e1, result.get(0));
         Assert.assertEquals(e2, result.get(1));
 
-        result = sensorValueRepository.get(token, t1, t2, 3);
+        result = sensorValueRepository.get(token, t1, t2 + 1, 3);
         Assert.assertEquals(2L, result.size());
         Assert.assertEquals(e1, result.get(0));
         Assert.assertEquals(e2, result.get(1));

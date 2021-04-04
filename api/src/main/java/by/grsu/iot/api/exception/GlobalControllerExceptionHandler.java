@@ -6,12 +6,14 @@ import by.grsu.iot.model.dto.exception.NotAccessForOperationApplicationException
 import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
 import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.model.exception.NotActiveEntityApplicationException;
 import by.grsu.iot.security.jwt.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,22 +40,28 @@ public class GlobalControllerExceptionHandler {
                 , HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<ApplicationExceptionDto> responseFor401() {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+    @ExceptionHandler({InvalidJwtAuthenticationException.class})
+    public ResponseEntity<ApplicationExceptionDto> invalidJwtAuthenticationException(final InvalidJwtAuthenticationException exception) {
         return new ResponseEntity<>(
-                new ApplicationExceptionDto(new Date(), "Authentication exception")
+                new ApplicationExceptionDto(new Date(), exception.getMessage())
                 , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
-    @ExceptionHandler({InvalidJwtAuthenticationException.class})
-    public ResponseEntity<ApplicationExceptionDto> invalidJwtAuthenticationException(final InvalidJwtAuthenticationException exception) {
-        return responseFor401();
+    @ExceptionHandler({UsernameNotFoundException.class})
+    public ResponseEntity<ApplicationExceptionDto> authenticationException(final UsernameNotFoundException exception) {
+        return new ResponseEntity<>(
+                new ApplicationExceptionDto(new Date(), exception.getMessage())
+                , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<ApplicationExceptionDto> authenticationException(final AuthenticationException exception) {
-        return responseFor401();
+        return new ResponseEntity<>(
+                new ApplicationExceptionDto(new Date(), exception.getMessage())
+                , HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
@@ -97,5 +105,14 @@ public class GlobalControllerExceptionHandler {
         return new ResponseEntity<>(
                 new ApplicationExceptionDto(new Date(), exception.getMessage())
                 , HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)  // 405
+    @ExceptionHandler({NotActiveEntityApplicationException.class})
+    public ResponseEntity<ApplicationExceptionDto> validationErrorException(final NotActiveEntityApplicationException exception,
+                                                                            final HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ApplicationExceptionDto(new Date(), exception.getMessage())
+                , HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

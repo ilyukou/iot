@@ -4,6 +4,7 @@ import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.RoleRepository;
 import by.grsu.iot.repository.util.StringUtil;
 import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.NumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ public class EntityFactory {
     private static final String DEFAULT_STATE = "off";
     private static final List<String> DEFAULT_STATES = Arrays.asList("off", "on");
     private static RoleRepository roleRepository;
-    private static Integer EMAIL_TOKEN_LENGTH;
+    private static Integer EMAIL_CODE_LENGTH;
 
     private static Long THING_TOKEN_LENGTH;
 
@@ -49,6 +50,8 @@ public class EntityFactory {
 
     public static User createUser(String address) {
         User user = new User(createBaseEntity());
+
+        user.setStatus(Status.NOT_ACTIVE);
 
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
@@ -83,7 +86,7 @@ public class EntityFactory {
         Email email = new Email(createBaseEntity());
 
         email.setAddress(address);
-        email.setCode(StringUtil.generateString(EMAIL_TOKEN_LENGTH));
+        email.setCode(NumberUtil.generateNumber(EMAIL_CODE_LENGTH));
 
         return email;
     }
@@ -101,9 +104,9 @@ public class EntityFactory {
         EntityFactory.roleRepository = roleRepository;
     }
 
-    @Value("${by.grsu.iot.repository.email.token.length}")
-    public void setEmailTokenLength(Integer emailTokenLength) {
-        EntityFactory.EMAIL_TOKEN_LENGTH = emailTokenLength;
+    @Value("${by.grsu.iot.repository.email.code.length}")
+    public void setEmailTokenLength(Integer emailCodeLength) {
+        EntityFactory.EMAIL_CODE_LENGTH = emailCodeLength;
     }
 
     @Value("${by.grsu.iot.repository.device.token.length}")

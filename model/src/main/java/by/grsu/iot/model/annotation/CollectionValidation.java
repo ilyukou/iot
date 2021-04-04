@@ -23,9 +23,4 @@ public @interface CollectionValidation {
      * @return collection size must be lower or equal to
      */
     int maxSize() default Integer.MAX_VALUE;
-
-    /**
-     * @return required collection or not
-     */
-    boolean required() default true;
 }

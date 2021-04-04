@@ -27,6 +27,11 @@
             <artifactId>model</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>by.grsu</groupId>
+            <artifactId>util</artifactId>
+            <version>0.1</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/fr.pilato.spring/spring-elasticsearch -->
         <dependency>

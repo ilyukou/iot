@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.project;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 
@@ -10,10 +11,11 @@ import by.grsu.iot.model.dto.DataTransferObject;
  */
 public class ProjectForm implements DataTransferObject {
 
+    @RequiredField
     @StringValidation(min = 4, max = 16, spaceAllowed = true)
     private String name;
 
-    @StringValidation(min = 0, max = 128, spaceAllowed = true, required = false)
+    @StringValidation(min = 0, max = 128, spaceAllowed = true)
     private String title;
 
     public ProjectForm(String name, String title) {

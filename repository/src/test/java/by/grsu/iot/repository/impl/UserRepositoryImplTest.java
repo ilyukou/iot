@@ -29,6 +29,7 @@ public class UserRepositoryImplTest {
     private final String password = "password";
     private final String address = "email@email.com";
     private final RoleType roleType = RoleType.User;
+    private final Long EMAIL_ID = 1L;
 
     @MockBean
     private EmailRepository emailRepository;
@@ -48,6 +49,7 @@ public class UserRepositoryImplTest {
 
         email = new Email();
         email.setAddress(address);
+//        email.setId(EMAIL_ID);
 
         user.setEmail(email);
 
@@ -132,5 +134,16 @@ public class UserRepositoryImplTest {
         User created = userRepository.create(user);
 
         Assert.assertTrue(userRepository.isExistByUsername(username));
+    }
+
+    @Test
+    public void getEmailId(){
+        when(emailRepository.create(email)).thenReturn(email);
+        when(emailRepository.update(email)).thenReturn(email);
+
+        User created = userRepository.create(user);
+        when(emailRepository.create(email)).thenReturn(email);
+
+        Assert.assertEquals(EMAIL_ID, userRepository.getEmailId(created.getUsername()));
     }
 }

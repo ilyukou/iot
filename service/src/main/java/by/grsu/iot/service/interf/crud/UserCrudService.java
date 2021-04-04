@@ -1,8 +1,6 @@
 package by.grsu.iot.service.interf.crud;
 
-import by.grsu.iot.model.dto.user.AuthenticationRequest;
-import by.grsu.iot.model.dto.user.AuthenticationUser;
-import by.grsu.iot.model.dto.user.RegistrationRequest;
+import by.grsu.iot.model.dto.user.*;
 import by.grsu.iot.model.sql.User;
 
 /**
@@ -35,4 +33,10 @@ public interface UserCrudService {
      * @return {@link User} with such {@link User#getUsername()}
      */
     User getByUsername(final String username);
+
+    void activateUser(ActivateUser data);
+
+    void update(String username, UserUpdateForm form);
+
+    void restorePassword(RestorePasswordForm data);
 }

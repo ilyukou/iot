@@ -27,11 +27,6 @@ public @interface StringValidation {
     int max() default Integer.MAX_VALUE;
 
     /**
-     * @return required field or not
-     */
-    boolean required() default true;
-
-    /**
      * @return are spaces allowed in the string
      */
     boolean spaceAllowed() default false;

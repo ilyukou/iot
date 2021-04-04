@@ -13,6 +13,10 @@
         <module>service</module>
         <module>access</module>
         <module>security</module>
+        <module>email</module>
+        <module>async</module>
+        <module>util</module>
+        <module>producer</module>
     </modules>
     <packaging>pom</packaging>
 

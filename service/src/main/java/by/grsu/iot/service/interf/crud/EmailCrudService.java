@@ -1,6 +1,7 @@
 package by.grsu.iot.service.interf.crud;
 
 
+import by.grsu.iot.model.dto.email.SendEmailCodeRequest;
 import by.grsu.iot.model.sql.Email;
 
 /**
@@ -25,4 +26,8 @@ public interface EmailCrudService {
      * @return created {@link Email}
      */
     Email create(Email email);
+
+    Integer changeEmailAddress(String username, String address);
+
+    void sendEmailCode(SendEmailCodeRequest data);
 }

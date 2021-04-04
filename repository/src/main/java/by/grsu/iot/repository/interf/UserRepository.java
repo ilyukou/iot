@@ -1,5 +1,6 @@
 package by.grsu.iot.repository.interf;
 
+import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.User;
 
 /**
@@ -64,5 +65,12 @@ public interface UserRepository {
      * @return {@link User#getId()} or {@code null}
      */
     Long getUserId(String username);
+
+    /**
+     * Get {@link Email#getId()}
+     * @param username {@link User#getUsername()}
+     * @return {@link Email#getId()}
+     */
+    Long getEmailId(String username);
 }
 

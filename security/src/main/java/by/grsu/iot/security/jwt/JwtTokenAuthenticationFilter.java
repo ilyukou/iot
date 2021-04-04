@@ -29,33 +29,19 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
 
         String token = jwtTokenProvider.resolveToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication auth = jwtTokenProvider.getAuthentication(token);
+        try {
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                Authentication auth = jwtTokenProvider.getAuthentication(token);
 
-            if (auth != null) {
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                if (auth != null) {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
+            return ;
         }
-        filterChain.doFilter(req, res);
 
-//        try {
-//            if (token != null && jwtTokenProvider.validateToken(token)) {
-//                Authentication auth = jwtTokenProvider.getAuthentication(token);
-//
-//                if (auth != null) {
-//                    SecurityContextHolder.getContext().setAuthentication(auth);
-//                }
-//            }
-//            filterChain.doFilter(req, res);
-//        } catch (Exception e) {
-//
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.getWriter().write(
-//                    new ObjectMapper().writeValueAsString(
-//                            new ExceptionResponse(new Date(), "Authentication exception")
-//                    ));
-//            response.setContentType("text/json");
-//            response.getWriter().flush();
-//        }
+        filterChain.doFilter(req, res);
     }
 }

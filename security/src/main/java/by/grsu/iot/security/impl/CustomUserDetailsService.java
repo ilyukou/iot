@@ -1,5 +1,6 @@
 package by.grsu.iot.security.impl;
 
+import by.grsu.iot.model.exception.NotActiveEntityApplicationException;
 import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.interf.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +28,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (user == null) {
             throw new UsernameNotFoundException("Username: " + username + " not found");
+        }
+
+        if (!user.isActive()){
+            throw new NotActiveEntityApplicationException("User not active");
         }
 
         return new org.springframework.security.core.userdetails.User(

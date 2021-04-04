@@ -2,6 +2,7 @@ package by.grsu.iot.repository.interf;
 
 
 import by.grsu.iot.model.sql.Email;
+import by.grsu.iot.model.sql.User;
 
 /**
  * Repository for CRUD operation with {@link Email}
@@ -49,4 +50,26 @@ public interface EmailRepository {
      * @return {@code true} if exist or {@code false} if not exist
      */
     boolean isExist(String address);
+
+    /**
+     * Change address for {@link User#getUsername()}
+     * @param username {@link User#getUsername()}
+     * @param address new address for {@link User}
+     * @return updated {@link Email}
+     */
+    Email changeAddress(String username, String address);
+
+    /**
+     * Get code {@link Email#getCode()}
+     * @param username {@link User}
+     * @return {@link Email#getCode()}
+     */
+    Integer getCode(String username);
+
+    /**
+     * Create code for {@link Email}
+     * @param address {@link Email#getAddress()}
+     * @return {@link Email#getCode()}
+     */
+    Integer createCode(String address);
 }

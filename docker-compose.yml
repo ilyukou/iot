@@ -56,15 +56,15 @@ services:
       timeout: 10s
       retries: 5
 
-#  activemq:
-#    image: rmohr/activemq:5.15.6
-#    container_name: activemq
-#    ports:
-#      - "61616:61616"
-#      - "8162:8162"
-#    restart: always
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "http://localhost:61617" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 5
+  activemq:
+    image: rmohr/activemq:5.15.6
+    container_name: activemq
+    ports:
+      - "61616:61616"
+      - "8162:8162"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:61617" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5

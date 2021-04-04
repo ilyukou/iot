@@ -15,12 +15,12 @@ public class Email extends BaseEntity {
 
     private String address;
 
-    private String code;
+    private Integer code;
 
     @OneToOne(mappedBy = "email")
     private User user;
 
-    public Email(Long id, Date created, Date updated, Status status, String address, String code, User user) {
+    public Email(Long id, Date created, Date updated, Status status, String address, Integer code, User user) {
         super(id, created, updated, status);
         this.address = address;
         this.code = code;
@@ -49,11 +49,11 @@ public class Email extends BaseEntity {
         this.address = address;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

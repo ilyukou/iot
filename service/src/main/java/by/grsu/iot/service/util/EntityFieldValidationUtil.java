@@ -1,8 +1,11 @@
 package by.grsu.iot.service.util;
 
 import by.grsu.iot.model.annotation.CollectionValidation;
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -14,6 +17,8 @@ import java.util.Collection;
  */
 public class EntityFieldValidationUtil {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityFieldValidationUtil.class);
+
     public static void validateString(Object object) {
         ObjectUtil.getAnnotationFields(object, StringValidation.class)
                 .forEach(field -> EntityFieldValidationUtil.validateObjectField(field, object));
@@ -24,11 +29,8 @@ public class EntityFieldValidationUtil {
 
         Object fieldValue = getValue(field, object);
 
-        if (annotation.required() && fieldValue == null) {
-            throw new BadRequestApplicationException(field.getName(), field.getName() + " required");
-        }
-
-        if (!annotation.required() && fieldValue == null) {
+        if (fieldValue == null) {
+            LOGGER.trace("Field value is null: " + fieldValue);
             return;
         }
 
@@ -89,6 +91,10 @@ public class EntityFieldValidationUtil {
 
         Object fieldValue = getValue(field, object);
 
+        if (fieldValue == null){
+            return;
+        }
+
         Collection<?> collection;
 
         try {
@@ -104,13 +110,6 @@ public class EntityFieldValidationUtil {
     public static void validateCollectionFieldByParam(
             CollectionValidation annotation, Collection<?> collection, Object fieldValue, Field field
     ) {
-        if (annotation.required() && fieldValue == null) {
-            throw new BadRequestApplicationException(field.getName(), field.getName() + " required");
-        }
-
-        if (!annotation.required() && fieldValue == null) {
-            return;
-        }
 
         if (collection.size() < annotation.minSize()) {
             throw new BadRequestApplicationException(field.getName(),
@@ -122,6 +121,21 @@ public class EntityFieldValidationUtil {
             throw new BadRequestApplicationException(field.getName(),
                     "Collection size is " + collection.size() + " and more than " + annotation.minSize());
 
+        }
+    }
+
+    public static void checkRequiredField(Object object) {
+        ObjectUtil.getAnnotationFields(object, RequiredField.class)
+                .forEach(field -> EntityFieldValidationUtil.checkRequiredField(field, object));
+    }
+
+    private static void checkRequiredField(Field field, Object object){
+        RequiredField annotation = field.getAnnotation(RequiredField.class);
+
+        Object fieldValue = getValue(field, object);
+
+        if (annotation.required() && fieldValue == null) {
+            throw new BadRequestApplicationException(field.getName(), field.getName() + " required");
         }
     }
 }

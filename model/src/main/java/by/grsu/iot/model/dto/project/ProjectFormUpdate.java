@@ -10,10 +10,10 @@ import by.grsu.iot.model.dto.DataTransferObject;
  */
 public class ProjectFormUpdate implements DataTransferObject {
 
-    @StringValidation(min = 4, max = 16, spaceAllowed = true, required = false)
+    @StringValidation(min = 4, max = 16, spaceAllowed = true)
     private String name;
 
-    @StringValidation(min = 0, max = 128, spaceAllowed = true, required = false)
+    @StringValidation(min = 0, max = 128, spaceAllowed = true)
     private String title;
 
     public ProjectFormUpdate(String name, String title) {

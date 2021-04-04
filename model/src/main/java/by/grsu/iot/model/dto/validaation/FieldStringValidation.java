@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.validaation;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 
 /**
@@ -12,13 +13,13 @@ public class FieldStringValidation {
 
     private Integer min;
     private Integer max;
-    private Boolean required;
+    private Boolean required = false;
     private Boolean spaceAllowed;
 
-    public FieldStringValidation(StringValidation stringValidation) {
+    public FieldStringValidation(StringValidation stringValidation, RequiredField requiredField) {
         this.min = stringValidation.min();
         this.max = stringValidation.max();
-        this.required = stringValidation.required();
+        this.required = requiredField.required();
         this.spaceAllowed = stringValidation.spaceAllowed();
     }
 
@@ -55,5 +56,15 @@ public class FieldStringValidation {
 
     public void setSpaceAllowed(Boolean spaceAllowed) {
         this.spaceAllowed = spaceAllowed;
+    }
+
+    public void updateField(StringValidation stringValidation) {
+        this.min = stringValidation.min();
+        this.max = stringValidation.max();
+        this.spaceAllowed = stringValidation.spaceAllowed();
+    }
+
+    public void updateField(RequiredField requiredField) {
+        this.required = requiredField.required();
     }
 }

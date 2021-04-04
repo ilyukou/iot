@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.user;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 
@@ -10,9 +11,11 @@ import by.grsu.iot.model.dto.DataTransferObject;
  */
 public class AuthenticationRequest implements DataTransferObject {
 
+    @RequiredField
     @StringValidation(min = 5, max = 32)
     private String username;
 
+    @RequiredField
     @StringValidation(min = 8, max = 128)
     private String password;
 

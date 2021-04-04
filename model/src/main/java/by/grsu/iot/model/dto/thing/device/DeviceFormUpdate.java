@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class DeviceFormUpdate implements DataTransferObject {
 
-    @StringValidation(min = 2, max = 16, spaceAllowed = true, required = false)
+    @StringValidation(min = 2, max = 16, spaceAllowed = true)
     private String name;
 
     @CollectionValidation(minSize = 2, maxSize = 10)
-    @StringValidation(min = 2, max = 16, required = false)
+    @StringValidation(min = 2, max = 16)
     private List<String> states;
 
     public DeviceFormUpdate(String name, List<String> states) {

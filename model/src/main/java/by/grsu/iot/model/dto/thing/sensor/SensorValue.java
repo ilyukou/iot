@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.thing.sensor;
 
+import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 
 /**
@@ -10,6 +11,8 @@ import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 public class SensorValue {
 
     private Long time;
+
+    @RequiredField
     private Double value;
 
     public SensorValue(Long time, Double value) {

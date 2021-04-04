@@ -28,6 +28,12 @@
             <artifactId>security</artifactId>
             <version>0.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>by.grsu</groupId>
+            <artifactId>email</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
