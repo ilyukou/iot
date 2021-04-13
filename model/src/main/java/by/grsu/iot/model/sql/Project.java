@@ -22,6 +22,10 @@ public class Project extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private Set<Sensor> sensors = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
+
     private String name;
 
     private String title;
@@ -71,6 +75,14 @@ public class Project extends BaseEntity {
 
     public void setSensors(Set<Sensor> sensors) {
         this.sensors = sensors;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
     @Override

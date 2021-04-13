@@ -5,7 +5,7 @@ import by.grsu.iot.model.sql.User;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.UserJpaRepository;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

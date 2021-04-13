@@ -8,7 +8,9 @@ import by.grsu.iot.service.interf.crud.ProjectCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
 import by.grsu.iot.access.interf.crud.ProjectAccessService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class ProjectCrudServiceImpl implements ProjectCrudService {
 

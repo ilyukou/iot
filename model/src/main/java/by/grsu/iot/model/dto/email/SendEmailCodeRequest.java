@@ -4,9 +4,11 @@ import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.async.EmailCodeType;
 import by.grsu.iot.model.dto.DataTransferObject;
 
+import javax.validation.constraints.Email;
+
 public class SendEmailCodeRequest implements DataTransferObject {
 
-// FIXME @Email
+    @Email(message = "Email should be valid")
     @RequiredField
     private String address;
 

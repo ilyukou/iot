@@ -8,7 +8,7 @@ import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.ProjectJpaRepository;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,5 +127,12 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Integer getProjectIotThingSize(Long projectId) {
         return deviceRepository.getDevicesSize(projectId)
                 + sensorRepository.getSensorsSize(projectId);
+    }
+
+    @Override
+    public String getProjectOwnerUsernameByResourceId(Long resourceId) {
+        Long userId = projectJpaRepository.findUserIdByResourceId(resourceId);
+
+        return userRepository.findUsername(userId);
     }
 }

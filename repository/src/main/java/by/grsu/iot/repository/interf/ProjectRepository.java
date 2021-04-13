@@ -2,6 +2,7 @@ package by.grsu.iot.repository.interf;
 
 import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Project;
+import by.grsu.iot.model.sql.Resource;
 import by.grsu.iot.model.sql.User;
 
 import java.util.List;
@@ -104,4 +105,11 @@ public interface ProjectRepository {
      * @return size of {@link IotThing} in {@link Project}
      */
     Integer getProjectIotThingSize(Long projectId);
+
+    /**
+     * Get owner {@link User#getUsername()} by {@link Resource#getId()}
+     * @param resourceId {@link Resource#getId()}
+     * @return {@link User#getUsername()}
+     */
+    String getProjectOwnerUsernameByResourceId(Long resourceId);
 }

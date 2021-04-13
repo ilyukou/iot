@@ -42,6 +42,11 @@
             <artifactId>producer</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>by.grsu</groupId>
+            <artifactId>resource</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>

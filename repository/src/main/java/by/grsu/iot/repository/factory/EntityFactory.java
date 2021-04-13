@@ -2,8 +2,8 @@ package by.grsu.iot.repository.factory;
 
 import by.grsu.iot.model.sql.*;
 import by.grsu.iot.repository.interf.RoleRepository;
-import by.grsu.iot.repository.util.StringUtil;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.StringUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import by.grsu.iot.util.service.NumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

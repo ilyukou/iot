@@ -4,7 +4,7 @@ import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import by.grsu.iot.repository.jpa.EmailJpaRepository;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import by.grsu.iot.util.service.NumberUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Value;

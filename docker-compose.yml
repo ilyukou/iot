@@ -8,17 +8,46 @@ services:
   #      - '3000:3000'
   #      - '3001:3001'
 
-  #  api:
-  #    image: ilyukou/api:0.1
-  #    container_name: api
-  #    command: -timeout 60s
-  #    ports:
-  #      - "8080:8080"
-  #    environment:
-  #      TZ: Europe/Minsk
-  #    restart: always
-  #    depends_on:
-  #      - mysql
+#    api:
+#      image: ilyukou/api:0.1
+#      container_name: api
+#      command: -timeout 60s
+#      ports:
+#        - "8080:8080"
+#      environment:
+#        TZ: UTC
+##        SPRING_APPLICATION_JSON: '{
+##              "spring.datasource.url": "jdbc:mysql://db:3306/table",
+##            }'
+#      restart: always
+#      depends_on:
+#        - mysql
+#        - elasticsearch
+#        - activemq
+#  s3server:
+#    image: scality/s3server:latest
+#    container_name: s3server
+#    restart: unless-stopped
+#    ports:
+#      - "8000:8000"
+##    volumes:
+##      - s3data:/usr/src/app/localData
+##      - s3metadata:/usr/src/app/localMetadata
+#    environment:
+#      - SCALITY_ACCESS_KEY_ID=aws_s3_access_key
+#      - SCALITY_SECRET_ACCESS_KEY=aws_s3_secret_key
+#      - SSL="FALSE"
+
+  resource:
+    image: minio/minio
+    container_name: resource
+    command: server /data
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER : aws_s3_access_key
+      MINIO_ROOT_PASSWORD : aws_s3_secret_key
+    restart: always
 
   mysql:
     image: mysql:8.0.21

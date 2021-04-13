@@ -5,7 +5,7 @@ import by.grsu.iot.repository.RepositoryApplication;
 import by.grsu.iot.repository.config.RepositoryElasticSearchTestConfig;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;

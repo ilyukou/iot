@@ -1,4 +1,4 @@
-package by.grsu.iot.repository.util;
+package by.grsu.iot.util.service;
 
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 import com.fasterxml.jackson.core.JsonProcessingException;

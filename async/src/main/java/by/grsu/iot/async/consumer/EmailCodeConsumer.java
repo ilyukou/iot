@@ -33,7 +33,7 @@ public class EmailCodeConsumer implements MessageListener {
         this.objectMapper = objectMapper;
     }
 
-    @JmsListener(destination = "${active-mq.topic.emailVerificationCode}")
+    @JmsListener(destination = "${by.grsu.iot.async.active-mq.topic.emailVerificationCode}")
     @Override
     public void onMessage(Message message) {
         try{

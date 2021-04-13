@@ -17,14 +17,21 @@ import by.grsu.iot.security.jwt.JwtProperties;
 import by.grsu.iot.security.jwt.JwtTokenProvider;
 import by.grsu.iot.service.interf.crud.EmailCrudService;
 import by.grsu.iot.service.interf.crud.UserCrudService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class UserCrudServiceImpl implements UserCrudService {
+
+    @Value("${by.grsu.iot.security.user.default-status}")
+    private String DEFAULT_STATUS;
 
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;
@@ -71,10 +78,17 @@ public class UserCrudServiceImpl implements UserCrudService {
         u.setUsername(registrationRequest.getUsername());
         u.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
+        if (Status.NOT_ACTIVE.getValue().equals(DEFAULT_STATUS)){
+            u.setStatus(Status.NOT_ACTIVE);
+            emailCodeProducer.produce(
+                    new EmailCode(u.getEmail().getAddress(), u.getEmail().getCode(), EmailCodeType.CREATE_ACCOUNT));
+
+        } else {
+            u.setStatus(Status.ACTIVE);
+        }
+
         u = userRepository.create(u);
 
-        emailCodeProducer.produce(
-                new EmailCode(u.getEmail().getAddress(), u.getEmail().getCode(), EmailCodeType.CREATE_ACCOUNT));
 
         return u;
     }

@@ -3,7 +3,7 @@ package by.grsu.iot.repository.impl;
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
-import by.grsu.iot.repository.util.ElasticsearchUtil;
+import by.grsu.iot.util.service.ElasticsearchUtil;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;

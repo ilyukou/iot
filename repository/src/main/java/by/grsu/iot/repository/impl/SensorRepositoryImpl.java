@@ -6,7 +6,7 @@ import by.grsu.iot.repository.factory.EntityFactory;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.repository.jpa.SensorJpaRepository;
-import by.grsu.iot.repository.util.TimeUtil;
+import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
