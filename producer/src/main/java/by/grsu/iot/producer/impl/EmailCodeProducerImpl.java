@@ -5,8 +5,8 @@ import by.grsu.iot.producer.interf.EmailCodeProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailCodeProducerImpl implements EmailCodeProducer {
 
-    @Value("${active-mq.topic.emailVerificationCode}")
-    private String TOPIC_NAME;
+    private static final String MODULE = "by.grsu.iot.producer.";
+    private static final String TOPIC_NAME_PROPERTY = MODULE + "emailVerificationCode";
+    private static String TOPIC_NAME;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailCodeProducerImpl.class);
 
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper objectMapper;
 
-    public EmailCodeProducerImpl(JmsTemplate jmsTemplate, ObjectMapper objectMapper) {
+    public EmailCodeProducerImpl(Environment environment, JmsTemplate jmsTemplate, ObjectMapper objectMapper) {
         this.jmsTemplate = jmsTemplate;
         this.objectMapper = objectMapper;
+
+        TOPIC_NAME = environment.getProperty(TOPIC_NAME_PROPERTY);
     }
 
     @Override

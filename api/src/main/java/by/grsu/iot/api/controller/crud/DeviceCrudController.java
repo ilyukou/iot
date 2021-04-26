@@ -4,8 +4,6 @@ import by.grsu.iot.model.dto.thing.device.DeviceDto;
 import by.grsu.iot.model.dto.thing.device.DeviceForm;
 import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/crud/device")
 public class DeviceCrudController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceCrudController.class);
 
     private final DeviceCrudService deviceCrudService;
 

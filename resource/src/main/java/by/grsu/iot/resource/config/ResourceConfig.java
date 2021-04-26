@@ -8,51 +8,42 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+
+import java.util.Objects;
 
 @PropertySource("classpath:application-resource.properties")
 @Configuration
 public class ResourceConfig {
 
-    @Value("${by.grsu.iot.resource.s3.endpoint}")
-    private String endpoint;
+    private static final String MODULE = "by.grsu.iot.resource.";
 
-    @Value("${by.grsu.iot.resource.s3.accessKey}")
-    private String accessKey;
+    private static final String S3_ENDPOINT_PROPERTY = MODULE + "s3.endpoint";
+    private static final String S3_ACCESS_KEY_PROPERTY = MODULE + "s3.accessKey";
+    private static final String S3_SECRET_KEY_PROPERTY = MODULE + "s3.secretKey";
 
-    @Value("${by.grsu.iot.resource.s3.secretKey}")
-    private String secretKey;
+    private final Environment environment;
 
-    @Value("${by.grsu.iot.resource.s3.bucketName}")
-    private String bucketName;
+    public ResourceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public AmazonS3 amazonS3() {
-//        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-//        ClientConfiguration clientConfiguration = new ClientConfiguration();
-//        clientConfiguration.setSignerOverride("AWSS3V4SignerType");
-//
-//        AmazonS3 amazonS3 =  AmazonS3ClientBuilder
-//                .standard()
-//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, Regions.US_EAST_1.name()))
-//                .withPathStyleAccessEnabled(true)
-//                .withClientConfiguration(clientConfiguration)
-//                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-//
-//                .build();
-//        amazonS3.setBucketAcl(bucketName, CannedAccessControlList.PublicRead);
-//
-//        return amazonS3;
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+        AWSCredentials credentials = new BasicAWSCredentials(
+                Objects.requireNonNull(environment.getProperty(S3_ACCESS_KEY_PROPERTY)),
+                Objects.requireNonNull(environment.getProperty(S3_SECRET_KEY_PROPERTY)));
+
         ClientConfiguration clientConfiguration = new ClientConfiguration();
         clientConfiguration.setSignerOverride("AWSS3V4SignerType");
 
         AmazonS3 s3Client = AmazonS3ClientBuilder
                 .standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, Regions.US_EAST_1.name()))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
+                        environment.getProperty(S3_ENDPOINT_PROPERTY), Regions.US_EAST_1.name()))
                 .withPathStyleAccessEnabled(true)
                 .withClientConfiguration(clientConfiguration)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

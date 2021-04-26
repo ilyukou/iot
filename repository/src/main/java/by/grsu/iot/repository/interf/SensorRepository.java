@@ -93,4 +93,6 @@ public interface SensorRepository {
      * @return count of {@link Sensor}
      */
     Integer getSensorsSize(Long projectId);
+
+    String getTokenById(Long id);
 }

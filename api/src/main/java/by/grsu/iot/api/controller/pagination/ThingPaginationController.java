@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -40,9 +39,7 @@ public class ThingPaginationController {
             @PathVariable Integer page
     ) {
         return new ResponseEntity<>(
-                thingPaginationService.getThingsFromProjectPage(project, page, userDetails.getUsername()).stream()
-                        .map(ThingWrapper::new)
-                        .collect(Collectors.toList())
-                , HttpStatus.OK);
+                thingPaginationService.getThingsFromProjectPage(project, page, userDetails.getUsername()),
+                HttpStatus.OK);
     }
 }

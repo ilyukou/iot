@@ -3,7 +3,7 @@ package by.grsu.iot.email.impl;
 import by.grsu.iot.email.interf.EmailSenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,16 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSenderServiceImpl.class);
 
-    @Value("${by.grsu.iot.email.smtp.username}")
-    private String from;
+    private static final String MODULE = "by.grsu.iot.email.";
+    private static final String SMTP_EMAIL_PROPERTY = MODULE + "smtp.email";
+
+    private static String from;
 
     private final JavaMailSender emailSender;
 
-    public EmailSenderServiceImpl(JavaMailSender emailSender) {
+    public EmailSenderServiceImpl(Environment environment, JavaMailSender emailSender) {
         this.emailSender = emailSender;
+        from = environment.getProperty(SMTP_EMAIL_PROPERTY);
     }
 
     @Override
@@ -30,10 +33,9 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-//mimeMessage.setContent(htmlMsg, "text/html"); /** Use this or below line **/
         try {
             helper.setTo(to);
-            helper.setText(text, true); // Use this or above line.
+            helper.setText(text, true);
             helper.setSubject(subject);
             helper.setFrom(from);
 

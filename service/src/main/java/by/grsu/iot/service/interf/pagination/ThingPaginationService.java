@@ -1,6 +1,7 @@
 package by.grsu.iot.service.interf.pagination;
 
 import by.grsu.iot.model.dto.pagination.PaginationInfo;
+import by.grsu.iot.model.dto.thing.ThingWrapper;
 import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
@@ -31,5 +32,5 @@ public interface ThingPaginationService {
      * @param username who requested {@link User#getUsername()}
      * @return {@link List} of {@link IotThing}
      */
-    List<? extends IotThing> getThingsFromProjectPage(Long project, Integer page, String username);
+    List<ThingWrapper> getThingsFromProjectPage(Long project, Integer page, String username);
 }

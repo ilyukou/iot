@@ -7,7 +7,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -23,7 +22,11 @@ public class ElasticsearchUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchUtil.class);
 
-    private static ObjectMapper objectMapper;
+    private static ObjectMapper OBJECT_MAPPER;
+
+    public ElasticsearchUtil(ObjectMapper objectMapper) {
+        OBJECT_MAPPER = objectMapper;
+    }
 
     public static SensorValueElasticsearch convert(SearchResponse response) {
         List<SensorValueElasticsearch> list = convertToList(response);
@@ -48,7 +51,7 @@ public class ElasticsearchUtil {
 
             SensorValueElasticsearch object = null;
             try {
-                object = objectMapper.readValue(sh.getSourceAsString(), SensorValueElasticsearch.class);
+                object = OBJECT_MAPPER.readValue(sh.getSourceAsString(), SensorValueElasticsearch.class);
             } catch (JsonProcessingException e) {
                 LOGGER.warn("Error while convert SearchResponse to SensorValueElasticsearch", e);
             }
@@ -57,10 +60,5 @@ public class ElasticsearchUtil {
         }
 
         return list;
-    }
-
-    @Autowired
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        ElasticsearchUtil.objectMapper = objectMapper;
     }
 }

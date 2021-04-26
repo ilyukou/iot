@@ -1,7 +1,5 @@
 package by.grsu.iot.util.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -15,16 +13,10 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:application-util.properties")
 public class StringUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
-
-    private static String ALPHABET;
-
     @Value("${by.grsu.iot.util.alphabet}")
-    public void set(String alphabet) {
-        StringUtil.ALPHABET = alphabet;
-    }
+    private String ALPHABET;
 
-    public static String generateString(long length) {
+    public String generateString(long length) {
         StringBuilder name = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
@@ -36,7 +28,7 @@ public class StringUtil {
         return name.toString();
     }
 
-    public static String generateFileName(long length, String filename) {
+    public String generateFileName(long length, String filename) {
 
         if (length > 255 || length > ALPHABET.length()) {
             length = ALPHABET.length();
@@ -46,12 +38,12 @@ public class StringUtil {
         return generateString(length) + "." + contentType;
     }
 
-    public static String getContentTypeFromFileName(String originalFileName) {
+    public String getContentTypeFromFileName(String originalFileName) {
         String[] s = originalFileName.split("\\.");
         return s[1];
     }
 
-    public static String generateToken(long length) {
+    public String generateToken(long length) {
         return generateString(length);
     }
 }

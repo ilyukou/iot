@@ -8,10 +8,11 @@ import by.grsu.iot.repository.interf.DeviceStateRepository;
 import by.grsu.iot.service.interf.DeviceStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,18 +24,18 @@ public class DeviceStateServiceImpl implements DeviceStateService {
 
     private final DeviceStateRepository repository;
     private final StateRequestConsumer stateRequestConsumer;
-
-    @Value("${device.state.get.long-polling.time}")
-    private Long deviceWaitTime;
-
-    @Value("${device.state.set.long-polling.time}")
-    private Long requestWaitTime;
+    private static final String MODULE = "by.grsu.iot.service.";
+    private static final String DEVICE_LONG_POLLING_TIME = MODULE + "device.state.get.long-polling.time";
+    private static final String REQUEST_LONG_POLLING_TIME = MODULE + "device.state.set.long-polling.time";
+    private final Environment environment;
 
     public DeviceStateServiceImpl(
             DeviceStateRepository repository,
-            StateRequestConsumer stateRequestConsumer
+            StateRequestConsumer stateRequestConsumer,
+            Environment environment
     ) {
         this.stateRequestConsumer = stateRequestConsumer;
+        this.environment = environment;
 
         ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         service.execute(stateRequestConsumer);
@@ -87,11 +88,11 @@ public class DeviceStateServiceImpl implements DeviceStateService {
 
     @Override
     public Long getDeviceWaitTime() {
-        return deviceWaitTime;
+        return Long.valueOf(Objects.requireNonNull(environment.getProperty(DEVICE_LONG_POLLING_TIME)));
     }
 
     @Override
     public Long getRequestWaitTime() {
-        return requestWaitTime;
+        return Long.valueOf(Objects.requireNonNull(environment.getProperty(REQUEST_LONG_POLLING_TIME)));
     }
 }

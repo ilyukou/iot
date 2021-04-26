@@ -7,23 +7,6 @@ services:
   #    ports:
   #      - '3000:3000'
   #      - '3001:3001'
-
-#    api:
-#      image: ilyukou/api:0.1
-#      container_name: api
-#      command: -timeout 60s
-#      ports:
-#        - "8080:8080"
-#      environment:
-#        TZ: UTC
-##        SPRING_APPLICATION_JSON: '{
-##              "spring.datasource.url": "jdbc:mysql://db:3306/table",
-##            }'
-#      restart: always
-#      depends_on:
-#        - mysql
-#        - elasticsearch
-#        - activemq
 #  s3server:
 #    image: scality/s3server:latest
 #    container_name: s3server
@@ -97,3 +80,21 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+#
+#  api:
+#      image: ilyailyukou/api:0.1
+#      container_name: api
+#      command: -timeout 60s
+#      ports:
+#        - "8080:8080"
+#      environment:
+#        TZ: Atlantic/Reykjavik # UTC
+#        SPRING_APPLICATION_JSON: '{
+#           "spring.datasource.url": "jdbc:mysql://db:3306/table",
+#        }'
+#      restart: always
+#      depends_on:
+#        - mysql
+#        - elasticsearch
+#        - activemq
+#        - resource

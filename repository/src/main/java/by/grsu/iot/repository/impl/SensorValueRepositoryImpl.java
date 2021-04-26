@@ -4,6 +4,7 @@ import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.util.service.ElasticsearchUtil;
+import lombok.SneakyThrows;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -91,6 +92,24 @@ public class SensorValueRepositoryImpl implements SensorValueRepository {
         SearchResponse response = findOne(token);
 
         return response.getInternalResponse().hits().getTotalHits().value;
+    }
+
+    @SneakyThrows
+    @Override
+    public List<SensorValueElasticsearch> getLastValuePiece(String token, Integer size) {
+        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchBoolPrefixQuery("token", token));
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(queryBuilder);
+        searchSourceBuilder.size(size);
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH);
+        searchRequest.indices(SENSOR_VALUE_DOCUMENT_NAME);
+        searchRequest.source(searchSourceBuilder);
+
+        return ElasticsearchUtil.convertToList(restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT));
     }
 
     private SearchResponse findOne(String token) throws IOException {

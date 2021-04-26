@@ -1,8 +1,8 @@
 package by.grsu.iot.repository.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -15,9 +15,11 @@ import javax.sql.DataSource;
  * @author Ilyukou Ilya
  */
 @Configuration
-@PropertySource("classpath:application-repository.properties")
 @EnableTransactionManagement
 public class RepositoryDataSourceConfig {
+
+    @Value("${spring.datasource.url}")
+    private String url;
 
     private final Environment env;
 
@@ -35,4 +37,21 @@ public class RepositoryDataSourceConfig {
 
         return dataSource;
     }
+
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+//        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+//        em.setDataSource(dataSource);
+//        em.setPackagesToScan(new String[] { "by.grsu" });
+//
+//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        em.setJpaVendorAdapter(vendorAdapter);
+//
+//        Properties properties = new Properties();
+//        properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+//        properties.setProperty("spring.jpa.hibernate.ddl-auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
+//        em.setJpaProperties(properties);
+//
+//        return em;
+//    }
 }

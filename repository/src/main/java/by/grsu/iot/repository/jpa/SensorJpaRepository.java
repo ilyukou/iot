@@ -26,4 +26,7 @@ public interface SensorJpaRepository extends JpaRepository<Sensor, Long> {
 
     @Query(value = "select count(*) from sensor s where s.project_id = ?1", nativeQuery = true)
     Integer getSensorsSize(Long projectId);
+
+    @Query(value = "select s.token from sensor s where s.id = ?1", nativeQuery = true)
+    String findTokenById(Long id);
 }

@@ -17,8 +17,7 @@ import by.grsu.iot.security.jwt.JwtProperties;
 import by.grsu.iot.security.jwt.JwtTokenProvider;
 import by.grsu.iot.service.interf.crud.EmailCrudService;
 import by.grsu.iot.service.interf.crud.UserCrudService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserCrudServiceImpl implements UserCrudService {
 
-    @Value("${by.grsu.iot.security.user.default-status}")
-    private String DEFAULT_STATUS;
+    private static final String MODULE = "by.grsu.iot.security.";
+    private static final String DEFAULT_STATUS_PROPERTY = MODULE + "user.default-status";
 
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;
@@ -41,6 +40,7 @@ public class UserCrudServiceImpl implements UserCrudService {
     private final JwtProperties jwtProperties;
     private final EmailCodeProducer emailCodeProducer;
     private final EmailCrudService emailCrudService;
+    private final Environment environment;
 
     public UserCrudServiceImpl(
             EmailRepository emailRepository,
@@ -50,7 +50,8 @@ public class UserCrudServiceImpl implements UserCrudService {
             JwtTokenProvider jwtTokenProvider,
             JwtProperties jwtProperties,
             EmailCodeProducer emailCodeProducer,
-            EmailCrudService emailCrudService
+            EmailCrudService emailCrudService,
+            Environment environment
     ) {
         this.emailRepository = emailRepository;
         this.userRepository = userRepository;
@@ -60,6 +61,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         this.jwtProperties = jwtProperties;
         this.emailCodeProducer = emailCodeProducer;
         this.emailCrudService = emailCrudService;
+        this.environment = environment;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         u.setUsername(registrationRequest.getUsername());
         u.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
-        if (Status.NOT_ACTIVE.getValue().equals(DEFAULT_STATUS)){
+        if (Status.NOT_ACTIVE.equals(getDefaultUserStatus())) {
             u.setStatus(Status.NOT_ACTIVE);
             emailCodeProducer.produce(
                     new EmailCode(u.getEmail().getAddress(), u.getEmail().getCode(), EmailCodeType.CREATE_ACCOUNT));
@@ -176,7 +178,7 @@ public class UserCrudServiceImpl implements UserCrudService {
     public void restorePassword(RestorePasswordForm data) {
         Integer code = emailRepository.getCode(data.getUsername());
 
-        if (code != null && !code.equals(data.getCode())){
+        if (code != null && !code.equals(data.getCode())) {
             throw new BadRequestApplicationException("code", "Bad code");
         }
 
@@ -185,5 +187,10 @@ public class UserCrudServiceImpl implements UserCrudService {
         user.setPassword(passwordEncoder.encode(data.getPassword()));
 
         userRepository.update(user);
+    }
+
+    @Override
+    public Status getDefaultUserStatus() {
+        return Status.valueOf(environment.getProperty(DEFAULT_STATUS_PROPERTY));
     }
 }

@@ -47,4 +47,6 @@ public interface SensorValueRepository {
      * @return count of document with such token.
      */
     Long getSensorValueElasticsearchCount(String token) throws IOException;
+
+    List<SensorValueElasticsearch> getLastValuePiece(String token, Integer size);
 }

@@ -2,9 +2,11 @@ package by.grsu.iot.model.dto.thing;
 
 import by.grsu.iot.model.dto.thing.device.DeviceDto;
 import by.grsu.iot.model.dto.thing.sensor.SensorDto;
+import by.grsu.iot.model.dto.thing.sensor.SensorValue;
 import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Sensor;
+
+import java.util.List;
 
 /**
  * @author Ilyukou Ilya
@@ -14,18 +16,14 @@ public class ThingWrapper {
     private ThingEnum type;
     private Object entity;
 
-    public ThingWrapper(IotThing iotThing) {
-        if (iotThing.getClass().equals(Device.class)) {
-            this.type = ThingEnum.device;
-            this.entity = new DeviceDto((Device) iotThing);
+    public ThingWrapper(Device device) {
+        this.type = ThingEnum.device;
+        this.entity = new DeviceDto(device);
+    }
 
-        } else if (iotThing.getClass().equals(Sensor.class)) {
-            this.type = ThingEnum.sensor;
-            this.entity = new SensorDto((Sensor) iotThing);
-
-        } else {
-            throw new IllegalArgumentException("Not supported class: " + iotThing.getClass());
-        }
+    public ThingWrapper(Sensor sensor, List<SensorValue> values) {
+        this.type = ThingEnum.sensor;
+        this.entity = new SensorDto(sensor, values);
     }
 
     public ThingWrapper() {

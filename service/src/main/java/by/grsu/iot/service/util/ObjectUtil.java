@@ -99,4 +99,13 @@ public class ObjectUtil {
 
         return s;
     }
+
+    public static <T extends Annotation> T getMethodAnnotation(Class<?> clazz, String methodName, Class<T> annotation) {
+        try {
+            return clazz.getMethod(methodName).getAnnotation(annotation);
+        } catch (NoSuchMethodException e) {
+            // FIXME Throw exception without a declare exception
+            throw new IllegalArgumentException("NoSuchMethodException");
+        }
+    }
 }

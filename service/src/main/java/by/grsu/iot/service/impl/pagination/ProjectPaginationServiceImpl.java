@@ -1,35 +1,42 @@
 package by.grsu.iot.service.impl.pagination;
 
+import by.grsu.iot.access.interf.pagination.ProjectPaginationAccessService;
 import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.util.CollectionUtil;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.service.interf.pagination.ProjectPaginationService;
-import by.grsu.iot.access.interf.pagination.ProjectPaginationAccessService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @PropertySource("classpath:application-service.properties")
 @Service
 public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
+    private static final String PROJECT_PER_PAGE_PROPERTY = "by.grsu.iot.service.project.per-page";
+    private static Long PROJECT_PER_PAGE;
+
+    private final Environment environment;
+
     private final ProjectRepository projectRepository;
     private final ProjectPaginationAccessService projectPaginationAccessService;
 
-    @Value("${project.per-page}")
-    private Long PROJECT_PER_PAGE;
-
     public ProjectPaginationServiceImpl(
-            ProjectRepository projectRepository,
+            Environment environment, ProjectRepository projectRepository,
             ProjectPaginationAccessService projectPaginationAccessService) {
+        this.environment = environment;
         this.projectRepository = projectRepository;
         this.projectPaginationAccessService = projectPaginationAccessService;
+
+        PROJECT_PER_PAGE = Long.valueOf(Objects.requireNonNull(environment.getProperty(PROJECT_PER_PAGE_PROPERTY)));
     }
+
 
     @Override
     public List<Project> getProjectsFromPage(Integer page, String whoBeingAskedUsername, String whoRequestedUsername) {

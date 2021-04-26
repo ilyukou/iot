@@ -7,13 +7,14 @@ import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.service.interf.SensorValueService;
 import by.grsu.iot.service.interf.crud.SensorCrudService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @PropertySource("classpath:application-service.properties")
@@ -21,17 +22,20 @@ import java.util.stream.Collectors;
 @Service
 public class SensorValueServiceImpl implements SensorValueService {
 
+    private final static String MODULE = "by.grsu.iot.service.";
+    private final static String SENSOR_VALUE_PIECE_SIZE_PROPERTY = MODULE + "sensor.value.piece.size";
+
     private final SensorValueRepository sensorValueRepository;
     private final SensorCrudService sensorCrudService;
-    @Value("${sensor.value.list.size.response}")
-    private Integer sensorValueList;
+    private final Environment environment;
 
     public SensorValueServiceImpl(
             SensorValueRepository sensorValueRepository,
-            SensorCrudService sensorCrudService
-    ) {
+            SensorCrudService sensorCrudService,
+            Environment environment) {
         this.sensorValueRepository = sensorValueRepository;
         this.sensorCrudService = sensorCrudService;
+        this.environment = environment;
     }
 
     @Override
@@ -45,7 +49,8 @@ public class SensorValueServiceImpl implements SensorValueService {
             throw new BadRequestApplicationException("token", "Not found sensor with such token");
         }
 
-        return sensorValueRepository.get(token, from, to, sensorValueList).stream()
+        return sensorValueRepository.get(token, from, to, Integer
+                .valueOf(Objects.requireNonNull(environment.getProperty(SENSOR_VALUE_PIECE_SIZE_PROPERTY)))).stream()
                 .map(SensorValue::new)
                 .collect(Collectors.toList());
     }

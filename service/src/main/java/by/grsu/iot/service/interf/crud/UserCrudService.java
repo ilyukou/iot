@@ -1,6 +1,7 @@
 package by.grsu.iot.service.interf.crud;
 
 import by.grsu.iot.model.dto.user.*;
+import by.grsu.iot.model.sql.Status;
 import by.grsu.iot.model.sql.User;
 
 /**
@@ -39,4 +40,6 @@ public interface UserCrudService {
     void update(String username, UserUpdateForm form);
 
     void restorePassword(RestorePasswordForm data);
+
+    Status getDefaultUserStatus();
 }

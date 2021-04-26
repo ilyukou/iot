@@ -97,4 +97,9 @@ public class SensorRepositoryImpl implements SensorRepository {
     public Integer getSensorsSize(Long projectId) {
         return sensorJpaRepository.getSensorsSize(projectId);
     }
+
+    @Override
+    public String getTokenById(Long id) {
+        return sensorJpaRepository.findTokenById(id);
+    }
 }

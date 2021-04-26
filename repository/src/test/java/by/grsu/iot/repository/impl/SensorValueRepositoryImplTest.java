@@ -2,7 +2,7 @@ package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.repository.RepositoryApplication;
-import by.grsu.iot.repository.config.RepositoryElasticSearchTestConfig;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.elasticsearch.SensorValueElasticsearchRepository;
 import by.grsu.iot.repository.interf.SensorValueRepository;
 import by.grsu.iot.util.service.TimeUtil;
@@ -22,13 +22,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Import(RepositoryElasticSearchTestConfig.class)
+@TestPropertySource("classpath:application-repository.properties")
+@Import(RepositoryTestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,8 +44,8 @@ public class SensorValueRepositoryImplTest {
     @Autowired
     private RestHighLevelClient client;
 
-    private String token = "token";
-    private String token2 = "token2";
+    private final String token = "token";
+    private final String token2 = "token2";
 
     @BeforeAll
     public void createIndexResponse() throws IOException {

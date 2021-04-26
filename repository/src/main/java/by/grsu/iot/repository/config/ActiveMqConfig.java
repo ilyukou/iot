@@ -1,34 +1,36 @@
 package by.grsu.iot.repository.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
 
-@PropertySource("classpath:application-repository.properties")
+//@PropertySource("classpath:application-repository.properties")
 @Configuration
 public class ActiveMqConfig {
 
-    @Value("${active-mq.broker-url}")
-    private String brokerUrl;
+    private final static String MODULE = "by.grsu.iot.repository.";
 
-    @Value("${active-mq.password}")
-    private String password;
+    private final static String BROKER_URL_PROPERTY = MODULE + "active-mq.broker-url";
+    private final static String PASSWORD_PROPERTY = MODULE + "active-mq.password";
+    private final static String USER_PROPERTY = MODULE + "active-mq.user";
 
-    @Value("${active-mq.user}")
-    private String user;
+    private final Environment environment;
+
+    public ActiveMqConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public ConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-        activeMQConnectionFactory.setBrokerURL(brokerUrl);
-        activeMQConnectionFactory.setUserName(user);
-        activeMQConnectionFactory.setPassword(password);
+        activeMQConnectionFactory.setBrokerURL(environment.getProperty(BROKER_URL_PROPERTY));
+        activeMQConnectionFactory.setUserName(environment.getProperty(USER_PROPERTY));
+        activeMQConnectionFactory.setPassword(environment.getProperty(PASSWORD_PROPERTY));
         return activeMQConnectionFactory;
     }
 
