@@ -95,10 +95,7 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
             }
         }
 
-        return result
-                .stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return result;
     }
 
     @Override
