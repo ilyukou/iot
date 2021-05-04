@@ -4,7 +4,7 @@ import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.repository.RepositoryApplication;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeviceRepositoryImplTest {
 
     private final String username = "username";

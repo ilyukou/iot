@@ -2,7 +2,7 @@ package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.sql.Role;
 import by.grsu.iot.model.sql.RoleType;
-import by.grsu.iot.repository.RepositoryApplication;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.RoleRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoleRepositoryImplTest {
 
     private final RoleType ADMIN_ROLE_TYPE = RoleType.Admin;

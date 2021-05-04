@@ -4,7 +4,6 @@ import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.Role;
 import by.grsu.iot.model.sql.RoleType;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.repository.RepositoryApplication;
 import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.when;
 @Import(RepositoryTestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserRepositoryImplTest {
 
     private final String username = "username";
