@@ -14,6 +14,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vavr.API.*;
+
 /**
  * Object util
  *
@@ -51,13 +53,10 @@ public class ObjectUtil {
     public static Project updateField(Project project, ProjectFormUpdate projectFormUpdate) {
         Project p = SerializationUtils.clone(project);
 
-        if (projectFormUpdate.getName() != null) {
-            p.setName(projectFormUpdate.getName());
-        }
-
-        if (projectFormUpdate.getTitle() != null) {
-            p.setTitle(projectFormUpdate.getTitle());
-        }
+        Match(true).of(
+                Case($(projectFormUpdate.getName() != null), run(() -> p.setName(projectFormUpdate.getName()))),
+                Case($(projectFormUpdate.getTitle() != null), run(() -> p.setTitle(projectFormUpdate.getTitle())))
+        );
 
         return p;
     }
@@ -65,13 +64,10 @@ public class ObjectUtil {
     public static Device updateField(Device device, DeviceFormUpdate deviceFormUpdate) {
         Device d = SerializationUtils.clone(device);
 
-        if (deviceFormUpdate.getName() != null) {
-            d.setName(deviceFormUpdate.getName());
-        }
-
-        if (deviceFormUpdate.getStates() != null) {
-            d.setStates(deviceFormUpdate.getStates());
-        }
+        Match(true).of(
+                Case($(deviceFormUpdate.getName() != null), run(() -> d.setName(deviceFormUpdate.getName()))),
+                Case($(deviceFormUpdate.getStates() != null), run(() -> d.setStates(deviceFormUpdate.getStates())))
+        );
 
         return d;
     }

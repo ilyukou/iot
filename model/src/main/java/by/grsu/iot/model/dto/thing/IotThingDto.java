@@ -2,6 +2,8 @@ package by.grsu.iot.model.dto.thing;
 
 import by.grsu.iot.model.sql.IotThing;
 
+import static io.vavr.API.*;
+
 /**
  * @author Ilyukou Ilya
  */
@@ -19,17 +21,11 @@ public class IotThingDto {
         this.name = iotThing.getName();
         this.token = iotThing.getToken();
 
-        if (iotThing.getActive() != null) {
-            this.activity = iotThing.getActive().getTime();
-        }
-
-        if (iotThing.getUpdated() != null) {
-            this.update = iotThing.getUpdated().getTime();
-        }
-
-        if (iotThing.getCreated() != null) {
-            this.create = iotThing.getCreated().getTime();
-        }
+        Match(true).of(
+                Case($(iotThing.getActive() != null), o -> run(() -> setActivity(iotThing.getActive().getTime()))),
+                Case($(iotThing.getUpdated() != null), o -> run(() -> setUpdate(iotThing.getUpdated().getTime()))),
+                Case($(iotThing.getCreated() != null), o -> run(() -> setCreate(iotThing.getCreated().getTime())))
+        );
     }
 
     public IotThingDto() {

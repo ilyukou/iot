@@ -1,6 +1,10 @@
 package by.grsu.iot.model.util;
 
+import java.util.List;
+import java.util.Set;
 import java.util.*;
+
+import static io.vavr.API.*;
 
 /**
  * Collection Util
@@ -53,27 +57,15 @@ public class CollectionUtil {
     }
 
     public static Integer getCountOfArrayPortion(Integer arraySize, Long portionSize) {
-        if (arraySize < 0 || portionSize < 0) {
-            throw new IllegalArgumentException("Number are negative. " +
-                    "arraySize={" + arraySize + "}, " +
-                    "portionSize={" + portionSize + "}");
-        }
-
-        if (portionSize == 0) {
-            throw new IllegalArgumentException("Portion size is 0");
-        }
-
-        if (arraySize == 0) {
-            return 0;
-        }
-
-        if (arraySize <= portionSize) {
-            return 1;
-        }
-
-        Double portions = Math.ceil(arraySize.doubleValue() / portionSize.doubleValue());
-
-        return portions.intValue();
+        return Match(true).of(
+                Case($(arraySize < 0 || portionSize <= 0), i -> {
+                    throw new IllegalArgumentException("Number must be more than 0. " +
+                            "arraySize={" + arraySize + "}, " +
+                            "portionSize={" + portionSize + "}");
+                }),
+                Case($(arraySize == 0), 0),
+                Case($(arraySize <= portionSize), 1),
+                Case($(true), new Double(Math.ceil(arraySize.doubleValue() / portionSize.doubleValue())).intValue()));
     }
 
     public static <T> List<T> getArrayFromTo(Long from, Long to, List<T> array) {
@@ -85,11 +77,10 @@ public class CollectionUtil {
             throw new IllegalArgumentException("From more than List size");
         }
 
-        if (to > array.size()) {
-            to = (long) array.size();
-        }
-
-        return array.subList(from.intValue(), to.intValue());
+        return array.subList(from.intValue(), (Match(true).of(
+                Case($(to > array.size()), array.size()),
+                Case($(to <= array.size()), to)
+        )).intValue());
     }
 
     public static <T> Set<T> getSharedSetKeys(Set<T> set1, Set<T> set2) {

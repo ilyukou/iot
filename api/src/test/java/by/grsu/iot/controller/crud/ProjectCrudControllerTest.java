@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Set;
 
+import static io.vavr.API.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,28 +83,15 @@ public class ProjectCrudControllerTest {
     private EmailCodeProducer producer;
 
     private MvcResult send(String url, String method, Object body, RequestPostProcessor credential) throws Exception {
-        MockHttpServletRequestBuilder builder;
 
-        switch (method) {
-            case "get":
-                builder = get(url).with(credential);
-                break;
-
-            case "put":
-                builder = put(url).with(credential);
-                break;
-
-            case "post":
-                builder = post(url).with(credential);
-                break;
-
-            case "delete":
-                builder = delete(url).with(credential);
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
-
+        MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) Match(method).of(
+                Case($(m -> m.equals("get")), o -> get(url).with(credential)),
+                Case($(m -> m.equals("put")), o -> put(url).with(credential)),
+                Case($(m -> m.equals("post")), o -> post(url).with(credential)),
+                Case($(m -> m.equals("delete")), o -> delete(url).with(credential)),
+                Case($(), o -> run(() -> {
+                    throw new IllegalArgumentException();
+                })));
 
         return mockMvc.perform(builder
                 .content(objectMapper.writeValueAsString(body)).contentType(MediaType.APPLICATION_JSON))
@@ -160,6 +148,7 @@ public class ProjectCrudControllerTest {
 
         ProjectFormUpdate form = new ProjectFormUpdate();
         form.setName(PROJECT_NAME_2);
+        form.setTitle(TITLE_NAME);  // if not set. Mock send "null"
         send(CONTROLLER_URL + "/" + p.getId(), "put", form, SecurityMockMvcRequestPostProcessors.user(USERNAME));
 
         Set<Project> projectList = projectRepository.getUserProjectsByUser(user);
@@ -181,6 +170,7 @@ public class ProjectCrudControllerTest {
 
         ProjectFormUpdate form = new ProjectFormUpdate();
         form.setTitle(TITLE_NAME_2);
+        form.setName(PROJECT_NAME); // if not set. Mock send "null"
         send(CONTROLLER_URL + "/" + p.getId(), "put", form, SecurityMockMvcRequestPostProcessors.user(USERNAME));
 
         Set<Project> projectList = projectRepository.getUserProjectsByUser(user);

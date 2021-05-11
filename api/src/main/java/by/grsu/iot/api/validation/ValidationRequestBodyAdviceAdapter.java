@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 
 import java.lang.reflect.Type;
 
+import static io.vavr.API.*;
+
 /**
  * Controller advice that a validate all dto body after body read
  *
@@ -30,17 +32,16 @@ public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter,
                                 Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
 
-        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), RequiredField.class)){
-            EntityFieldValidationUtil.checkRequiredField(body);
-        }
-
-        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), StringValidation.class)) {
-            EntityFieldValidationUtil.validateString(body);
-        }
-
-        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), CollectionValidation.class)) {
-            EntityFieldValidationUtil.validateCollection(body);
-        }
+        Match(body).of(
+                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), RequiredField.class)), run(() ->
+                        EntityFieldValidationUtil.checkRequiredField(body)
+                )),
+                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), StringValidation.class)), run(() ->
+                        EntityFieldValidationUtil.validateString(body)
+                )),
+                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), CollectionValidation.class)), run(() ->
+                        EntityFieldValidationUtil.validateCollection(body)
+                )));
 
         return body;
     }

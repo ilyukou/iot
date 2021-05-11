@@ -33,13 +33,9 @@ public class ElasticsearchUtil {
 
         if (list.size() > 1) {
             throw new IndexOutOfBoundsException("Found more than one SensorValueElasticsearch in SearchResponse");
-
-        } else if (list.size() == 1) {
-            return list.get(0);
-
-        } else {
-            return null;
         }
+
+        return list.size() == 1 ? list.get(0) : null;
     }
 
     public static List<SensorValueElasticsearch> convertToList(SearchResponse response) {

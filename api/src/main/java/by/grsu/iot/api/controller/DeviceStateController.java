@@ -16,6 +16,8 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Date;
 
+import static io.vavr.API.*;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/deviceState")
@@ -118,14 +120,10 @@ public class DeviceStateController {
     }
 
     private ResponseEntity<ApplicationExceptionDto> getExceptionResponse(Exception e) {
-        if (e instanceof ConflictException) {
-            return new ResponseEntity<>(
-                    new ApplicationExceptionDto(new Date(), e.getMessage())
-                    , HttpStatus.CONFLICT);
-        } else {
-            return new ResponseEntity<>(
-                    new ApplicationExceptionDto(new Date(), e.getMessage())
-                    , HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return Match(true).of(
+                Case($(e instanceof ConflictException),
+                        new ResponseEntity<>(new ApplicationExceptionDto(new Date(), e.getMessage()), HttpStatus.CONFLICT)),
+                Case($(true),
+                        new ResponseEntity<>(new ApplicationExceptionDto(new Date(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR)));
     }
 }

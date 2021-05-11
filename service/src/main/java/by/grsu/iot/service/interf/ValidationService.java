@@ -1,6 +1,6 @@
 package by.grsu.iot.service.interf;
 
-import by.grsu.iot.model.dto.validaation.ObjectValidation;
+import by.grsu.iot.model.dto.validaation.FieldStringValidation;
 
 import java.util.Map;
 
@@ -16,5 +16,5 @@ public interface ValidationService {
      *
      * @return all dto entity rules
      */
-    Map<String, ObjectValidation> getValidationRuleForAllRequestEntity();
+    Map<String, Map<String, FieldStringValidation>> getValidationRuleForAllRequestEntity();
 }

@@ -1,6 +1,6 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.model.dto.validaation.ObjectValidation;
+import by.grsu.iot.model.dto.validaation.FieldStringValidation;
 import by.grsu.iot.service.interf.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class ValidationController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, ObjectValidation>> getAll() {
+    public ResponseEntity<Map<String, Map<String, FieldStringValidation>>> getAll() {
         return new ResponseEntity<>(validationService.getValidationRuleForAllRequestEntity(), HttpStatus.OK);
     }
 }
