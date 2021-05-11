@@ -1,42 +1,27 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * @author Ilyukou Ilya
+ */
 @Entity
 @Table(name = "resource")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Resource extends BaseEntity {
 
-    private String filename;
+    private String fileName;
 
     @OneToOne(mappedBy = "resource")
     private Project project;
-
-    public Resource(String fileName, Project project) {
-        super();
-        this.filename = fileName;
-        this.project = project;
-    }
-
-    public Resource() {
-        super();
-    }
-
-    public String getFileName() {
-        return filename;
-    }
-
-    public void setFileName(String fileName) {
-        this.filename = fileName;
-    }
-
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
 }

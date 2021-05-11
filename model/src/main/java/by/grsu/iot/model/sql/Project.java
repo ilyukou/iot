@@ -1,5 +1,10 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,6 +15,10 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "project")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,57 +41,6 @@ public class Project extends BaseEntity {
 
     public Project(BaseEntity baseEntity) {
         super(baseEntity);
-    }
-
-    public Project() {
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(Set<Device> devices) {
-        this.devices = devices;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Set<Sensor> getSensors() {
-        return sensors;
-    }
-
-    public void setSensors(Set<Sensor> sensors) {
-        this.sensors = sensors;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
-    public void setResource(Resource resource) {
-        this.resource = resource;
     }
 
     @Override

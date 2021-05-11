@@ -3,12 +3,20 @@ package by.grsu.iot.model.dto.user;
 import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Used to send authorization data to the controller
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthenticationRequest implements DataTransferObject {
 
     @RequiredField
@@ -18,28 +26,4 @@ public class AuthenticationRequest implements DataTransferObject {
     @RequiredField
     @StringValidation(min = 8, max = 128)
     private String password;
-
-    public AuthenticationRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public AuthenticationRequest() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -1,6 +1,10 @@
 package by.grsu.iot.model.sql;
 
 import by.grsu.iot.model.util.CollectionUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +16,10 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "device")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Device extends IotThing {
 
     private String state;
@@ -24,29 +32,6 @@ public class Device extends IotThing {
 
     public Device(BaseEntity baseEntity) {
         super(baseEntity);
-    }
-
-    public Device() {
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public List<String> getStates() {
-        return states;
-    }
-
-    public void setStates(List<String> states) {
-        this.states = states;
-    }
-
-    public void addState(String state) {
-        this.states.add(state);
     }
 
     @Override

@@ -1,7 +1,11 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,6 +13,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role extends BaseEntity {
 
     @Column(name = "role")
@@ -20,41 +28,6 @@ public class Role extends BaseEntity {
     public Role(RoleType role) {
         super();
         this.role = role;
-    }
-
-    public Role(Long id, Date created, Date updated, Status status, RoleType role, List<User> users) {
-        super(id, created, updated, status);
-        this.role = role;
-        this.users = users;
-    }
-
-    public Role(BaseEntity baseEntity) {
-        super(baseEntity);
-    }
-
-    public Role() {
-        super();
-    }
-
-    public Role(Role role) {
-        this(role.getId(), role.getCreated(), role.getUpdated(), role.getStatus(),
-                role.getRoleType(), role.getUsers());
-    }
-
-    public RoleType getRoleType() {
-        return role;
-    }
-
-    public void setRoleType(RoleType role) {
-        this.role = role;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     @Override

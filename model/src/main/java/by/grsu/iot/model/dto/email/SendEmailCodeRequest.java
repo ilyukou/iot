@@ -3,9 +3,20 @@ package by.grsu.iot.model.dto.email;
 import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.async.EmailCodeType;
 import by.grsu.iot.model.dto.DataTransferObject;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 
+/**
+ * @author Ilyukou Ilya
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SendEmailCodeRequest implements DataTransferObject {
 
     @Email(message = "Email should be valid")
@@ -14,28 +25,4 @@ public class SendEmailCodeRequest implements DataTransferObject {
 
     @RequiredField
     private EmailCodeType type;
-
-    public SendEmailCodeRequest(String address, EmailCodeType type) {
-        this.address = address;
-        this.type = type;
-    }
-
-    public SendEmailCodeRequest() {
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public EmailCodeType getType() {
-        return type;
-    }
-
-    public void setType(EmailCodeType type) {
-        this.type = type;
-    }
 }

@@ -1,5 +1,10 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -11,6 +16,10 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "email")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Email extends BaseEntity {
 
     private String address;
@@ -36,33 +45,6 @@ public class Email extends BaseEntity {
 
     public Email(BaseEntity baseEntity) {
         super(baseEntity);
-    }
-
-    public Email() {
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override

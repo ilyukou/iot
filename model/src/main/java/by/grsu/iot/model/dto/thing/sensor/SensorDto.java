@@ -3,6 +3,10 @@ package by.grsu.iot.model.dto.thing.sensor;
 import by.grsu.iot.model.dto.thing.IotThingDto;
 import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Sensor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,12 +15,13 @@ import java.util.List;
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SensorDto extends IotThingDto {
 
     private List<SensorValue> values;
-
-    public SensorDto() {
-    }
 
     public SensorDto(IotThing iotThing) {
         super(iotThing);
@@ -24,14 +29,6 @@ public class SensorDto extends IotThingDto {
 
     public SensorDto(IotThing iotThing, List<SensorValue> values) {
         super(iotThing);
-        this.values = values;
-    }
-
-    public List<SensorValue> getValues() {
-        return values;
-    }
-
-    public void setValues(List<SensorValue> values) {
         this.values = values;
     }
 }

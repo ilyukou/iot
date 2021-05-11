@@ -3,12 +3,20 @@ package by.grsu.iot.model.dto.project;
 
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.sql.Project;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * DTO for {@link Project}
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectDto implements DataTransferObject {
 
     private String name;
@@ -27,40 +35,5 @@ public class ProjectDto implements DataTransferObject {
         if (project.getResource() != null){
             this.resource = project.getResource().getFileName();
         }
-    }
-
-    public ProjectDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
     }
 }

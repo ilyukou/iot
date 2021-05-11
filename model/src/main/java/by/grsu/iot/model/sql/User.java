@@ -1,5 +1,9 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +15,10 @@ import java.util.*;
  */
 @Entity
 @Table(name = "user")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 
     private String username;
@@ -30,20 +38,6 @@ public class User extends BaseEntity implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles = new ArrayList<>();
 
-    public User() {
-    }
-
-    public User(Long id, Date created, Date updated, Status status,
-                String username, String password, Email email,
-                Set<Project> projects, List<Role> roles) {
-        super(id, created, updated, status);
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.projects = projects;
-        this.roles = roles;
-    }
-
     public User(User user) {
         super(user.getId(), user.getCreated(), user.getUpdated(), user.getStatus());
         this.username = user.getUsername();
@@ -55,14 +49,6 @@ public class User extends BaseEntity implements UserDetails {
 
     public User(BaseEntity baseEntity) {
         super(baseEntity);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override
@@ -88,42 +74,6 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
-    }
-
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
-    }
-
-    public void addProject(Project project) {
-        this.projects.add(project);
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
     }
 
     @Override

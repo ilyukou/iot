@@ -1,6 +1,10 @@
 package by.grsu.iot.model.elasticsearch;
 
 import by.grsu.iot.model.sql.Sensor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -14,6 +18,10 @@ import java.util.Objects;
  * @author Ilyukou Ilya
  */
 @Document(indexName = "sensorvalue")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SensorValueElasticsearch implements Comparable {
 
     @Id
@@ -29,41 +37,6 @@ public class SensorValueElasticsearch implements Comparable {
     public SensorValueElasticsearch(Long time, Double value, String token) {
         this.time = time;
         this.value = value;
-        this.token = token;
-    }
-
-    public SensorValueElasticsearch() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
         this.token = token;
     }
 

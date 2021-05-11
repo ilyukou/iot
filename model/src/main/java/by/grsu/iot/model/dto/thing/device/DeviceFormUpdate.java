@@ -3,6 +3,10 @@ package by.grsu.iot.model.dto.thing.device;
 import by.grsu.iot.model.annotation.CollectionValidation;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,6 +15,10 @@ import java.util.List;
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeviceFormUpdate implements DataTransferObject {
 
     @StringValidation(min = 2, max = 16, spaceAllowed = true)
@@ -19,28 +27,4 @@ public class DeviceFormUpdate implements DataTransferObject {
     @CollectionValidation(minSize = 2, maxSize = 10)
     @StringValidation(min = 2, max = 16)
     private List<String> states;
-
-    public DeviceFormUpdate(String name, List<String> states) {
-        this.name = name;
-        this.states = states;
-    }
-
-    public DeviceFormUpdate() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<String> getStates() {
-        return states;
-    }
-
-    public void setStates(List<String> states) {
-        this.states = states;
-    }
 }

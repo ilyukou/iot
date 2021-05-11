@@ -5,6 +5,10 @@ import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.annotation.StringValidation;
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.sql.Device;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -13,6 +17,10 @@ import java.util.List;
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeviceForm implements DataTransferObject {
 
     private Long project;
@@ -30,16 +38,6 @@ public class DeviceForm implements DataTransferObject {
     @StringValidation(min = 2, max = 16)
     private List<String> states;
 
-    public DeviceForm(Long project, String state, String name, List<String> states) {
-        this.project = project;
-        this.state = state;
-        this.name = name;
-        this.states = states;
-    }
-
-    public DeviceForm() {
-    }
-
     public Device convert() {
         Device device = new Device();
 
@@ -48,37 +46,5 @@ public class DeviceForm implements DataTransferObject {
         device.setState(getState());
 
         return device;
-    }
-
-    public Long getProject() {
-        return project;
-    }
-
-    public void setProject(Long project) {
-        this.project = project;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<String> getStates() {
-        return states;
-    }
-
-    public void setStates(List<String> states) {
-        this.states = states;
     }
 }

@@ -57,7 +57,7 @@ public class UserRepositoryImplTest {
         user.setEmail(email);
 
         role = new Role();
-        role.setRoleType(roleType);
+        role.setRole(roleType);
     }
 
     @Test

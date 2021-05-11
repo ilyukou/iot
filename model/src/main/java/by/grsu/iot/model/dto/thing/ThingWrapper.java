@@ -5,12 +5,20 @@ import by.grsu.iot.model.dto.thing.sensor.SensorDto;
 import by.grsu.iot.model.dto.thing.sensor.SensorValue;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Sensor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 /**
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ThingWrapper {
 
     private ThingEnum type;
@@ -24,24 +32,5 @@ public class ThingWrapper {
     public ThingWrapper(Sensor sensor, List<SensorValue> values) {
         this.type = ThingEnum.sensor;
         this.entity = new SensorDto(sensor, values);
-    }
-
-    public ThingWrapper() {
-    }
-
-    public ThingEnum getType() {
-        return type;
-    }
-
-    public void setType(ThingEnum type) {
-        this.type = type;
-    }
-
-    public Object getEntity() {
-        return entity;
-    }
-
-    public void setEntity(Object entity) {
-        this.entity = entity;
     }
 }

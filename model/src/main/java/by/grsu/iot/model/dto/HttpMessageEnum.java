@@ -1,5 +1,13 @@
 package by.grsu.iot.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * @author Ilyukou Ilya
+ */
+@Getter
+@AllArgsConstructor
 public enum HttpMessageEnum {
     ok("ok"),
     info("info"),
@@ -7,12 +15,4 @@ public enum HttpMessageEnum {
     warn("warn");
 
     private final String value;
-
-    HttpMessageEnum(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

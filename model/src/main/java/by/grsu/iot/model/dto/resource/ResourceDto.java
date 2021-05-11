@@ -2,12 +2,20 @@ package by.grsu.iot.model.dto.resource;
 
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.sql.Resource;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * DTO for {@link Resource}
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResourceDto implements DataTransferObject {
 
     private Long project;
@@ -16,24 +24,5 @@ public class ResourceDto implements DataTransferObject {
     public ResourceDto(Resource resource) {
         this.project = resource.getProject().getId();
         this.filename = resource.getFileName();
-    }
-
-    public ResourceDto() {
-    }
-
-    public Long getProject() {
-        return project;
-    }
-
-    public void setProject(Long project) {
-        this.project = project;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 }

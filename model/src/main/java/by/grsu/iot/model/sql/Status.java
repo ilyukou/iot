@@ -1,8 +1,13 @@
 package by.grsu.iot.model.sql;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author Ilyukou Ilya
  */
+@Getter
+@AllArgsConstructor
 public enum Status {
     NOT_ACTIVE("NOT_ACTIVE"),
     ACTIVE("ACTIVE"),
@@ -10,12 +15,4 @@ public enum Status {
     DELETED("DELETED");
 
     private final String value;
-
-    Status(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

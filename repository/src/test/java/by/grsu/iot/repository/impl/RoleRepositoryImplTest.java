@@ -47,9 +47,9 @@ public class RoleRepositoryImplTest {
     @Test
     public void getRoleOrCreate() {
         Role created = roleRepository.create(ADMIN_ROLE_TYPE);
-        Role fromRepository = roleRepository.getRoleOrCreate(created.getRoleType());
+        Role fromRepository = roleRepository.getRoleOrCreate(created.getRole());
 
-        Assert.assertEquals(created.getRoleType(), fromRepository.getRoleType());
+        Assert.assertEquals(created.getRole(), fromRepository.getRole());
         Assert.assertEquals(created.getId(), fromRepository.getId());
         Assert.assertEquals(created.getCreated(), fromRepository.getCreated());
         Assert.assertEquals(created.getUpdated(), fromRepository.getUpdated());

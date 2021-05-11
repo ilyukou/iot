@@ -2,6 +2,10 @@ package by.grsu.iot.model.dto.exception;
 
 import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.exception.ApplicationException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -10,6 +14,10 @@ import java.util.Date;
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApplicationExceptionDto implements DataTransferObject {
 
     private Long time;
@@ -17,30 +25,6 @@ public class ApplicationExceptionDto implements DataTransferObject {
 
     public ApplicationExceptionDto(Date time, String message) {
         this.time = time.getTime();
-        this.message = message;
-    }
-
-    public ApplicationExceptionDto(Long time, String message) {
-        this.time = time;
-        this.message = message;
-    }
-
-    public ApplicationExceptionDto() {
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
     }
 }

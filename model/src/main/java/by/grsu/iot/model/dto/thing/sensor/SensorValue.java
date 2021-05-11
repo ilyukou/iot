@@ -2,12 +2,20 @@ package by.grsu.iot.model.dto.thing.sensor;
 
 import by.grsu.iot.model.annotation.RequiredField;
 import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Used to send a value of sensor
  *
  * @author Ilyukou Ilya
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SensorValue {
 
     private Long time;
@@ -15,32 +23,8 @@ public class SensorValue {
     @RequiredField
     private Double value;
 
-    public SensorValue(Long time, Double value) {
-        this.time = time;
-        this.value = value;
-    }
-
     public SensorValue(SensorValueElasticsearch sensorValueElasticsearch) {
         this.time = sensorValueElasticsearch.getTime();
         this.value = sensorValueElasticsearch.getValue();
-    }
-
-    public SensorValue() {
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
     }
 }
