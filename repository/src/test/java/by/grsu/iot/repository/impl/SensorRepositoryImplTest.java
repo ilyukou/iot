@@ -4,7 +4,7 @@ import by.grsu.iot.model.sql.Email;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.Sensor;
 import by.grsu.iot.model.sql.User;
-import by.grsu.iot.repository.RepositoryApplication;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.repository.interf.SensorRepository;
 import by.grsu.iot.repository.interf.UserRepository;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SensorRepositoryImplTest {
 
     private final String username = "username";

@@ -7,12 +7,14 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /**
  * Configuration ElasticSearch Client
  *
  * @author Ilyukou Ilya
  */
+@EnableElasticsearchRepositories(basePackages = {"by.grsu.iot.repository"})
 @Configuration
 public class RepositoryElasticSearchConfig {
 

@@ -2,7 +2,7 @@ package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.model.dto.thing.device.state.SetDeviceRequest;
-import by.grsu.iot.repository.RepositoryApplication;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.DeviceStateRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeviceStateRepositoryImplTest {
 
     @Autowired
@@ -24,8 +24,8 @@ public class DeviceStateRepositoryImplTest {
     private GetStateRequest getStateRequest;
     private SetDeviceRequest setDeviceRequest;
 
-    private String token = "token1";
-    private String state = "on";
+    private final String token = "token1";
+    private final String state = "on";
 
     @Before
     public void setUp() {

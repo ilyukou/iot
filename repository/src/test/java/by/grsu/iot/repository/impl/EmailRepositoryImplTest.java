@@ -1,7 +1,7 @@
 package by.grsu.iot.repository.impl;
 
 import by.grsu.iot.model.sql.Email;
-import by.grsu.iot.repository.RepositoryApplication;
+import by.grsu.iot.repository.config.RepositoryTestConfig;
 import by.grsu.iot.repository.interf.EmailRepository;
 import by.grsu.iot.repository.interf.UserRepository;
 import org.junit.Assert;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {RepositoryApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {RepositoryTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmailRepositoryImplTest {
 
     private final String address = "email@email.com";

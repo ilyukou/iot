@@ -2,15 +2,18 @@ package by.grsu.iot.repository.config;
 
 import fr.pilato.spring.elasticsearch.ElasticsearchRestClientFactoryBean;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@TestConfiguration
+@Import(RepositoryModuleConfig.class)
+@Configuration
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = CommandLineRunner.class))
+@EnableAutoConfiguration
 public class RepositoryTestConfig {
 
     @Bean
