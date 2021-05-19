@@ -2,7 +2,9 @@ package by.grsu.iot.service.interf.crud;
 
 import by.grsu.iot.model.dto.project.ProjectForm;
 import by.grsu.iot.model.dto.project.ProjectFormUpdate;
+import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.sql.Project;
+import org.springframework.data.domain.Page;
 
 /**
  * Service layer for CRUD operation with {@link Project}
@@ -46,4 +48,6 @@ public interface ProjectCrudService {
      * @param username who request a delete project
      */
     void delete(Long id, String username);
+
+    Page<Project> getPage(String username, Integer size, Integer page, RequestSortType type, String field);
 }

@@ -2,6 +2,8 @@ package by.grsu.iot.repository.jpa;
 
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +42,6 @@ public interface DeviceJpaRepository extends JpaRepository<Device, Long> {
 
     @Query(value = "select count(*) from device d where d.project_id = ?1", nativeQuery = true)
     Integer getDevicesSize(Long projectId);
+
+    Page<Device> findAllByProject(Project project, Pageable pageable);
 }

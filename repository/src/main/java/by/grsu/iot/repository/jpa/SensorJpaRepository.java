@@ -1,6 +1,9 @@
 package by.grsu.iot.repository.jpa;
 
+import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.Sensor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -29,4 +32,6 @@ public interface SensorJpaRepository extends JpaRepository<Sensor, Long> {
 
     @Query(value = "select s.token from sensor s where s.id = ?1", nativeQuery = true)
     String findTokenById(Long id);
+
+    Page<Sensor> findAllByProject(Project project, Pageable pageable);
 }

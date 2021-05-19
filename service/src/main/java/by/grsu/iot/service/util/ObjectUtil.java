@@ -1,13 +1,19 @@
 package by.grsu.iot.service.util;
 
 import by.grsu.iot.model.dto.project.ProjectFormUpdate;
+import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.dto.thing.sensor.SensorFormUpdate;
+import by.grsu.iot.model.dto.thing.sensor.SensorValue;
+import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.Sensor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -103,5 +109,25 @@ public class ObjectUtil {
             // FIXME Throw exception without a declare exception
             throw new IllegalArgumentException("NoSuchMethodException");
         }
+    }
+
+    public static Pageable convertToPageable(RequestSortType type, String field, Integer size, Integer page) {
+        return PageRequest.of(page, size, setSort(null, type, field));
+    }
+
+    private static Sort setSort(Sort sort, RequestSortType type, String field) {
+        return setOrder(setField(sort, field), type);
+    }
+
+    private static Sort setOrder(Sort sort, RequestSortType type) {
+        return type == RequestSortType.descending ? sort.descending() : sort.ascending();
+    }
+
+    private static Sort setField(Sort sort, String field) {
+        return sort == null ? Sort.by(field) : sort.and(Sort.by(field));
+    }
+
+    public static List<SensorValue> convertToSensorValue(List<SensorValueElasticsearch> values) {
+        return values.stream().map(SensorValue::new).collect(Collectors.toList());
     }
 }

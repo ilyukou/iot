@@ -4,6 +4,7 @@ import by.grsu.iot.model.elasticsearch.SensorValueElasticsearch;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Repository for CRUD operation with {@link SensorValueElasticsearch}
@@ -49,4 +50,6 @@ public interface SensorValueRepository {
     Long getSensorValueElasticsearchCount(String token) throws IOException;
 
     List<SensorValueElasticsearch> getLastValuePiece(String token, Integer size);
+
+    Map<String, List<SensorValueElasticsearch>> getSensorLastValuesByTokens(List<String> tokens, Integer pieceSize);
 }

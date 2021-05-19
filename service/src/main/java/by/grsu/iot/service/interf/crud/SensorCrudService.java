@@ -1,5 +1,8 @@
 package by.grsu.iot.service.interf.crud;
 
+import by.grsu.iot.model.dto.PageWrapper;
+import by.grsu.iot.model.dto.sort.RequestSortType;
+import by.grsu.iot.model.dto.thing.sensor.SensorDto;
 import by.grsu.iot.model.dto.thing.sensor.SensorForm;
 import by.grsu.iot.model.dto.thing.sensor.SensorFormUpdate;
 import by.grsu.iot.model.sql.Project;
@@ -56,4 +59,6 @@ public interface SensorCrudService {
      * @return true if exist, or false
      */
     boolean isExist(String token);
+
+    PageWrapper<SensorDto> getPage(Long project, String username, Integer size, Integer page, RequestSortType type, String field);
 }

@@ -12,6 +12,8 @@ import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -135,5 +137,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         Long userId = projectJpaRepository.findUserIdByResourceId(resourceId);
 
         return userRepository.findUsername(userId);
+    }
+
+    @Override
+    public Page<Project> getPage(User user, Pageable pageable) {
+        return projectJpaRepository.findAllByUser(user, pageable);
     }
 }
