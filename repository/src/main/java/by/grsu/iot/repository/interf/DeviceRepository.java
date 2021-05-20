@@ -119,4 +119,6 @@ public interface DeviceRepository {
      * @return count of devices
      */
     Integer getDevicesSize(Long projectId);
+
+    boolean hasUserOwnerDevice(String username, Long deviceId);
 }

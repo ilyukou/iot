@@ -4,7 +4,6 @@ import by.grsu.iot.model.dto.thing.device.DeviceForm;
 import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.model.sql.User;
 
 /**
  * Service layer for CRUD operation with {@link Device}
@@ -17,37 +16,33 @@ public interface DeviceCrudService {
      * Create {@link Device} for {@link Project} with such {@link Project#getId()}.
      *
      * @param deviceForm form with fields
-     * @param username   who request a create device {@link User#getUsername()}
      * @return created {@link Device}
      */
-    Device create(DeviceForm deviceForm, String username);
+    Device create(DeviceForm deviceForm);
 
     /**
      * Get {@link Device} by {@link Device#getId()}
      *
-     * @param id       {@link Device#getId()}
-     * @param username who request a device {@link User#getUsername()}
+     * @param id {@link Device#getId()}
      * @return {@link Device}
      */
-    Device getById(Long id, String username);
+    Device getById(Long id);
 
     /**
      * Delete {@link Device} by {@link Device#getId()}
      *
      * @param id       {@link Device#getId()}
-     * @param username who request a delete device {@link User#getUsername()}
      */
-    void delete(Long id, String username);
+    void delete(Long id);
 
     /**
      * Update {@link Device}
      *
      * @param id               {@link Device#getId()}
      * @param deviceFormUpdate form with fields
-     * @param username         who request a update device {@link User#getUsername()}
      * @return updated {@link Device}
      */
-    Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username);
+    Device update(Long id, DeviceFormUpdate deviceFormUpdate);
 
     /**
      * Get current {@link Device#getState()} from repository

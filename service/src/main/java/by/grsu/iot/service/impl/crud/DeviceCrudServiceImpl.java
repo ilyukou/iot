@@ -9,7 +9,6 @@ import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.access.interf.crud.DeviceAccessService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,21 +20,18 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
 
     private final DeviceRepository deviceRepository;
     private final ProjectRepository projectRepository;
-    private final DeviceAccessService deviceAccessService;
 
     public DeviceCrudServiceImpl(
             DeviceRepository deviceRepository,
-            ProjectRepository projectRepository,
-            DeviceAccessService deviceAccessService) {
+            ProjectRepository projectRepository
+    ) {
         this.deviceRepository = deviceRepository;
         this.projectRepository = projectRepository;
-        this.deviceAccessService = deviceAccessService;
     }
 
 
     @Override
-    public Device create(DeviceForm deviceForm, String username) {
-        deviceAccessService.checkCreateAccess(username, deviceForm.getProject());
+    public Device create(DeviceForm deviceForm) {
 
         checkStates(deviceForm.getState(), deviceForm.getStates());
 
@@ -43,23 +39,17 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
     }
 
     @Override
-    public Device getById(Long id, String username) {
-        deviceAccessService.checkReadAccess(username, id);
-
+    public Device getById(Long id) {
         return deviceRepository.getById(id);
     }
 
     @Override
-    public void delete(Long id, String username) {
-        deviceAccessService.checkDeleteAccess(username, id);
-
+    public void delete(Long id) {
         deviceRepository.delete(id);
     }
 
     @Override
-    public Device update(Long id, DeviceFormUpdate deviceFormUpdate, String username) {
-        deviceAccessService.checkUpdateAccess(username, id);
-
+    public Device update(Long id, DeviceFormUpdate deviceFormUpdate) {
         Device device = deviceRepository.getById(id);
 
         if (deviceFormUpdate.getStates() != null) {

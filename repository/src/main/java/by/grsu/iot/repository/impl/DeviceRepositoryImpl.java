@@ -127,4 +127,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     public Integer getDevicesSize(Long projectId) {
         return deviceJpaRepository.getDevicesSize(projectId);
     }
+
+    @Override
+    public boolean hasUserOwnerDevice(String username, Long deviceId) {
+        return username.equals(getDeviceOwnerUsername(deviceId));
+    }
 }

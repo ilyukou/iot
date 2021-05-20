@@ -136,4 +136,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return userRepository.findUsername(userId);
     }
+
+    @Override
+    public boolean hasUserOwnerProject(String username, Long projectId) {
+        return username.equals(getProjectOwnerUsername(projectId));
+    }
 }

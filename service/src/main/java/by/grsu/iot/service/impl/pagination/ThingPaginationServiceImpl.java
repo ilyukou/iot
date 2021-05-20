@@ -1,6 +1,5 @@
 package by.grsu.iot.service.impl.pagination;
 
-import by.grsu.iot.access.interf.pagination.ThingPaginationAccessService;
 import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.model.dto.thing.ThingEnum;
 import by.grsu.iot.model.dto.thing.ThingWrapper;
@@ -35,7 +34,6 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     private final ProjectRepository projectRepository;
     private final DeviceRepository deviceRepository;
-    private final ThingPaginationAccessService thingPaginationAccessService;
     private final SensorRepository sensorRepository;
     private final SensorValueRepository sensorValueRepository;
 
@@ -43,12 +41,10 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
             Environment environment,
             ProjectRepository projectRepository,
             DeviceRepository deviceRepository,
-            ThingPaginationAccessService thingPaginationAccessService,
             SensorRepository sensorRepository,
             SensorValueRepository sensorValueRepository) {
         this.projectRepository = projectRepository;
         this.deviceRepository = deviceRepository;
-        this.thingPaginationAccessService = thingPaginationAccessService;
         this.sensorRepository = sensorRepository;
 
         THING_PER_PAGE = Long.valueOf(Objects.requireNonNull(environment.getProperty(THING_PER_PAGE_PROPERTY)));
@@ -59,8 +55,6 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     @Override
     public List<ThingWrapper> getThingsFromProjectPage(Long projectId, Integer page, String username) {
-        thingPaginationAccessService.checkPageReadAccess(projectId, username);
-
         List<PaginationIotThing> things = deviceRepository.getProjectDeviceIds(projectId)
                 .stream()
                 .sorted()
@@ -100,7 +94,6 @@ public class ThingPaginationServiceImpl implements ThingPaginationService {
 
     @Override
     public PaginationInfo getPaginationInfo(Long projectId, String username) {
-        thingPaginationAccessService.checkPaginationInfoReadAccess(projectId, username);
 
         Integer size = projectRepository.getProjectIotThingSize(projectId);
 

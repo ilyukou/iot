@@ -95,4 +95,6 @@ public interface SensorRepository {
     Integer getSensorsSize(Long projectId);
 
     String getTokenById(Long id);
+
+    boolean hasUserOwnerSensor(String username, Long sensorId);
 }

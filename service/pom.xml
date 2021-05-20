@@ -29,11 +29,6 @@
         </dependency>
         <dependency>
             <groupId>by.grsu</groupId>
-            <artifactId>access</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>by.grsu</groupId>
             <artifactId>security</artifactId>
             <version>0.1</version>
         </dependency>

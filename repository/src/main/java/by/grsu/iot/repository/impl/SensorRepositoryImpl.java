@@ -102,4 +102,9 @@ public class SensorRepositoryImpl implements SensorRepository {
     public String getTokenById(Long id) {
         return sensorJpaRepository.findTokenById(id);
     }
+
+    @Override
+    public boolean hasUserOwnerSensor(String username, Long sensorId) {
+        return username.equals(getOwnerUsername(sensorId));
+    }
 }

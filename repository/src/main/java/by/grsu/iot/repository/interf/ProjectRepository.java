@@ -108,8 +108,11 @@ public interface ProjectRepository {
 
     /**
      * Get owner {@link User#getUsername()} by {@link Resource#getId()}
+     *
      * @param resourceId {@link Resource#getId()}
      * @return {@link User#getUsername()}
      */
     String getProjectOwnerUsernameByResourceId(Long resourceId);
+
+    boolean hasUserOwnerProject(String username, Long projectId);
 }

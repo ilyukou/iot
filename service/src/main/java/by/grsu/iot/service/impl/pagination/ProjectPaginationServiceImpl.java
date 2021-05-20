@@ -1,6 +1,5 @@
 package by.grsu.iot.service.impl.pagination;
 
-import by.grsu.iot.access.interf.pagination.ProjectPaginationAccessService;
 import by.grsu.iot.model.dto.pagination.PaginationInfo;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.model.sql.Project;
@@ -25,14 +24,11 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
     private final Environment environment;
 
     private final ProjectRepository projectRepository;
-    private final ProjectPaginationAccessService projectPaginationAccessService;
 
     public ProjectPaginationServiceImpl(
-            Environment environment, ProjectRepository projectRepository,
-            ProjectPaginationAccessService projectPaginationAccessService) {
+            Environment environment, ProjectRepository projectRepository) {
         this.environment = environment;
         this.projectRepository = projectRepository;
-        this.projectPaginationAccessService = projectPaginationAccessService;
 
         PROJECT_PER_PAGE = Long.valueOf(Objects.requireNonNull(environment.getProperty(PROJECT_PER_PAGE_PROPERTY)));
     }
@@ -40,7 +36,6 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
     @Override
     public List<Project> getProjectsFromPage(Integer page, String whoBeingAskedUsername, String whoRequestedUsername) {
-        projectPaginationAccessService.checkPageReadAccess(whoBeingAskedUsername, whoRequestedUsername);
 
         PaginationInfo info = getPaginationInfo(whoBeingAskedUsername, whoRequestedUsername);
 
@@ -64,8 +59,6 @@ public class ProjectPaginationServiceImpl implements ProjectPaginationService {
 
     @Override
     public PaginationInfo getPaginationInfo(String whoBeingAskedUsername, String whoRequestedUsername) {
-
-        projectPaginationAccessService.checkPaginationInfoReadAccess(whoBeingAskedUsername, whoRequestedUsername);
 
         Integer projectsSize = projectRepository.getUserProjectsSize(whoBeingAskedUsername);
 

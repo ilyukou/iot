@@ -26,7 +26,7 @@ public class ValidationServiceImpl implements ValidationService {
         return reflections.getSubTypesOf(DataTransferObject.class).stream()
                 .peek(aClass -> Arrays.stream(aClass.getFields()).forEach(field -> field.setAccessible(true)))
                 .filter(aClass -> ObjectUtil.hasClassAnnotatedField(aClass, StringValidation.class))
-                .collect(Collectors.toMap(Class::getSimpleName, clazz -> getClassValidationRule(clazz)));
+                .collect(Collectors.toMap(Class::getSimpleName, this::getClassValidationRule));
     }
 
     private Map<String, FieldStringValidation> getClassValidationRule(Class<?> clazz) {
