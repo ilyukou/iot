@@ -18,4 +18,8 @@ public class BadRequestApplicationException extends ApplicationException {
         super(message);
         this.field = field;
     }
+
+    public BadRequestApplicationException(String message) {
+        super(message);
+    }
 }
