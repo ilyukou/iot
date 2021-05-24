@@ -1,5 +1,7 @@
 package by.grsu.iot.service.impl.crud;
 
+import by.grsu.iot.access.interf.crud.DeviceAccessService;
+import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.dto.thing.device.DeviceForm;
 import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
@@ -9,7 +11,7 @@ import by.grsu.iot.repository.interf.DeviceRepository;
 import by.grsu.iot.repository.interf.ProjectRepository;
 import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import by.grsu.iot.service.util.ObjectUtil;
-import by.grsu.iot.access.interf.crud.DeviceAccessService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +76,11 @@ public class DeviceCrudServiceImpl implements DeviceCrudService {
     @Override
     public String getDeviceState(String token) {
         return deviceRepository.getDeviceStateByToken(token);
+    }
+
+    @Override
+    public Page<Device> getPage(Long project, Integer size, Integer page, RequestSortType type, String field) {
+        return deviceRepository.getPage(projectRepository.getById(project), ObjectUtil.convertToPageable(type, field, size, page));
     }
 
     private void checkStates(String state, List<String> states) {

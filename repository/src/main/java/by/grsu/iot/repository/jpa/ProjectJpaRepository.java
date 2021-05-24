@@ -2,6 +2,8 @@ package by.grsu.iot.repository.jpa;
 
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,4 +30,6 @@ public interface ProjectJpaRepository extends JpaRepository<Project, Long> {
 
     @Query(value = "select p.user_id from project p where p.resource_id = ?1", nativeQuery = true)
     Long findUserIdByResourceId(Long projectId);
+
+    Page<Project> findAllByUser(User user, Pageable pageable);
 }

@@ -1,10 +1,12 @@
 package by.grsu.iot.service.interf.crud;
 
+import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.dto.thing.device.DeviceForm;
 import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
 import by.grsu.iot.model.sql.Device;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.User;
+import org.springframework.data.domain.Page;
 
 /**
  * Service layer for CRUD operation with {@link Device}
@@ -56,4 +58,6 @@ public interface DeviceCrudService {
      * @return {@link Device#getState()}
      */
     String getDeviceState(String token);
+
+    Page<Device> getPage(Long project, Integer size, Integer page, RequestSortType type, String field);
 }

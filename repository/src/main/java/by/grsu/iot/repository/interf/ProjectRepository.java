@@ -4,6 +4,8 @@ import by.grsu.iot.model.sql.IotThing;
 import by.grsu.iot.model.sql.Project;
 import by.grsu.iot.model.sql.Resource;
 import by.grsu.iot.model.sql.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -108,8 +110,18 @@ public interface ProjectRepository {
 
     /**
      * Get owner {@link User#getUsername()} by {@link Resource#getId()}
+     *
      * @param resourceId {@link Resource#getId()}
      * @return {@link User#getUsername()}
      */
     String getProjectOwnerUsernameByResourceId(Long resourceId);
+
+    /**
+     * Get {@link Page} of {@link Project}
+     *
+     * @param user     {@link Project#getUser()}
+     * @param pageable {@link Pageable}
+     * @return page of projects
+     */
+    Page<Project> getPage(User user, Pageable pageable);
 }

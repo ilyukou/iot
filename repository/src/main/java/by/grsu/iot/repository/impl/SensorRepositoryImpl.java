@@ -9,6 +9,8 @@ import by.grsu.iot.repository.jpa.SensorJpaRepository;
 import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,5 +103,10 @@ public class SensorRepositoryImpl implements SensorRepository {
     @Override
     public String getTokenById(Long id) {
         return sensorJpaRepository.findTokenById(id);
+    }
+
+    @Override
+    public Page<Sensor> getPage(Project project, Pageable pageable) {
+        return sensorJpaRepository.findAllByProject(project, pageable);
     }
 }

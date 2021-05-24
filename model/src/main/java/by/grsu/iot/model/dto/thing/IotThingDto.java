@@ -1,5 +1,6 @@
 package by.grsu.iot.model.dto.thing;
 
+import by.grsu.iot.model.dto.DataTransferObject;
 import by.grsu.iot.model.sql.IotThing;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import static io.vavr.API.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class IotThingDto {
+public class IotThingDto implements DataTransferObject {
 
     private Long id;
     private String name;

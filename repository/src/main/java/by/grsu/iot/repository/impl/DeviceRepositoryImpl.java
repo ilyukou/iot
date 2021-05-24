@@ -9,6 +9,8 @@ import by.grsu.iot.repository.jpa.DeviceJpaRepository;
 import by.grsu.iot.util.service.TimeUtil;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,5 +128,10 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     @Override
     public Integer getDevicesSize(Long projectId) {
         return deviceJpaRepository.getDevicesSize(projectId);
+    }
+
+    @Override
+    public Page<Device> getPage(Project project, Pageable pageable) {
+        return deviceJpaRepository.findAllByProject(project, pageable);
     }
 }

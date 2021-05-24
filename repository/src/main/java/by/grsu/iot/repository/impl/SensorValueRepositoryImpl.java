@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Transactional
 @Repository
@@ -110,6 +112,13 @@ public class SensorValueRepositoryImpl implements SensorValueRepository {
         searchRequest.source(searchSourceBuilder);
 
         return ElasticsearchUtil.convertToList(restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT));
+    }
+
+    @Override
+    public Map<String, List<SensorValueElasticsearch>> getSensorLastValuesByTokens(List<String> tokens, Integer pieceSize) {
+        return tokens
+                .stream()
+                .collect(Collectors.toMap(token -> token, token -> getLastValuePiece(token, pieceSize)));
     }
 
     private SearchResponse findOne(String token) throws IOException {

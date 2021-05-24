@@ -1,5 +1,7 @@
 package by.grsu.iot.api.controller.crud;
 
+import by.grsu.iot.model.dto.PageWrapper;
+import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.dto.thing.sensor.SensorDto;
 import by.grsu.iot.model.dto.thing.sensor.SensorForm;
 import by.grsu.iot.model.dto.thing.sensor.SensorFormUpdate;
@@ -23,6 +25,20 @@ public class SensorCrudController {
 
     public SensorCrudController(SensorCrudService sensorCrudService) {
         this.sensorCrudService = sensorCrudService;
+    }
+
+    @GetMapping("{project}")
+    public ResponseEntity<PageWrapper<SensorDto>> getSensorPage(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long project,
+            @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.crud.sensor.page.size}") Integer size,
+            @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.startFrom}") Integer page,
+            @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.sort.type}") RequestSortType sort,
+            @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.sort.field}") String field
+    ) {
+        return new ResponseEntity<>(
+                sensorCrudService.getPage(project, userDetails.getUsername(), size, page, sort, field),
+                HttpStatus.OK);
     }
 
     @PostMapping
