@@ -1,5 +1,6 @@
 package by.grsu.iot.security.jwt;
 
+import by.grsu.iot.util.service.StringUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,24 +8,20 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 
-    private String secretKey = "secret";
+    private static final Long SECRET_KEY_LENGTH = 32L;
+    private static final Long VALIDITY_TOKEN_IN_MILLISECONDS = 100 * 3600000L; // 100h
 
-    //validity in milliseconds
-    private long validityInMs = 100 * 3600000; // 100h
+    private final String secretKey;
+
+    public JwtProperties(StringUtil stringUtil) {
+        secretKey = stringUtil.generateString(SECRET_KEY_LENGTH);
+    }
 
     public String getSecretKey() {
         return secretKey;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
     public long getValidityInMs() {
-        return validityInMs;
-    }
-
-    public void setValidityInMs(long validityInMs) {
-        this.validityInMs = validityInMs;
+        return VALIDITY_TOKEN_IN_MILLISECONDS;
     }
 }
