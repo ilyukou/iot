@@ -1,6 +1,5 @@
 package by.grsu.iot.service.impl.crud;
 
-import by.grsu.iot.access.interf.crud.ResourceAccessService;
 import by.grsu.iot.model.exception.ApplicationException;
 import by.grsu.iot.model.exception.BadRequestApplicationException;
 import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
@@ -31,26 +30,22 @@ public class ResourceCrudServiceImpl implements ResourceCrudService {
 
     private final ResourceRepository resourceRepository;
     private final FileResourceRepository fileResourceRepository;
-    private final ResourceAccessService resourceAccessService;
+
     @Value("#{'${by.grsu.iot.resource.file.content-type}'.split(',')}")
     private List<String> CONTENT_TYPES;
 
     public ResourceCrudServiceImpl(
             ResourceRepository resourceRepository,
             FileResourceRepository fileResourceRepository,
-            ResourceAccessService resourceAccessService,
             StringUtil stringUtil
     ) {
         this.resourceRepository = resourceRepository;
         this.fileResourceRepository = fileResourceRepository;
-        this.resourceAccessService = resourceAccessService;
         this.stringUtil = stringUtil;
     }
 
     @Override
     public Resource create(MultipartFile file, Long projectId, String username) {
-        resourceAccessService.checkCreateAccess(username, projectId);
-
         String fileName;
         try {
             fileName = fileResourceRepository.save(file);
@@ -93,7 +88,6 @@ public class ResourceCrudServiceImpl implements ResourceCrudService {
 
     @Override
     public InputStream get(String filename, String username) {
-        resourceAccessService.checkReadAccess(username, filename);
 
         if (!resourceRepository.isExist(filename)) {
             throw new EntityNotFoundApplicationException("Not found resource with such filename");

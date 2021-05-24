@@ -1,6 +1,5 @@
 package by.grsu.iot.service.impl.crud;
 
-import by.grsu.iot.access.interf.crud.ProjectAccessService;
 import by.grsu.iot.model.dto.project.ProjectForm;
 import by.grsu.iot.model.dto.project.ProjectFormUpdate;
 import by.grsu.iot.model.dto.sort.RequestSortType;
@@ -18,46 +17,36 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectCrudServiceImpl implements ProjectCrudService {
 
     private final ProjectRepository projectRepository;
-    private final ProjectAccessService projectAccessService;
     private final UserCrudService userCrudService;
 
     public ProjectCrudServiceImpl(
             ProjectRepository projectRepository,
-            ProjectAccessService projectAccessService,
             UserCrudService userCrudService
     ) {
         this.projectRepository = projectRepository;
-        this.projectAccessService = projectAccessService;
         this.userCrudService = userCrudService;
     }
 
     @Override
     public Project create(ProjectForm projectForm, String username) {
-        projectAccessService.checkCreateAccess(username);
 
         return projectRepository.create(projectForm.getName(), username, projectForm.getTitle());
     }
 
     @Override
-    public Project update(Long id, ProjectFormUpdate projectFormUpdate, String username) {
-        projectAccessService.checkUpdateAccess(username, id);
-
-        Project project = ObjectUtil.updateField(getById(id, username), projectFormUpdate);
+    public Project update(Long id, ProjectFormUpdate projectFormUpdate) {
+        Project project = ObjectUtil.updateField(getById(id), projectFormUpdate);
 
         return projectRepository.update(project);
     }
 
     @Override
-    public Project getById(Long id, String username) {
-        projectAccessService.checkReadAccess(username, id);
-
+    public Project getById(Long id) {
         return projectRepository.getById(id);
     }
 
     @Override
-    public void delete(Long id, String username) {
-        projectAccessService.checkDeleteAccess(username, id);
-
+    public void delete(Long id) {
         projectRepository.delete(id);
     }
 

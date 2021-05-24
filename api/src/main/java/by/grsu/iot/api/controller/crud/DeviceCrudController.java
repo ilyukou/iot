@@ -10,8 +10,7 @@ import by.grsu.iot.service.interf.crud.DeviceCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -27,9 +26,9 @@ public class DeviceCrudController {
         this.deviceCrudService = deviceCrudService;
     }
 
+    @PreAuthorize("hasPermission(#project, #this.this.class.name, 'read-page')")
     @GetMapping
     public ResponseEntity<PageWrapper<DeviceDto>> getDevicePage(
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long project,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.crud.device.page.size}") Integer size,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.startFrom}") Integer page,
@@ -44,41 +43,41 @@ public class DeviceCrudController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#deviceForm.project, #this.this.class.name, 'create')")
     @PostMapping
     public ResponseEntity<DeviceDto> create(
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody DeviceForm deviceForm
     ) {
         return new ResponseEntity<>(
-                new DeviceDto(deviceCrudService.create(deviceForm, userDetails.getUsername())),
+                new DeviceDto(deviceCrudService.create(deviceForm)),
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'update')")
     @PutMapping("/{id}")
     public ResponseEntity<DeviceDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
             @RequestBody DeviceFormUpdate deviceFormUpdate
     ) {
         return new ResponseEntity<>(
-                new DeviceDto(deviceCrudService.update(id, deviceFormUpdate, userDetails.getUsername())),
+                new DeviceDto(deviceCrudService.update(id, deviceFormUpdate)),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'read')")
+    @GetMapping("{id}")
     public ResponseEntity<DeviceDto> get(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        return new ResponseEntity<>(new DeviceDto(deviceCrudService.getById(id, userDetails.getUsername())), HttpStatus.OK);
+        return new ResponseEntity<>(new DeviceDto(deviceCrudService.getById(id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        deviceCrudService.delete(id, userDetails.getUsername());
+        deviceCrudService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

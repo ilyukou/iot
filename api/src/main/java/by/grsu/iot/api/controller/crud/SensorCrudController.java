@@ -10,8 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -27,55 +26,55 @@ public class SensorCrudController {
         this.sensorCrudService = sensorCrudService;
     }
 
-    @GetMapping("{project}")
+    @PreAuthorize("hasPermission(#project, #this.this.class.name, 'read-page')")
+    @GetMapping
     public ResponseEntity<PageWrapper<SensorDto>> getSensorPage(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long project,
+            @RequestParam Long project,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.crud.sensor.page.size}") Integer size,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.startFrom}") Integer page,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.sort.type}") RequestSortType sort,
             @RequestParam(required = false, defaultValue = "${by.grsu.iot.api.controller.page.sort.field}") String field
     ) {
         return new ResponseEntity<>(
-                sensorCrudService.getPage(project, userDetails.getUsername(), size, page, sort, field),
+                sensorCrudService.getPage(project, size, page, sort, field),
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#sensorForm.project, #this.this.class.name, 'create')")
     @PostMapping
     public ResponseEntity<SensorDto> create(
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody SensorForm sensorForm
     ) {
         return new ResponseEntity<>(
-                new SensorDto(sensorCrudService.create(sensorForm, userDetails.getUsername())),
+                new SensorDto(sensorCrudService.create(sensorForm)),
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'update')")
     @PutMapping("/{id}")
     public ResponseEntity<SensorDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
             @RequestBody SensorFormUpdate sensorFormUpdate
     ) {
         return new ResponseEntity<>(
-                new SensorDto(sensorCrudService.update(id, sensorFormUpdate, userDetails.getUsername())),
+                new SensorDto(sensorCrudService.update(id, sensorFormUpdate)),
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'read')")
     @GetMapping("/{id}")
     public ResponseEntity<SensorDto> get(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        return new ResponseEntity<>(new SensorDto(sensorCrudService.getById(id, userDetails.getUsername())), HttpStatus.OK);
+        return new ResponseEntity<>(new SensorDto(sensorCrudService.getById(id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        sensorCrudService.delete(id, userDetails.getUsername());
+        sensorCrudService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

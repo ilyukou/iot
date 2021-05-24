@@ -10,6 +10,7 @@ import by.grsu.iot.service.interf.crud.ProjectCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -54,31 +55,31 @@ public class ProjectCrudController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'update')")
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
             @RequestBody ProjectFormUpdate projectFormUpdate
     ) {
         return new ResponseEntity<>(
-                new ProjectDto(projectCrudService.update(id, projectFormUpdate, userDetails.getUsername())),
+                new ProjectDto(projectCrudService.update(id, projectFormUpdate)),
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'read')")
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDto> get(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        return new ResponseEntity<>(new ProjectDto(projectCrudService.getById(id, userDetails.getUsername())), HttpStatus.OK);
+        return new ResponseEntity<>(new ProjectDto(projectCrudService.getById(id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasPermission(#id, #this.this.class.name, 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        projectCrudService.delete(id, userDetails.getUsername());
+        projectCrudService.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

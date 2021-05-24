@@ -134,4 +134,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     public Page<Device> getPage(Project project, Pageable pageable) {
         return deviceJpaRepository.findAllByProject(project, pageable);
     }
+
+    @Override
+    public boolean hasUserOwnerDevice(String username, Long deviceId) {
+        return username.equals(getDeviceOwnerUsername(deviceId));
+    }
 }

@@ -143,4 +143,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Page<Project> getPage(User user, Pageable pageable) {
         return projectJpaRepository.findAllByUser(user, pageable);
     }
+
+    @Override
+    public boolean hasUserOwnerProject(String username, Long projectId) {
+        return username.equals(getProjectOwnerUsername(projectId));
+    }
 }

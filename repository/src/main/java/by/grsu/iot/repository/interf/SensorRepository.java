@@ -106,4 +106,6 @@ public interface SensorRepository {
      * @return page of sensors
      */
     Page<Sensor> getPage(Project project, Pageable pageable);
+
+    boolean hasUserOwnerSensor(String username, Long sensorId);
 }

@@ -1,6 +1,5 @@
 package by.grsu.iot.service.impl.crud;
 
-import by.grsu.iot.access.interf.crud.SensorAccessService;
 import by.grsu.iot.model.dto.PageWrapper;
 import by.grsu.iot.model.dto.sort.RequestSortType;
 import by.grsu.iot.model.dto.thing.sensor.SensorDto;
@@ -29,29 +28,23 @@ public class SensorCrudServiceImpl implements SensorCrudService {
     private final Integer DEFAULT_SIZE = 10;
 
     private final SensorRepository sensorRepository;
-    private final SensorAccessService sensorAccessService;
     private final ProjectCrudService projectCrudService;
     private final SensorValueRepository sensorValueRepository;
 
-    public SensorCrudServiceImpl(SensorRepository sensorRepository, SensorAccessService sensorAccessService, ProjectCrudService projectCrudService, @Lazy SensorValueRepository sensorValueRepository) {
+    public SensorCrudServiceImpl(SensorRepository sensorRepository, ProjectCrudService projectCrudService, @Lazy SensorValueRepository sensorValueRepository) {
         this.sensorRepository = sensorRepository;
-        this.sensorAccessService = sensorAccessService;
         this.projectCrudService = projectCrudService;
         this.sensorValueRepository = sensorValueRepository;
     }
 
     @Override
-    public Sensor create(SensorForm sensorForm, String username) {
-        sensorAccessService.checkCreateAccess(username, sensorForm.getProject());
-
+    public Sensor create(SensorForm sensorForm) {
         return sensorRepository.create(sensorForm.getProject(), sensorForm.getName());
     }
 
     @Override
-    public Sensor update(Long id, SensorFormUpdate sensorFormUpdate, String username) {
-        sensorAccessService.checkUpdateAccess(username, id);
-
-        Sensor sensor = getById(id, username);
+    public Sensor update(Long id, SensorFormUpdate sensorFormUpdate) {
+        Sensor sensor = getById(id);
 
         sensor = ObjectUtil.updateField(sensor, sensorFormUpdate);
 
@@ -59,16 +52,12 @@ public class SensorCrudServiceImpl implements SensorCrudService {
     }
 
     @Override
-    public Sensor getById(Long id, String username) {
-        sensorAccessService.checkReadAccess(username, id);
-
+    public Sensor getById(Long id) {
         return sensorRepository.getById(id);
     }
 
     @Override
-    public void delete(Long id, String username) {
-        sensorAccessService.checkDeleteAccess(username, id);
-
+    public void delete(Long id) {
         sensorRepository.delete(id);
     }
 
@@ -78,8 +67,8 @@ public class SensorCrudServiceImpl implements SensorCrudService {
     }
 
     @Override
-    public PageWrapper<SensorDto> getPage(Long project, String username, Integer size, Integer page, RequestSortType type, String field) {
-        Page<Sensor> p = sensorRepository.getPage(projectCrudService.getById(project, username),
+    public PageWrapper<SensorDto> getPage(Long project, Integer size, Integer page, RequestSortType type, String field) {
+        Page<Sensor> p = sensorRepository.getPage(projectCrudService.getById(project),
                 ObjectUtil.convertToPageable(type, field, size, page));
 
         Map<String, List<SensorValueElasticsearch>> map = sensorValueRepository

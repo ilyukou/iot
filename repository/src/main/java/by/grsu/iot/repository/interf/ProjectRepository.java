@@ -124,4 +124,6 @@ public interface ProjectRepository {
      * @return page of projects
      */
     Page<Project> getPage(User user, Pageable pageable);
+
+    boolean hasUserOwnerProject(String username, Long projectId);
 }

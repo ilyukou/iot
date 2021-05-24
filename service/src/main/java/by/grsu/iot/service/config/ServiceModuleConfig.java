@@ -1,6 +1,5 @@
 package by.grsu.iot.service.config;
 
-import by.grsu.iot.access.config.AccessModuleConfig;
 import by.grsu.iot.producer.config.ProducerModuleConfig;
 import by.grsu.iot.repository.config.RepositoryModuleConfig;
 import by.grsu.iot.resource.config.ResourceModuleConfig;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(value = {RepositoryModuleConfig.class, AccessModuleConfig.class, SecurityModuleConfig.class,
+@Import(value = {RepositoryModuleConfig.class, SecurityModuleConfig.class,
         ProducerModuleConfig.class, ResourceModuleConfig.class})
 @EnableCaching
 @ComponentScan(basePackages = {"by.grsu.iot.service"})

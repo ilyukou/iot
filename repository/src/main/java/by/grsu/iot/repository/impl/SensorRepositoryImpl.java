@@ -109,4 +109,9 @@ public class SensorRepositoryImpl implements SensorRepository {
     public Page<Sensor> getPage(Project project, Pageable pageable) {
         return sensorJpaRepository.findAllByProject(project, pageable);
     }
+
+    @Override
+    public boolean hasUserOwnerSensor(String username, Long sensorId) {
+        return username.equals(getOwnerUsername(sensorId));
+    }
 }

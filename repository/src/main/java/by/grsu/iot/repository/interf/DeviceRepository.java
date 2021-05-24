@@ -130,4 +130,6 @@ public interface DeviceRepository {
      * @return page of devices
      */
     Page<Device> getPage(Project project, Pageable pageable);
+
+    boolean hasUserOwnerDevice(String username, Long deviceId);
 }
