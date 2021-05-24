@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @CrossOrigin
@@ -24,30 +24,12 @@ public class ResourceCrudController {
         this.resourceCrudService = resourceCrudService;
     }
 
-    @PostMapping
+    @PostMapping("{project}")
     public ResponseEntity<ResourceDto> create(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam Long project,
-            @RequestParam(value = "file") MultipartFile multipartFile
-    ) {
-
-        if (multipartFile == null || multipartFile.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        String[] file = multipartFile.getOriginalFilename().split("\\.");
-        if (file.length != 2){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (!resourceCrudService.support(file[1])){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(
-                new ResourceDto(
-                        resourceCrudService.create(multipartFile, project, userDetails.getUsername())),
-                HttpStatus.OK);
+            @PathVariable Long project,
+            HttpServletRequest request
+    ) throws IOException {
+        return new ResponseEntity<>(new ResourceDto(resourceCrudService.create(project, request)), HttpStatus.OK);
     }
 
     @GetMapping(value = "{resource}", produces = MediaType.IMAGE_JPEG_VALUE)
