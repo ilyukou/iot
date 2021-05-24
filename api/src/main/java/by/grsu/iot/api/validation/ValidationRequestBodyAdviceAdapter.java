@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 
 import java.lang.reflect.Type;
-
-import static io.vavr.API.*;
+import java.util.Collection;
 
 /**
  * Controller advice that a validate all dto body after body read
@@ -32,17 +31,24 @@ public class ValidationRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter,
                                 Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
 
-        Match(body).of(
-                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), RequiredField.class)), run(() ->
-                        EntityFieldValidationUtil.checkRequiredField(body)
-                )),
-                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), StringValidation.class)), run(() ->
-                        EntityFieldValidationUtil.validateString(body)
-                )),
-                Case($(b -> ObjectUtil.hasClassAnnotatedField(b.getClass(), CollectionValidation.class)), run(() ->
-                        EntityFieldValidationUtil.validateCollection(body)
-                )));
-
+        if (body instanceof Collection) {
+            Collection<?> collection = (Collection<?>) body;
+            collection.forEach(this::validate);
+        } else {
+            validate(body);
+        }
         return body;
+    }
+
+    private void validate(Object body) {
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), RequiredField.class)) {
+            EntityFieldValidationUtil.checkRequiredField(body);
+        }
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), StringValidation.class)) {
+            EntityFieldValidationUtil.validateString(body);
+        }
+        if (ObjectUtil.hasClassAnnotatedField(body.getClass(), CollectionValidation.class)) {
+            EntityFieldValidationUtil.validateCollection(body);
+        }
     }
 }
