@@ -1,8 +1,8 @@
 package by.grsu.iot.api.permission.resolver;
 
 import by.grsu.iot.api.controller.crud.DeviceCrudController;
-import by.grsu.iot.repository.interf.DeviceRepository;
-import by.grsu.iot.repository.interf.ProjectRepository;
+import by.grsu.iot.api.repository.sql.DeviceRepository;
+import by.grsu.iot.api.repository.sql.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,6 @@
 package by.grsu.iot.api.permission.resolver;
 
-import by.grsu.iot.model.sql.User;
+import by.grsu.iot.api.model.sql.User;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

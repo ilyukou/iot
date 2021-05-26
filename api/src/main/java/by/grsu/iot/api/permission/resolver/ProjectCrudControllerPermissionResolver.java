@@ -1,8 +1,8 @@
 package by.grsu.iot.api.permission.resolver;
 
 import by.grsu.iot.api.controller.crud.ProjectCrudController;
-import by.grsu.iot.model.sql.Project;
-import by.grsu.iot.repository.interf.ProjectRepository;
+import by.grsu.iot.api.model.sql.Project;
+import by.grsu.iot.api.repository.sql.ProjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

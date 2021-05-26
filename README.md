@@ -1,10 +1,9 @@
 ### Educational software and hardware complex 'Internet of Things'
 
-##### <em> Docs version v0.1 </em>
+##### <em> Project version v0.1 </em>
 
-Docs version is equal project version
+That project support [swagger](https://swagger.io/). For usage swagger - run application and navigate to _
+/swagger-ui.html_
 ___
 
-[API Docs](docs/Interface.md)
-
-[Tutorial](docs/Tutorial.md)
+### [Tutorial](docs/Tutorial.md)

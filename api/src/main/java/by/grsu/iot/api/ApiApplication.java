@@ -1,11 +1,12 @@
 package by.grsu.iot.api;
 
-import by.grsu.iot.service.config.ServiceModuleConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
 
-@Import(value = {ServiceModuleConfig.class})
+@EntityScan
+@EnableCaching
 @SpringBootApplication
 public class ApiApplication {
     public static void main(String[] args) {

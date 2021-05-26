@@ -1,0 +1,122 @@
+active-mq:
+  broker-url: tcp://localhost:61616
+  password: admin
+  user: admin
+by:
+  grsu:
+    iot:
+      api:
+        controller:
+          crud:
+            device:
+              page:
+                size: 25
+            project:
+              page:
+                size: 10
+            sensor:
+              page:
+                size: 25
+          page:
+            sort:
+              field: id
+              type: ascending
+            startFrom: 0
+        service:
+          producer:
+            emailVerificationCode: EmailVerificationCode
+        util:
+          number: 123456789
+      repository:
+        active-mq:
+          broker-url: tcp://localhost:61616
+          password: admin
+          user: admin
+        elasticsearch:
+          host: localhost
+          port: 9200
+        email:
+          code:
+            length: 6
+        string:
+          alphabet: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+        thing:
+          token:
+            length: 32
+      resource:
+        file:
+          content-type: jpg,png,jpeg
+          filename:
+            length: 200
+        s3:
+          accessKey: aws_s3_access_key
+          bucketName: resource
+          endpoint: http://127.0.0.1:9000
+          partSize: 5242880
+          secretKey: aws_s3_secret_key
+      security:
+        user:
+          default-status: ACTIVE
+      service:
+        device:
+          state:
+            get:
+              long-polling:
+                time: 20000
+            set:
+              long-polling:
+                time: 10000
+        project:
+          per-page: 10
+          thing:
+            per-page: 25
+        sensor:
+          value:
+            piece:
+              size: 100
+          values:
+            count: 10
+device:
+  states:
+    size:
+      max: 10
+      min: 2
+logging:
+  level:
+    by:
+      grsu:
+        iot: INFO
+    org:
+      springframework: ERROR
+resource:
+  filename:
+    length: 250
+sensor:
+  value:
+    list:
+      size:
+        max: 1000
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    password: password
+    url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        globally_quoted_identifiers: true
+        jdbc:
+          time_zone: UTC
+    show-sql: false
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      enabled: false
