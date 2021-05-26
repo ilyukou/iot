@@ -1,14 +1,13 @@
 package by.grsu.iot.async.consumer;
 
-import by.grsu.iot.email.interf.EmailSenderService;
-import by.grsu.iot.model.async.EmailCode;
-import by.grsu.iot.model.async.EmailCodeType;
-import by.grsu.iot.util.service.EmailMessageTemplateUtil;
+import by.grsu.iot.async.model.EmailCode;
+import by.grsu.iot.async.model.EmailCodeType;
+import by.grsu.iot.async.service.EmailSenderService;
+import by.grsu.iot.async.util.EmailMessageTemplateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import javax.jms.MessageListener;
 
 import static io.vavr.API.*;
 
-@PropertySource("classpath:application-async.properties")
 @Service
 public class EmailCodeConsumer implements MessageListener {
 

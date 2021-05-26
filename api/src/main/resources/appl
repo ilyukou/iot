@@ -1,0 +1,67 @@
+server.port=8080
+spring.main.allow-bean-definition-overriding=true
+logging.level.org.springframework=ERROR
+logging.level.by.grsu.iot=INFO
+by.grsu.iot.api.controller.page.sort.type=ascending
+by.grsu.iot.api.controller.page.startFrom=0
+by.grsu.iot.api.controller.page.sort.field=id
+by.grsu.iot.api.controller.crud.project.page.size=10
+by.grsu.iot.api.controller.crud.device.page.size=25
+by.grsu.iot.api.controller.crud.sensor.page.size=25
+spring.servlet.multipart.enabled=false
+by.grsu.iot.resource.file.content-type=jpg,png,jpeg
+by.grsu.iot.resource.s3.partSize=5242880
+by.grsu.iot.resource.file.filename.length=200
+
+# PRODUCER
+active-mq.broker-url=tcp://localhost:61616
+active-mq.user=admin
+active-mq.password=admin
+
+by.grsu.iot.api.service.producer.emailVerificationCode=EmailVerificationCode
+
+# SERVICE
+by.grsu.iot.service.project.per-page=10
+by.grsu.iot.service.project.thing.per-page=25
+by.grsu.iot.service.sensor.values.count=10
+device.states.size.max=10
+device.states.size.min=2
+by.grsu.iot.service.device.state.set.long-polling.time=10000
+by.grsu.iot.service.device.state.get.long-polling.time=20000
+by.grsu.iot.service.sensor.value.piece.size=100
+sensor.value.list.size.max=1000
+resource.filename.length=250
+by.grsu.iot.security.user.default-status=ACTIVE
+
+
+# REPOSITORY
+# SQL Database
+spring.datasource.url=jdbc:mysql://localhost:3306/iot
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+# LOGGER
+by.grsu.iot.repository.string.alphabet=0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+by.grsu.iot.repository.thing.token.length=32
+by.grsu.iot.repository.email.code.length=6
+# Elasticsearch
+by.grsu.iot.repository.elasticsearch.host=localhost
+by.grsu.iot.repository.elasticsearch.port=9200
+# ActiveMQ
+by.grsu.iot.repository.active-mq.broker-url=tcp://localhost:61616
+by.grsu.iot.repository.active-mq.user=admin
+by.grsu.iot.repository.active-mq.password=admin
+
+# RESOURCE
+by.grsu.iot.resource.s3.endpoint=http://127.0.0.1:9000
+by.grsu.iot.resource.s3.accessKey=aws_s3_access_key
+by.grsu.iot.resource.s3.secretKey=aws_s3_secret_key
+by.grsu.iot.resource.s3.bucketName=resource
+
+# UTIL
+by.grsu.iot.api.util.number=0123456789

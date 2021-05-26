@@ -17,20 +17,10 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
         <dependency>
-            <groupId>by.grsu</groupId>
-            <artifactId>service</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>by.grsu</groupId>
-            <artifactId>email</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>by.grsu</groupId>
-            <artifactId>util</artifactId>
-            <version>0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
 </project>

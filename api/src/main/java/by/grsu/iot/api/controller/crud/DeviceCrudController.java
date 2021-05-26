@@ -1,12 +1,12 @@
 package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.model.dto.PageWrapper;
-import by.grsu.iot.model.dto.sort.RequestSortType;
-import by.grsu.iot.model.dto.thing.device.DeviceDto;
-import by.grsu.iot.model.dto.thing.device.DeviceForm;
-import by.grsu.iot.model.dto.thing.device.DeviceFormUpdate;
-import by.grsu.iot.model.sql.Device;
-import by.grsu.iot.service.interf.crud.DeviceCrudService;
+import by.grsu.iot.api.model.dto.PageWrapper;
+import by.grsu.iot.api.model.dto.sort.RequestSortType;
+import by.grsu.iot.api.model.dto.thing.device.DeviceDto;
+import by.grsu.iot.api.model.dto.thing.device.DeviceForm;
+import by.grsu.iot.api.model.dto.thing.device.DeviceFormUpdate;
+import by.grsu.iot.api.model.sql.Device;
+import by.grsu.iot.api.service.crud.DeviceCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

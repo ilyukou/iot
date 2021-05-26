@@ -7,16 +7,8 @@
     <artifactId>iot</artifactId>
     <version>0.1</version>
     <modules>
-        <module>model</module>
-        <module>repository</module>
         <module>api</module>
-        <module>service</module>
-        <module>security</module>
-        <module>email</module>
         <module>async</module>
-        <module>util</module>
-        <module>producer</module>
-        <module>resource</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,11 +1,11 @@
 package by.grsu.iot.api.controller.crud;
 
-import by.grsu.iot.model.dto.PageWrapper;
-import by.grsu.iot.model.dto.sort.RequestSortType;
-import by.grsu.iot.model.dto.thing.sensor.SensorDto;
-import by.grsu.iot.model.dto.thing.sensor.SensorForm;
-import by.grsu.iot.model.dto.thing.sensor.SensorFormUpdate;
-import by.grsu.iot.service.interf.crud.SensorCrudService;
+import by.grsu.iot.api.model.dto.PageWrapper;
+import by.grsu.iot.api.model.dto.sort.RequestSortType;
+import by.grsu.iot.api.model.dto.thing.sensor.SensorDto;
+import by.grsu.iot.api.model.dto.thing.sensor.SensorForm;
+import by.grsu.iot.api.model.dto.thing.sensor.SensorFormUpdate;
+import by.grsu.iot.api.service.crud.SensorCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

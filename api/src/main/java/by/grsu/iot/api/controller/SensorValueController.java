@@ -1,8 +1,8 @@
 package by.grsu.iot.api.controller;
 
-import by.grsu.iot.model.dto.thing.sensor.SensorValue;
-import by.grsu.iot.service.interf.SensorValueService;
-import by.grsu.iot.util.service.TimeUtil;
+import by.grsu.iot.api.model.dto.thing.sensor.SensorValue;
+import by.grsu.iot.api.service.SensorValueService;
+import by.grsu.iot.api.util.TimeUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

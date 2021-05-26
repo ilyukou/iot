@@ -1,13 +1,13 @@
 package by.grsu.iot.api.exception;
 
-import by.grsu.iot.model.dto.exception.ApplicationExceptionDto;
-import by.grsu.iot.model.dto.exception.BadRequestApplicationExceptionDto;
-import by.grsu.iot.model.dto.exception.NotAccessForOperationApplicationExceptionDto;
-import by.grsu.iot.model.exception.BadRequestApplicationException;
-import by.grsu.iot.model.exception.EntityNotFoundApplicationException;
-import by.grsu.iot.model.exception.NotAccessForOperationApplicationException;
-import by.grsu.iot.model.exception.NotActiveEntityApplicationException;
-import by.grsu.iot.security.jwt.InvalidJwtAuthenticationException;
+import by.grsu.iot.api.model.dto.exception.ApplicationExceptionDto;
+import by.grsu.iot.api.model.dto.exception.BadRequestApplicationExceptionDto;
+import by.grsu.iot.api.model.dto.exception.NotAccessForOperationApplicationExceptionDto;
+import by.grsu.iot.api.model.exception.BadRequestApplicationException;
+import by.grsu.iot.api.model.exception.EntityNotFoundApplicationException;
+import by.grsu.iot.api.model.exception.NotAccessForOperationApplicationException;
+import by.grsu.iot.api.model.exception.NotActiveEntityApplicationException;
+import by.grsu.iot.api.security.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
