@@ -3,7 +3,7 @@ package by.grsu.iot.api.repository;
 import by.grsu.iot.api.config.RepositoryTestConfig;
 import by.grsu.iot.api.model.sql.Role;
 import by.grsu.iot.api.model.sql.RoleType;
-import by.grsu.iot.api.repository.sql.RoleRepository;
+import by.grsu.iot.api.repository.sql.user.RoleRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

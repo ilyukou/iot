@@ -8,7 +8,7 @@ import by.grsu.iot.api.model.dto.user.AuthenticationUser;
 import by.grsu.iot.api.model.dto.user.RegistrationRequest;
 import by.grsu.iot.api.model.sql.Status;
 import by.grsu.iot.api.model.sql.User;
-import by.grsu.iot.api.service.crud.UserCrudService;
+import by.grsu.iot.api.service.crud.user.UserCrudService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;

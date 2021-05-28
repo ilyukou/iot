@@ -1,18 +1,24 @@
 package by.grsu.iot.api.service;
 
+import by.grsu.iot.api.model.annotation.Logging;
+import by.grsu.iot.api.model.annotation.Profiling;
 import by.grsu.iot.api.model.dto.thing.device.DeviceState;
 import by.grsu.iot.api.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.api.model.dto.thing.device.state.SetDeviceRequest;
 import by.grsu.iot.api.model.exception.ConflictException;
-import by.grsu.iot.api.repository.sql.DeviceStateRepository;
+import by.grsu.iot.api.repository.sql.project.thing.DeviceStateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Transactional
+@Logging
+@Profiling
 @Service
 public class DeviceStateServiceImpl implements DeviceStateService {
 

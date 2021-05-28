@@ -2,7 +2,7 @@ package by.grsu.iot.api.security;
 
 import by.grsu.iot.api.model.exception.NotActiveEntityApplicationException;
 import by.grsu.iot.api.model.sql.User;
-import by.grsu.iot.api.repository.sql.UserRepository;
+import by.grsu.iot.api.repository.sql.user.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

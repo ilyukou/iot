@@ -1,11 +1,13 @@
 package by.grsu.iot.api.service;
 
+import by.grsu.iot.api.model.annotation.Logging;
+import by.grsu.iot.api.model.annotation.Profiling;
 import by.grsu.iot.api.model.dto.thing.sensor.SensorValue;
 import by.grsu.iot.api.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.api.model.exception.BadRequestApplicationException;
 import by.grsu.iot.api.model.exception.EntityNotFoundApplicationException;
-import by.grsu.iot.api.repository.sql.SensorValueRepository;
-import by.grsu.iot.api.service.crud.SensorCrudService;
+import by.grsu.iot.api.repository.sql.project.thing.SensorValueRepository;
+import by.grsu.iot.api.service.crud.project.thing.SensorCrudService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Logging
+@Profiling
 @Transactional
 @Service
 public class SensorValueServiceImpl implements SensorValueService {

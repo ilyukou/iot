@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.crud;
 
 import by.grsu.iot.api.model.dto.user.UserUpdateForm;
-import by.grsu.iot.api.service.crud.UserCrudService;
+import by.grsu.iot.api.service.crud.user.UserCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

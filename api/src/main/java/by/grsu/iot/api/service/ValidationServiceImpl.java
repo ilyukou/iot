@@ -1,5 +1,7 @@
 package by.grsu.iot.api.service;
 
+import by.grsu.iot.api.model.annotation.Logging;
+import by.grsu.iot.api.model.annotation.Profiling;
 import by.grsu.iot.api.model.annotation.RequiredField;
 import by.grsu.iot.api.model.annotation.StringValidation;
 import by.grsu.iot.api.model.dto.DataTransferObject;
@@ -14,13 +16,17 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Logging
+@Profiling
 @Service
 public class ValidationServiceImpl implements ValidationService {
+
+    private static final String PATH = "by.grsu.iot.api.model.dto";
 
     @Override
     @Cacheable("validation")
     public Map<String, Map<String, FieldStringValidation>> getValidationRuleForAllRequestEntity() {
-        Reflections reflections = new Reflections("by.grsu.iot.api.model.dto");
+        Reflections reflections = new Reflections(PATH);
 
         return reflections.getSubTypesOf(DataTransferObject.class).stream()
                 .peek(aClass -> Arrays.stream(aClass.getFields()).forEach(field -> field.setAccessible(true)))

@@ -1,7 +1,7 @@
 package by.grsu.iot.api.controller.crud;
 
 import by.grsu.iot.api.model.dto.resource.ResourceDto;
-import by.grsu.iot.api.service.crud.ResourceCrudService;
+import by.grsu.iot.api.service.crud.project.ResourceCrudService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,36 +1,33 @@
 package by.grsu.iot.api.config.repository;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
 
-//@PropertySource("classpath:application-repository.properties")
 @Configuration
 public class ActiveMqConfig {
 
-    private final static String MODULE = "by.grsu.iot.repository.";
+    @Value("${by.grsu.iot.repository.active-mq.broker-url}")
+    private String BROKER_URL_PROPERTY;
 
-    private final static String BROKER_URL_PROPERTY = MODULE + "active-mq.broker-url";
-    private final static String PASSWORD_PROPERTY = MODULE + "active-mq.password";
-    private final static String USER_PROPERTY = MODULE + "active-mq.user";
+    @Value("${by.grsu.iot.repository.active-mq.password}")
+    private String PASSWORD_PROPERTY;
 
-    private final Environment environment;
+    @Value("${by.grsu.iot.repository.active-mq.user}")
+    private String USER_PROPERTY;
 
-    public ActiveMqConfig(Environment environment) {
-        this.environment = environment;
-    }
 
     @Bean
     public ConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-        activeMQConnectionFactory.setBrokerURL(environment.getProperty(BROKER_URL_PROPERTY));
-        activeMQConnectionFactory.setUserName(environment.getProperty(USER_PROPERTY));
-        activeMQConnectionFactory.setPassword(environment.getProperty(PASSWORD_PROPERTY));
+        activeMQConnectionFactory.setBrokerURL(BROKER_URL_PROPERTY);
+        activeMQConnectionFactory.setUserName(USER_PROPERTY);
+        activeMQConnectionFactory.setPassword(PASSWORD_PROPERTY);
         return activeMQConnectionFactory;
     }
 

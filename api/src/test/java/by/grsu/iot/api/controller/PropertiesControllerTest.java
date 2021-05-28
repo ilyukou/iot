@@ -31,7 +31,7 @@ public class PropertiesControllerTest {
 
     //    @WithMockUser("USER")
     @Test
-    public void signUp() throws Exception {
+    public void getProperties() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andReturn();

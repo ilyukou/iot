@@ -3,7 +3,7 @@ package by.grsu.iot.api.service;
 
 import by.grsu.iot.api.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.api.model.dto.thing.device.state.SetDeviceRequest;
-import by.grsu.iot.api.repository.sql.DeviceStateRepository;
+import by.grsu.iot.api.repository.sql.project.thing.DeviceStateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
