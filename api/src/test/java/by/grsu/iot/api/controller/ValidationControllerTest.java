@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {ApiApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ValidationControllerTest {
 
-    private static final String URL = "/properties";
+    private static final String URL = "/validation";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -31,7 +31,7 @@ public class ValidationControllerTest {
 
     @WithMockUser("USER")
     @Test
-    public void signUp() throws Exception {
+    public void validationProperties() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andReturn();

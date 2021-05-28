@@ -1,5 +1,7 @@
 package by.grsu.iot.api.service.producer;
 
+import by.grsu.iot.api.model.annotation.Logging;
+import by.grsu.iot.api.model.annotation.Profiling;
 import by.grsu.iot.api.model.dto.email.EmailCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+@Logging
+@Profiling
 @Service
 public class EmailCodeProducerImpl implements EmailCodeProducer {
 

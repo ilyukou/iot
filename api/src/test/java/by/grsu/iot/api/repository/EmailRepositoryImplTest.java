@@ -2,8 +2,8 @@ package by.grsu.iot.api.repository;
 
 import by.grsu.iot.api.config.RepositoryTestConfig;
 import by.grsu.iot.api.model.sql.Email;
-import by.grsu.iot.api.repository.sql.EmailRepository;
-import by.grsu.iot.api.repository.sql.UserRepository;
+import by.grsu.iot.api.repository.sql.user.EmailRepository;
+import by.grsu.iot.api.repository.sql.user.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

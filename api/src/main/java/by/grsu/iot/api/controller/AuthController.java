@@ -2,8 +2,8 @@ package by.grsu.iot.api.controller;
 
 import by.grsu.iot.api.model.dto.email.SendEmailCodeRequest;
 import by.grsu.iot.api.model.dto.user.*;
-import by.grsu.iot.api.service.crud.EmailCrudService;
-import by.grsu.iot.api.service.crud.UserCrudService;
+import by.grsu.iot.api.service.crud.user.EmailCrudService;
+import by.grsu.iot.api.service.crud.user.UserCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

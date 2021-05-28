@@ -5,7 +5,7 @@ import by.grsu.iot.api.model.dto.sort.RequestSortType;
 import by.grsu.iot.api.model.dto.thing.sensor.SensorDto;
 import by.grsu.iot.api.model.dto.thing.sensor.SensorForm;
 import by.grsu.iot.api.model.dto.thing.sensor.SensorFormUpdate;
-import by.grsu.iot.api.service.crud.SensorCrudService;
+import by.grsu.iot.api.service.crud.project.thing.SensorCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

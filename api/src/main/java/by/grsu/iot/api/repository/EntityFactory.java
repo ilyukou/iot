@@ -1,13 +1,14 @@
 package by.grsu.iot.api.repository;
 
 import by.grsu.iot.api.model.sql.*;
-import by.grsu.iot.api.repository.sql.RoleRepository;
+import by.grsu.iot.api.repository.sql.user.RoleRepository;
 import by.grsu.iot.api.util.NumberUtil;
 import by.grsu.iot.api.util.StringUtil;
 import by.grsu.iot.api.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 @Component
 public class EntityFactory {
 
-    //    private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
     private final StringUtil stringUtil;
     private final NumberUtil numberUtil;
 
@@ -39,7 +40,7 @@ public class EntityFactory {
 
     public EntityFactory(NumberUtil numberUtil, RoleRepository roleRepository, StringUtil stringUtil) {
         this.numberUtil = numberUtil;
-//        this.roleRepository = roleRepository;
+        this.roleRepository = roleRepository;
         this.stringUtil = stringUtil;
     }
 
@@ -62,9 +63,9 @@ public class EntityFactory {
 
         user.setStatus(Status.NOT_ACTIVE);
 
-//        List<Role> roles = new ArrayList<>();
-//        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
-//        user.setRoles(roles);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.getRoleOrCreate(DEFAULT_ROLE_TYPE));
+        user.setRoles(roles);
 
         user.setEmail(createEmail(address));
 

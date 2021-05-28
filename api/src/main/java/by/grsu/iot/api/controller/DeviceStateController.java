@@ -6,7 +6,7 @@ import by.grsu.iot.api.model.dto.exception.ApplicationExceptionDto;
 import by.grsu.iot.api.model.dto.thing.device.DeviceState;
 import by.grsu.iot.api.model.exception.ConflictException;
 import by.grsu.iot.api.service.DeviceStateService;
-import by.grsu.iot.api.service.crud.DeviceCrudService;
+import by.grsu.iot.api.service.crud.project.thing.DeviceCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

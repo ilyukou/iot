@@ -3,7 +3,7 @@ package by.grsu.iot.api.repository;
 import by.grsu.iot.api.config.RepositoryTestConfig;
 import by.grsu.iot.api.model.elasticsearch.SensorValueElasticsearch;
 import by.grsu.iot.api.repository.elasticsearch.SensorValueElasticsearchRepository;
-import by.grsu.iot.api.repository.sql.SensorValueRepository;
+import by.grsu.iot.api.repository.sql.project.thing.SensorValueRepository;
 import by.grsu.iot.api.util.TimeUtil;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;

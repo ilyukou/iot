@@ -2,7 +2,7 @@ package by.grsu.iot.async.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,16 +15,13 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSenderServiceImpl.class);
 
-    private static final String MODULE = "by.grsu.iot.email.";
-    private static final String SMTP_EMAIL_PROPERTY = MODULE + "smtp.email";
-
-    private static String from;
+    @Value("${by.grsu.iot.email.smtp.email}")
+    private String from;
 
     private final JavaMailSender emailSender;
 
-    public EmailSenderServiceImpl(Environment environment, JavaMailSender emailSender) {
+    public EmailSenderServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
-        from = environment.getProperty(SMTP_EMAIL_PROPERTY);
     }
 
     @Override

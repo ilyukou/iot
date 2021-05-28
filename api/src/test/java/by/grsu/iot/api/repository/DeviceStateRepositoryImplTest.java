@@ -3,7 +3,7 @@ package by.grsu.iot.api.repository;
 import by.grsu.iot.api.config.RepositoryTestConfig;
 import by.grsu.iot.api.model.dto.thing.device.state.GetStateRequest;
 import by.grsu.iot.api.model.dto.thing.device.state.SetDeviceRequest;
-import by.grsu.iot.api.repository.sql.DeviceStateRepository;
+import by.grsu.iot.api.repository.sql.project.thing.DeviceStateRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

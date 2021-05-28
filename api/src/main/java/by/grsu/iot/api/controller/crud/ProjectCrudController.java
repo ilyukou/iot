@@ -6,7 +6,7 @@ import by.grsu.iot.api.model.dto.project.ProjectForm;
 import by.grsu.iot.api.model.dto.project.ProjectFormUpdate;
 import by.grsu.iot.api.model.dto.sort.RequestSortType;
 import by.grsu.iot.api.model.sql.Project;
-import by.grsu.iot.api.service.crud.ProjectCrudService;
+import by.grsu.iot.api.service.crud.project.ProjectCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
